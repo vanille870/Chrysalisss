@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TerrainUtils;
 using UnityEngine.TerrainTools;
+using UnityEngine.UIElements;
 
 public class Terrain_grass : MonoBehaviour
 {
 
     public Terrain terrain;
     public int[,] grassInt;
+    Vector3 grassPosition;
 
 
     // Start is called before the first frame update
@@ -16,6 +18,8 @@ public class Terrain_grass : MonoBehaviour
     {
         grassInt = terrain.terrainData.GetDetailLayer(0,0, terrain.terrainData.detailWidth, terrain.terrainData.detailHeight, 0);
         print(grassInt);
+
+        grassPosition = terrain.transform.position;
     }
 
     // Update is called once per frame
