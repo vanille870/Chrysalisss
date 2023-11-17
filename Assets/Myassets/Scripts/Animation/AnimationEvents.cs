@@ -7,6 +7,7 @@ public class AnimationEvents : MonoBehaviour
 
     public GeneralAnimationWeapon generalAnimationWeapon;
     public Animator mainCharAnim;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,12 @@ public class AnimationEvents : MonoBehaviour
         mainCharAnim.SetBool("CanStartNextAttack", true);
         generalAnimationWeapon.isRessetingSpeed = true;
         //generalAnimationWeapon.speedTimer = 0;
+    }
+
+    void CanBreakObjects()
+    {
+        On_breakable_hit.canBreakObjects = true;
+        On_breakable_hit.hasBreaked = false;
 
     }
 }

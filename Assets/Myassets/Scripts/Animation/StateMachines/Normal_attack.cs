@@ -8,10 +8,10 @@ public class Normal_attack : StateMachineBehaviour
     public GeneralAnimationWeapon generalAnimationWeapon;
     public Movement movement;
 
-  
+
     public void Push()
     {
-    
+
     }
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -27,17 +27,11 @@ public class Normal_attack : StateMachineBehaviour
         movement.PushOnAttack();
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    void OnStateExit()
+    {
+        On_breakable_hit.canBreakObjects = false;
+    }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

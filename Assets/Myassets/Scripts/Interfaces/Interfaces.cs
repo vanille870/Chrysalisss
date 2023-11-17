@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public interface IDamageable
+public interface IBreakable
 {
    void Damage (float damage, Vector3 position);
 }

@@ -14,6 +14,7 @@ public class SM_variables : MonoBehaviour
     {
         this.mainCharAnimator = this.GetComponent<Animator>();
 
+        //get all statemachines and put in the respective script
         Normal_attack[] normal_Attack_scripts = this.mainCharAnimator.GetBehaviours<Normal_attack>();
         foreach (Normal_attack normal_Attack_SM in normal_Attack_scripts)
         {
