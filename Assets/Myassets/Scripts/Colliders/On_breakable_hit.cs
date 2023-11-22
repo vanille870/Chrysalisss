@@ -23,12 +23,14 @@ public class On_breakable_hit : MonoBehaviour
         if (canBreakObjects == true && hasBreaked == false)
         {
             Collider[] colliderArray = Physics.OverlapSphere(center.position, radius);
-            print("hi");
             hasBreaked = true;
 
             foreach (Collider col in colliderArray)
             {
- 
+                if (col.tag == "Breakable")
+                {
+                   col.GetComponent<GrassSpawner>().Damage(0f, radius, center.position);
+                }
             }
         }
     }

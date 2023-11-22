@@ -276,7 +276,6 @@ public class Movement : MonoBehaviour
     {
         currentSpeed = pushAmountAttack;
         IsPushing = true;
-        print("pushhhhhhhh");
     }
 
     public void AttackMovementModeStart()
@@ -292,7 +291,6 @@ public class Movement : MonoBehaviour
         turnSmoothTimeground = smoothTurnStorage;
         isAttacking = false;
         currentSpeed = 0;
-        print("stopp");
     }
 
     public void AttackPushtimer()

@@ -1,13 +1,12 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+using static UnityEngine.ParticleSystem;
+
 
 public class GrassSpawner : MonoBehaviour, IBreakable
 {
     public Material grassMaterial;
     public Mesh grassMesh;
     public int numInstances = 10;
-    Vector3 startingPosition;
-    Vector3[] positionStorage;
     public Matrix4x4[] MatrixArray;
     public Vector3 grassRotation;
     Vector3 Scaling;
@@ -21,74 +20,99 @@ public class GrassSpawner : MonoBehaviour, IBreakable
     public float minimumRotationOffset;
     public float maximumRotationOffset;
 
+    public float cutRange = 1f;
+
     public int seed = 0;
 
-    struct GrassInstanceMatrix
-    {
-        public Matrix4x4 objectToWorld;
-
-    };
-
-
-
+    MaterialPropertyBlock propertyBlock;
+    float[] cutData;
+    RenderParams rp;
+    Vector3 startingPosition;
+    Vector3[] positionStorage;
+    public ParticleSystem grassBladesPS;
+    GameObject particleSytemObject;
+    public EmitParams ep;
+    public GameObject grassParticleSys;
+    public Vector3 particlSysLocation;
+    public ParticleSystemPoolManager particleSystemPoolManager;
+    bool hasParticleSys = false;
 
     void Awake()
     {
+        ep.applyShapeToPosition = true;
+        getParticlSystemPosition();
+        particleSystemPoolManager = GameObject.Find("ParticleSysManager").GetComponent<ParticleSystemPoolManager>();
         Random.InitState(seed);
         grassRotation = transform.eulerAngles;
         Scaling = transform.localScale;
-        startingPosition = this.transform.position;
+        startingPosition = transform.position;
+
         MatrixArray = new Matrix4x4[numInstances];
         positionStorage = new Vector3[numInstances];
+        cutData = new float[numInstances];
         transform.hasChanged = false;
+        propertyBlock = new MaterialPropertyBlock();
+        rp = new RenderParams(grassMaterial);
+        rp.matProps = propertyBlock;
 
 
         for (int i = 0; i < numInstances; ++i)
         {
             Vector3 Originpoint = new Vector3(startingPosition.x + Random.insideUnitCircle.x, startingPosition.y, startingPosition.z + Random.insideUnitCircle.y);
-            positionStorage[i] = Originpoint;
             Physics.Raycast(Originpoint, Vector3.down, out raycastHit, Mathf.Infinity);
             Scaling = new Vector3(Scaling.x + Random.Range(minimumScaleOffset, maximumScaleOffset), Scaling.y + Random.Range(minimumScaleOffset, maximumScaleOffset), Scaling.z + Random.Range(minimumScaleOffset, maximumScaleOffset));
             grassRotation = new Vector3(0, grassRotation.y + Random.Range(minimumRotationOffset, maximumRotationOffset), grassRotation.z + Random.Range(minimumRotationOffset, maximumRotationOffset) / 10);
-
             MatrixArray[i] = Matrix4x4.TRS(raycastHit.point, Quaternion.Euler(0, grassRotation.y, grassRotation.z), Scaling);
+            cutData[i] = 0;
         }
-
     }
 
     void Update()
     {
+        rp = new RenderParams(grassMaterial);
+        rp.matProps = propertyBlock;
         InstanceGrass();
-        print(transform.hasChanged);
+
 
         if (SpawnGrassButton)
         {
             seed += 1;
-            CalculateAgain();
+            CalculateGrassAgain();
+            SpawnGrassButton = false;
         }
 
         if (transform.hasChanged == true)
         {
-            ChangeLocation();
+            CalculateGrassAgain();
             transform.hasChanged = false;
         }
 
     }
 
-    void CalculateAgain()
+    void InstanceGrass()
+    {
+        rp.matProps = propertyBlock;
+        Graphics.RenderMeshInstanced(rp, grassMesh, 0, MatrixArray); //final argument can take an array
+    }
+
+    void CalculateGrassAgain()
     {
         Random.InitState(seed);
         grassRotation = transform.eulerAngles;
         Scaling = transform.localScale;
         startingPosition = transform.position;
+
         MatrixArray = new Matrix4x4[numInstances];
         positionStorage = new Vector3[numInstances];
+        cutData = new float[numInstances];
+        transform.hasChanged = false;
+        rp = new RenderParams(grassMaterial);
+        rp.matProps = propertyBlock;
 
-        
+
         for (int i = 0; i < numInstances; ++i)
         {
             Vector3 Originpoint = new Vector3(startingPosition.x + Random.insideUnitCircle.x, startingPosition.y, startingPosition.z + Random.insideUnitCircle.y);
-            positionStorage[i] = Originpoint;
             Physics.Raycast(Originpoint, Vector3.down, out raycastHit, Mathf.Infinity);
             Scaling = new Vector3(Scaling.x + Random.Range(minimumScaleOffset, maximumScaleOffset), Scaling.y + Random.Range(minimumScaleOffset, maximumScaleOffset), Scaling.z + Random.Range(minimumScaleOffset, maximumScaleOffset));
             grassRotation = new Vector3(0, grassRotation.y + Random.Range(minimumRotationOffset, maximumRotationOffset), grassRotation.z + Random.Range(minimumRotationOffset, maximumRotationOffset) / 10);
@@ -96,25 +120,44 @@ public class GrassSpawner : MonoBehaviour, IBreakable
             MatrixArray[i] = Matrix4x4.TRS(raycastHit.point, Quaternion.Euler(0, grassRotation.y, grassRotation.z), Scaling);
         }
 
-
-        SpawnGrassButton = false;
-        print("grass");
     }
 
-    void InstanceGrass()
+    public void Damage(float damage, float range, Vector3 position)
     {
-        RenderParams rp = new RenderParams(grassMaterial);
-        Graphics.RenderMeshInstanced(rp, grassMesh, 0, MatrixArray); //final argument can take an array
+        float rangeSqr = range * range;
+
+        if (hasParticleSys == false)
+        {
+            AssignParticlSys();
+            hasParticleSys = true;
+        }
+
+
+        for (int i = 0; i < numInstances; ++i)
+        {
+            Matrix4x4 instance = MatrixArray[i];
+            Vector3 grassPos = new Vector3(instance[0, 3], instance[1, 3], instance[2, 3]);
+
+            Vector3 diff = (position - grassPos);
+
+            if (diff.sqrMagnitude < rangeSqr && cutData[i] == 0)
+            {
+                cutData[i] = 1f;
+                ep.position = grassPos;
+                grassBladesPS.Emit(ep, 20);
+            }
+        }
+        propertyBlock.SetFloatArray("_GrassIsCut", cutData); //set material block so shader knows what to 'cut'
     }
 
-    void ChangeLocation()
+    public void getParticlSystemPosition()
     {
-       CalculateAgain();
+        Physics.Raycast(this.transform.position, Vector3.down, out raycastHit, Mathf.Infinity);
+        particlSysLocation = raycastHit.point;
     }
 
-    public void Damage(float damage, Vector3 position)
+    public void AssignParticlSys()
     {
-        damage = 5;
-        position = Vector3.one;
+        particleSystemPoolManager.GetParticleSys(particlSysLocation, gameObject);
     }
 }

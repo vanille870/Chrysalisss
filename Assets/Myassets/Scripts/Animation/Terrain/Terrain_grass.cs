@@ -17,7 +17,6 @@ public class Terrain_grass : MonoBehaviour
     void Start()
     {
         grassInt = terrain.terrainData.GetDetailLayer(0,0, terrain.terrainData.detailWidth, terrain.terrainData.detailHeight, 0);
-        print(grassInt);
 
         grassPosition = terrain.transform.position;
     }

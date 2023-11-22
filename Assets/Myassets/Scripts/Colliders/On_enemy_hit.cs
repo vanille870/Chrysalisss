@@ -23,9 +23,7 @@ public class On_enemy_hit : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider thisCollider)
-    {
-        
-        print(thisCollider);
+    {  
 
         if (thisCollider.tag == "Enemy")
         {
