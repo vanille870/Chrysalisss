@@ -14,7 +14,7 @@ public class ParticleSystemPoolManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void GetParticleSys(Vector3 particleSysPos, GameObject GO)
+    public void GetParticleSystem(Vector3 particleSysPos, GameObject GO)
     {
         foreach (GameObject ThisGo in particleSysList)
         {
@@ -26,10 +26,13 @@ public class ParticleSystemPoolManager : MonoBehaviour
                 break;
             }
         }
+
+        Debug.LogError("No particle system aviable");
     }
 
    public void Start()
     {
+        //make list at runtime
         foreach (Transform childGO in poolParent.transform)
         {
             particleSysList.Add(childGO.gameObject);

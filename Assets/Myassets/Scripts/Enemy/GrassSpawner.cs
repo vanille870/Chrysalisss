@@ -26,12 +26,12 @@ public class GrassSpawner : MonoBehaviour, IBreakable
 
     MaterialPropertyBlock propertyBlock;
     float[] cutData;
-    RenderParams rp;
+    RenderParams renderP;
     Vector3 startingPosition;
     Vector3[] positionStorage;
     public ParticleSystem grassBladesPS;
     GameObject particleSytemObject;
-    public EmitParams ep;
+    public EmitParams emitP;
     public GameObject grassParticleSys;
     public Vector3 particlSysLocation;
     public ParticleSystemPoolManager particleSystemPoolManager;
@@ -39,10 +39,12 @@ public class GrassSpawner : MonoBehaviour, IBreakable
 
     void Awake()
     {
-        ep.applyShapeToPosition = true;
-        getParticlSystemPosition();
+
+        //initialize variables
+        emitP.applyShapeToPosition = true;
         particleSystemPoolManager = GameObject.Find("ParticleSysManager").GetComponent<ParticleSystemPoolManager>();
         Random.InitState(seed);
+
         grassRotation = transform.eulerAngles;
         Scaling = transform.localScale;
         startingPosition = transform.position;
@@ -51,9 +53,12 @@ public class GrassSpawner : MonoBehaviour, IBreakable
         positionStorage = new Vector3[numInstances];
         cutData = new float[numInstances];
         transform.hasChanged = false;
+        
         propertyBlock = new MaterialPropertyBlock();
-        rp = new RenderParams(grassMaterial);
-        rp.matProps = propertyBlock;
+        renderP = new RenderParams(grassMaterial);
+        renderP.matProps = propertyBlock;
+
+        getParticlSystemPosition();
 
 
         for (int i = 0; i < numInstances; ++i)
@@ -69,8 +74,8 @@ public class GrassSpawner : MonoBehaviour, IBreakable
 
     void Update()
     {
-        rp = new RenderParams(grassMaterial);
-        rp.matProps = propertyBlock;
+        renderP = new RenderParams(grassMaterial);
+        renderP.matProps = propertyBlock;
         InstanceGrass();
 
 
@@ -91,27 +96,32 @@ public class GrassSpawner : MonoBehaviour, IBreakable
 
     void InstanceGrass()
     {
-        rp.matProps = propertyBlock;
-        Graphics.RenderMeshInstanced(rp, grassMesh, 0, MatrixArray); //final argument can take an array
+        renderP.matProps = propertyBlock;
+        Graphics.RenderMeshInstanced(renderP, grassMesh, 0, MatrixArray); //final argument can take an array
     }
 
     void CalculateGrassAgain()
     {
         Random.InitState(seed);
+
         grassRotation = transform.eulerAngles;
         Scaling = transform.localScale;
         startingPosition = transform.position;
 
         MatrixArray = new Matrix4x4[numInstances];
         positionStorage = new Vector3[numInstances];
+
+        //array to pass into GPU isnatncing function so the game knows what to cut
         cutData = new float[numInstances];
+
         transform.hasChanged = false;
-        rp = new RenderParams(grassMaterial);
-        rp.matProps = propertyBlock;
+        renderP = new RenderParams(grassMaterial);
+        renderP.matProps = propertyBlock;
 
 
         for (int i = 0; i < numInstances; ++i)
         {
+            //Determine random location and fire raycast down for location on ground
             Vector3 Originpoint = new Vector3(startingPosition.x + Random.insideUnitCircle.x, startingPosition.y, startingPosition.z + Random.insideUnitCircle.y);
             Physics.Raycast(Originpoint, Vector3.down, out raycastHit, Mathf.Infinity);
             Scaling = new Vector3(Scaling.x + Random.Range(minimumScaleOffset, maximumScaleOffset), Scaling.y + Random.Range(minimumScaleOffset, maximumScaleOffset), Scaling.z + Random.Range(minimumScaleOffset, maximumScaleOffset));
@@ -143,8 +153,8 @@ public class GrassSpawner : MonoBehaviour, IBreakable
             if (diff.sqrMagnitude < rangeSqr && cutData[i] == 0)
             {
                 cutData[i] = 1f;
-                ep.position = grassPos;
-                grassBladesPS.Emit(ep, 20);
+                emitP.position = grassPos;
+                grassBladesPS.Emit(emitP, 20);
             }
         }
         propertyBlock.SetFloatArray("_GrassIsCut", cutData); //set material block so shader knows what to 'cut'
@@ -158,6 +168,6 @@ public class GrassSpawner : MonoBehaviour, IBreakable
 
     public void AssignParticlSys()
     {
-        particleSystemPoolManager.GetParticleSys(particlSysLocation, gameObject);
+        particleSystemPoolManager.GetParticleSystem(particlSysLocation, gameObject);
     }
 }
