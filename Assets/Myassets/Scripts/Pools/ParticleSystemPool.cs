@@ -24,7 +24,7 @@ public class ParticleSystemPool
             {
                 ThisGo.SetActive(true);
                 ThisGo.transform.position = particleSysPos;
-                GO.GetComponent<GrassSpawner>().grassBladesPS = ThisGo.GetComponent<ParticleSystem>();
+                GO.GetComponent<BreakableObjectSpawner>().grassBladesPS = ThisGo.GetComponent<ParticleSystem>();
                 break;
             }
         }

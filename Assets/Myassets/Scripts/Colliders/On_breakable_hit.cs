@@ -29,7 +29,7 @@ public class On_breakable_hit : MonoBehaviour
             {
                 if (col.tag == "Breakable")
                 {
-                   col.GetComponent<GrassSpawner>().Damage(0f, radius, center.position);
+                   col.GetComponent<BreakableObjectSpawner>().Damage(0f, radius, center.position);
                 }
             }
         }
