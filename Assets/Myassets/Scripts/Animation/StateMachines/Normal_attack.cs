@@ -6,7 +6,7 @@ public class Normal_attack : StateMachineBehaviour
 {
     public event System.Action<Animator, AnimatorStateInfo> onStateEnterOR;
     public GeneralAnimationWeapon generalAnimationWeapon;
-    public Movement movement;
+    public PlayerMovement movement;
 
 
     public void Push()

@@ -1,18 +1,17 @@
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 public class SM_variables : MonoBehaviour
 {
     //make space to put the scripts in
     public GeneralAnimationWeapon generalAnimationWeapon;
-    public Movement movement;
-    private Normal_attack normal_Attack1;
+    public PlayerMovement movement;
 
     private Animator mainCharAnimator;
 
+
     private void Awake()
     {
-        this.mainCharAnimator = this.GetComponent<Animator>();
+        mainCharAnimator = GetComponent<Animator>();
 
         //get all statemachines and put in the respective script
         Normal_attack[] normal_Attack_scripts = this.mainCharAnimator.GetBehaviours<Normal_attack>();
@@ -22,7 +21,7 @@ public class SM_variables : MonoBehaviour
             normal_Attack_SM.movement = this.movement;
         }
 
-        mainCharAnimator.GetBehaviour<Idle_SM>().movement = movement;
+        mainCharAnimator.GetBehaviour<Idle_SM>().SMmovement = movement;
         mainCharAnimator.GetBehaviour<Idle_SM>().generalAnimationWeapon = generalAnimationWeapon;
     }
 }

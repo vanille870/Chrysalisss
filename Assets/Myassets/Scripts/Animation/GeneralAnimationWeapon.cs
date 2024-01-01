@@ -5,7 +5,7 @@ using UnityEngine;
 public class GeneralAnimationWeapon : MonoBehaviour
 {
     public Animator mainCharAnimator;
-    public Movement movement;
+    public PlayerMovement movement;
     public float speedStorage;
     public static bool isAttacking;
     public bool isAttacking_DEBUG;

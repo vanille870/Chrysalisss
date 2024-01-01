@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Movement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
 
 
@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
     private bool multiplySpeed;
     public bool IsPushing;
     public bool isAttacking;
+    public bool playerKnockBack = false;
 
     [Header("Movement floats")]
     public float acceleration;
@@ -39,6 +40,9 @@ public class Movement : MonoBehaviour
     public float turnSmoothAttack;
     public float pushTimer;
     public float pushTime;
+    public float KnockbackTimer;
+    public float KnockbackTime;
+    float knockbackAmountHere;
 
 
     [Header("Jump floats")]
@@ -70,6 +74,7 @@ public class Movement : MonoBehaviour
     private Vector3 playerVelocity;
     static public Vector2 Input;
     public Vector3 storeLastMoveDir;
+    Vector3 otherPositionHere;
 
     [Header("Unity")]
     public Transform cam;
@@ -101,8 +106,11 @@ public class Movement : MonoBehaviour
         if (moveDir.sqrMagnitude >= 0.1f)
         {
             //smooth turning
-            targetAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
-            smoothingAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTimeground);
+            if (playerKnockBack == false)
+            {
+                targetAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
+                smoothingAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTimeground);
+            }
 
             if (isAttacking == false)
             {
@@ -124,7 +132,7 @@ public class Movement : MonoBehaviour
         //detremines how long you can hold jump to increase height
 
 
-        PlayerMovement();
+        PlayerControllerMovement();
         AttackPushtimer();
 
         //PlayerJumpUpdateFunctions();
@@ -161,7 +169,7 @@ public class Movement : MonoBehaviour
         moveDir = new Vector3(Input.x, 0, Input.y);
     }
 
-    void PlayerMovement()
+    void PlayerControllerMovement()
     {
         //Holds player to the ground
         //playerVelocity += Physics.gravity * Time.deltaTime * fallSpeed;
@@ -184,7 +192,7 @@ public class Movement : MonoBehaviour
 
         else
         {
-            //Smootly increases variable and character speed for idle state machine, and ensures the character moves forward
+            //Smootly decrease variable and character speed for idle state machine, and ensures the character moves forward
             mBFloatDummy -= mBFloatDeacceleration * Time.deltaTime;
             mBFloatDummy = Mathf.Clamp(mBFloatDummy, 0, 1);
 
@@ -197,7 +205,7 @@ public class Movement : MonoBehaviour
         LerpSpeed();
 
 
-        if (isAttacking == false)
+        if (isAttacking == false && playerKnockBack == false)
         {
             //if not attacking regular movemnt is performed
             if (!isSprinting)
@@ -211,6 +219,11 @@ public class Movement : MonoBehaviour
         {
             //if attacking this pushes the character for a more weighty feel.
             charControl.Move((transform.forward * pushAmountAttack + ((Physics.gravity / 5)) + playerVelocity) * Time.deltaTime);
+        }
+
+        else if (playerKnockBack == true)
+        {
+            knockback();
         }
 
 
@@ -293,6 +306,21 @@ public class Movement : MonoBehaviour
         currentSpeed = 0;
     }
 
+    void knockback()
+    {
+        Vector3 knockbackDir = otherPositionHere - transform.position;
+        knockbackDir = -knockbackDir.normalized;
+        charControl.Move((knockbackDir * knockbackAmountHere + playerVelocity) * Time.deltaTime);
+        KnockBackTimer();
+    }
+
+    public void iniateKnockback(float amountOfKnockback, Vector3 positionOther)
+    {
+        otherPositionHere = positionOther;
+        knockbackAmountHere = amountOfKnockback;
+        playerKnockBack = true;
+    }
+
     public void AttackPushtimer()
     {
         if (IsPushing == true)
@@ -303,6 +331,20 @@ public class Movement : MonoBehaviour
             {
                 pushTimer = 0;
                 IsPushing = false;
+            }
+        }
+    }
+
+    public void KnockBackTimer()
+    {
+        if (playerKnockBack == true)
+        {
+            KnockbackTimer += Time.deltaTime;
+
+            if (KnockbackTimer >= KnockbackTime)
+            {
+                KnockbackTimer = 0;
+                playerKnockBack = false;
             }
         }
     }

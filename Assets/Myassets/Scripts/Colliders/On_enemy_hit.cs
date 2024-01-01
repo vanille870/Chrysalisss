@@ -6,14 +6,14 @@ using UnityEngine;
 public class On_enemy_hit : MonoBehaviour
 {
 
-    private Collider enemyCollider;
+    public Collider enemyCollider;
     public ParticleSystem enemyHiteffect;
     private GameObject enemyGameObject;
 
     // Start is called before the first frame update
     void Awake()
     {
-        enemyCollider = this.GetComponent<Collider>();
+        
     }
 
     // Update is called once per frame
@@ -24,13 +24,15 @@ public class On_enemy_hit : MonoBehaviour
 
     void OnTriggerEnter(Collider thisCollider)
     {  
+        print(thisCollider.tag);
 
         if (thisCollider.tag == "Enemy")
         {
             enemyGameObject = thisCollider.gameObject;
             enemyHiteffect = enemyGameObject.GetComponentInParent<ParticleSystem>();
-            enemyHiteffect.Play();
+            //enemyHiteffect.Play();
             thisCollider.GetComponent<Enemy_hit_effects>().FlashStart();
+            print("a hit");
         }
     }
 }

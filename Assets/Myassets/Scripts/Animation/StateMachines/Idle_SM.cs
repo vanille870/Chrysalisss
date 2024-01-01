@@ -7,7 +7,7 @@ public class Idle_SM : StateMachineBehaviour
 {       
   
     public GeneralAnimationWeapon generalAnimationWeapon;
-    public Movement movement;
+    public PlayerMovement SMmovement;
 
     public void Awake() 
     {
@@ -17,7 +17,7 @@ public class Idle_SM : StateMachineBehaviour
     public void OnStateExit()
     {
         GeneralAnimationWeapon.isAttacking = true;
-        movement.AttackMovementModeStart(); 
+        SMmovement.AttackMovementModeStart(); 
     }
 
     public void OnStateEnter(Animator animator)
@@ -27,7 +27,7 @@ public class Idle_SM : StateMachineBehaviour
         animator.SetBool("NormalAttack", false);
         animator.SetBool("CanStartNextAttack", false);
         animator.SetBool("ReturnToIdle", false);
-        movement.AttackMovementModeStop();
+        SMmovement.AttackMovementModeStop();
 
         
     }

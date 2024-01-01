@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy_hit_effects : MonoBehaviour
 {
-    SkinnedMeshRenderer enemyRenderer;
+    public SkinnedMeshRenderer enemyRenderer;
     public Color flashColor;
     private Color originalColor;
     public Color debug;
@@ -27,7 +27,6 @@ public class Enemy_hit_effects : MonoBehaviour
     {
         shaderProperties = new MaterialPropertyBlock();
 
-        enemyRenderer = this.GetComponentInParent<SkinnedMeshRenderer>();
         originalColor = enemyRenderer.material.color;
         OriginalFresnelFactor = enemyRenderer.material.GetFloat("_FresnelFactor");
         HitFresnelFactor = OriginalFresnelFactor;

@@ -8,7 +8,7 @@ public class MainCharAnimation : MonoBehaviour
 {
     public Animator mainCharAnimator;
     public BlendTree MovementBlend;
-    public Movement movementScript;
+    public PlayerMovement movementScript;
 
     [Range(0, 1)]
     public float movementBlendFloat;

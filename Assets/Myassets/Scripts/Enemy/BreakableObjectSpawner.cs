@@ -41,7 +41,6 @@ public class BreakableObjectSpawner : MonoBehaviour, IBreakable
     public float maxParticleSytemTimer;
 
     bool hasParticleSys = false;
-    private bool particleSystemUnneeded = false;
     public string particlSysName;
 
     void Awake()

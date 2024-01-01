@@ -13,7 +13,7 @@ public class InputManager : MonoBehaviour
     public float acceleration;
 
     [Header("Scripts")]
-    [SerializeField] Movement movementScript;
+    [SerializeField] PlayerMovement movementScript;
     [SerializeField] GeneralAnimationWeapon generalAnimationWeapon;
 
     void Awake()
