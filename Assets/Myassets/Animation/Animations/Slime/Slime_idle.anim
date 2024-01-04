@@ -1856,54 +1856,68 @@ AnimationClip:
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 1
+    intParameter: 0
     messageOptions: 0
   - time: 0.38333333
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
+  - time: 1.3666667
+    functionName: CheckIfPlayerIsInRange
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.4666667
+  - time: 1.45
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 1.55
+  - time: 2.3166666
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.5666666
+  - time: 2.4
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 2.65
+  - time: 3.2166667
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 3.8333333
+  - time: 3.3000002
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 3.9166667
+  - time: 4.3333335
     functionName: CheckIfPlayerIsInRange
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
+    messageOptions: 0
+  - time: 4.416667
+    functionName: CheckIfPlayerIsInRange
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 1
     messageOptions: 0

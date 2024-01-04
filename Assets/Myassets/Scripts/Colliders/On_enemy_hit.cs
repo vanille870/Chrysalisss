@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class On_enemy_hit : MonoBehaviour
 {
-
-    public Collider enemyCollider;
     public ParticleSystem enemyHiteffect;
     private GameObject enemyGameObject;
+
+    public int damage;
+    public int staggrDamage;
 
     // Start is called before the first frame update
     void Awake()
@@ -22,17 +23,24 @@ public class On_enemy_hit : MonoBehaviour
         
     }
 
+    void PlayEnemyHitEffect()
+    {
+
+    }
+
     void OnTriggerEnter(Collider thisCollider)
     {  
-        print(thisCollider.tag);
 
         if (thisCollider.tag == "Enemy")
         {
             enemyGameObject = thisCollider.gameObject;
-            enemyHiteffect = enemyGameObject.GetComponentInParent<ParticleSystem>();
-            //enemyHiteffect.Play();
-            thisCollider.GetComponent<Enemy_hit_effects>().FlashStart();
-            print("a hit");
+            enemyHiteffect = enemyGameObject.GetComponentInChildren<ParticleSystem>();
+            enemyHiteffect.Play();
+            thisCollider.GetComponent<Slime_Damaged>().FlashStart();
+            
+            thisCollider.GetComponent<EnemyHealth>().EnemyRecieveDamage(damage, staggrDamage);
         }
     }
+
+    
 }

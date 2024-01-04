@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+public class EnemyHealth : MonoBehaviour
+{
+    public int StaggerValue;
+    int maxStaggerValue;
+
+    public int EnemyCurrentHealth;
+    public Animator EnemyAnimator;
+
+    public Slime_Damaged enemyAnimationScript;
+    public bool EnemyIsDead;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        maxStaggerValue = StaggerValue;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+         
+    }
+
+    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage)
+    {
+        EnemyCurrentHealth -= recievedDamage;
+        StaggerValue -= staggerDamage;
+
+
+          if (EnemyCurrentHealth <= 0)
+        {
+            EnemyAnimator.SetTrigger("_Dead");
+            enemyAnimationScript.DeadAnimation();
+            EnemyIsDead = true;
+        }
+
+        if (StaggerValue <= 0 && EnemyIsDead == false)
+        {
+            StaggerValue = maxStaggerValue;
+            EnemyAnimator.SetTrigger("_Stagger");
+
+            print("staggered");
+        }
+    }
+}

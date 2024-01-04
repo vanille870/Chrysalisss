@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Slime_animation : MonoBehaviour
+public class Enemy_Animation : MonoBehaviour
 {
     public NavMeshAgent slimeAgent;
     Animator slimeAnimator;
     public GameObject TriggerCollectionGO;
+    public GameObject CollisonGO;
+    public GameObject EnemyHurtBoxGO;
+    public ParticleSystem EnemyDeathParticleSystem;
 
     public float currentSpeed;
     [Range(0, 1)]
@@ -20,6 +23,7 @@ public class Slime_animation : MonoBehaviour
 
     float agentOriginalSpeed;
     float agentOrginalAcceleration;
+    float agentOrginalAnglSpeed;
 
 
     SphereCollider attackRangeSphere;
@@ -30,37 +34,27 @@ public class Slime_animation : MonoBehaviour
     public float rotationSpeed;
 
     public Collider[] TriggerCollection;
-    public int[] TriggerIDs;
-    public int hdzéua;
-
-
-
-
-
 
 
     // Start is called before the first frame update
     void Start()
     {
-        TriggerCollection = TriggerCollectionGO.GetComponentsInChildren<Collider>();
-
         slimeAnimator = GetComponent<Animator>();
 
         PlayerPoint = GameObject.Find("PlayerPoint").GetComponent<Transform>();
 
         agentOriginalSpeed = slimeAgent.speed;
         agentOrginalAcceleration = slimeAgent.acceleration;
+        agentOrginalAnglSpeed = slimeAgent.angularSpeed;
 
-        foreach (GameObject GO in TriggerCollectionGO.transform)
+
+        for (int i = 0; i < TriggerCollectionGO.transform.childCount; i++)
         {
-            if (GO.CompareTag("Enemy_trigger"))
+            GameObject currentGO = TriggerCollectionGO.transform.GetChild(i).gameObject;
+
+            if (currentGO.CompareTag("Enemy_trigger"))
             {
-                int number = 0;
-
-                string GOname = GO.name;
-                TriggerIDs[number] = Animator.StringToHash(GOname);
-
-                number += 1;
+                TriggerCollection[i] = currentGO.GetComponent<Collider>();
             }
         }
 
@@ -107,49 +101,33 @@ public class Slime_animation : MonoBehaviour
         isAttacking = false;
         slimeAgent.speed = agentOriginalSpeed;
         slimeAgent.acceleration = agentOrginalAcceleration;
-
-        slimeAnimator.SetBool("_FirstAttack", false);
-        slimeAnimator.SetBool("_InTrigger0", false);
-        slimeAnimator.SetBool("_InTrigger1", false);
+        print(slimeAgent.acceleration);
+        print(slimeAgent.speed);
     }
 
-    public void ClearBools()
+    public void RestoreFromStagger()
     {
-        slimeAnimator.SetBool("_FirstAttack", false);
-        slimeAnimator.SetBool("_InTrigger0", false);
-        slimeAnimator.SetBool("_InTrigger1", false);
+        slimeAgent.speed = agentOriginalSpeed;
+        slimeAgent.angularSpeed = agentOrginalAnglSpeed;
     }
 
-    public void ContinueAttack()
+    public void ResetAnimatorINT()
     {
+        slimeAnimator.SetInteger("_TriggerINT", -1);
 
     }
 
     public void CheckIfPlayerIsInRange(int colliderNumber)
     {
-        
-    }
-
-    public void CheckIfPlayerIsInRange2(String colliderName)
-    {
-    
+        if (TriggerCollection[colliderNumber].bounds.Contains(PlayerPoint.position) == true)
+        {
+            slimeAnimator.SetInteger("_TriggerINT", colliderNumber);
+        }
     }
 
     public void SetTriggerBool(int colliderNumber)
     {
-        switch (colliderNumber)
-        {
-            case 0:
-
-                slimeAnimator.SetBool("_InTrigger0", true);
-                break;
-
-            case 1:
-
-                slimeAnimator.SetBool("_InTrigger1", true);
-                break;
-        }
-
+        slimeAnimator.SetInteger("_TriggerINT", colliderNumber);
     }
 
 
@@ -178,5 +156,22 @@ public class Slime_animation : MonoBehaviour
         // Draw a ray pointing at our target in
         Debug.DrawRay(transform.position, newDirection, Color.red);
         transform.rotation = Quaternion.LookRotation(newDirection);
+    }
+
+    public void DeactivateEnemy()
+    {
+        gameObject.transform.root.gameObject.SetActive(false);
+    }
+
+    public void TriggerDeathParticleSystemAndMakeEnemyUninteractive()
+    {
+        EnemyDeathParticleSystem.Play();
+        CollisonGO.SetActive(false);
+
+    }
+
+    public void DisableAgent()
+    {
+        slimeAgent.enabled = false;
     }
 }

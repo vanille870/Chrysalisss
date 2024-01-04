@@ -115,6 +115,7 @@ Material:
     - _ReceiveShadows: 1
     - _Scale: 130.53
     - _ScollSpeed: 0.15
+    - _ScrollSpeed: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

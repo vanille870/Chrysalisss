@@ -941,10 +941,10 @@
     "m_Guid": {
         "m_GuidSerialized": "2fdacf41-717b-419a-b115-43384c7c46e0"
     },
-    "m_Name": "_ScollSpeed",
+    "m_Name": "_ScrollSpeed",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "_ScollSpeed",
-    "m_DefaultReferenceName": "_ScollSpeed",
+    "m_RefNameGeneratedByDisplayName": "_ScrollSpeed",
+    "m_DefaultReferenceName": "_ScrollSpeed",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1543,7 +1543,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "729e12b431be48b4ae6225a4828dffc2",
     "m_Id": 0,
-    "m_DisplayName": "_ScollSpeed",
+    "m_DisplayName": "_ScrollSpeed",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Slime_Attack_Range : MonoBehaviour
 {
     public Animator slimeAnimator;
-    public Slime_animation slimeAnimationScript;
+    public Enemy_Animation slimeAnimationScript;
     public int triggerNumber;
 
     void Start()

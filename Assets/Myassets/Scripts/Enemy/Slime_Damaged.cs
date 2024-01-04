@@ -2,18 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_hit_effects : MonoBehaviour
+public class Slime_Damaged : MonoBehaviour
 {
+    public EnemyHealth enemyHealthScript;
+    public Enemy_Animation slime_AnimationScript;
+
     public SkinnedMeshRenderer enemyRenderer;
     public Color flashColor;
     private Color originalColor;
     public Color debug;
     public float flashTime;
+
+    [Header("shader params")]
     private float OriginalFresnelFactor;
     public float HitFresnelFactor;
     public float TargetFresnel;
     public float fresnelLerpSpeedMultiplier;
     public float lerpInterpolation;
+    public float deathNoiseScale;
+    public float DeathScrollSpeed;
+    public float DeathNoiseOffset;
 
     private bool lerpFresnel;
     public bool lerpFresnelForward;
@@ -84,6 +92,13 @@ public class Enemy_hit_effects : MonoBehaviour
             timerCount = 0;
             lerpFresnelForward = !lerpFresnelForward;
         }
+    }
+
+    public void DeadAnimation()
+    {
+        shaderProperties.SetFloat("_NoiseScale", deathNoiseScale);
+        shaderProperties.SetFloat("_ScrollSpeed", DeathScrollSpeed);
+        shaderProperties.SetFloat("_Offset", DeathNoiseOffset);
     }
 
     void PropertyBlockFlash()

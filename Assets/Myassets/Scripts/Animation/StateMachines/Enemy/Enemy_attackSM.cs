@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime_AttackSM : StateMachineBehaviour
+public class Enemy_attackSM : StateMachineBehaviour
 {
-    public Slime_animation SMslime_AnimationScript;
+    public Enemy_Animation SMslime_AnimationScript;
 
     public void OnStateEnter()
     {
@@ -14,6 +14,6 @@ public class Slime_AttackSM : StateMachineBehaviour
 
     public void OnStateExit()
     {
-        SMslime_AnimationScript.ClearBools(); 
+        SMslime_AnimationScript.ResetAnimatorINT(); 
     }
 }
