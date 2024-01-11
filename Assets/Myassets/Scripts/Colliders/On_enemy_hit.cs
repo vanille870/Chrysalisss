@@ -37,7 +37,6 @@ public class On_enemy_hit : MonoBehaviour
             enemyHiteffect = enemyGameObject.GetComponentInChildren<ParticleSystem>();
             enemyHiteffect.Play();
             thisCollider.GetComponent<Slime_Damaged>().FlashStart();
-            
             thisCollider.GetComponent<EnemyHealth>().EnemyRecieveDamage(damage, staggrDamage);
         }
     }

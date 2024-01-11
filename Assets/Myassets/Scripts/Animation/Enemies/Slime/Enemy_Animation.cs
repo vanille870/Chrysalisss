@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -40,6 +42,7 @@ public class Enemy_Animation : MonoBehaviour
     void Start()
     {
         slimeAnimator = GetComponent<Animator>();
+
 
         PlayerPoint = GameObject.Find("PlayerPoint").GetComponent<Transform>();
 

@@ -12,7 +12,10 @@ public class EnemyHealth : MonoBehaviour
     public Animator EnemyAnimator;
 
     public Slime_Damaged enemyAnimationScript;
+    public Slime_AI slime_AIScript;
     public bool EnemyIsDead;
+
+    public float time;
 
 
     // Start is called before the first frame update
@@ -24,13 +27,14 @@ public class EnemyHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         
+        time = Time.time;
     }
 
     public void EnemyRecieveDamage(int recievedDamage, int staggerDamage)
     {
         EnemyCurrentHealth -= recievedDamage;
         StaggerValue -= staggerDamage;
+        slime_AIScript.currentEnemyState = Slime_AI.EnemyState.chasing;
 
 
           if (EnemyCurrentHealth <= 0)

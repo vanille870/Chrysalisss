@@ -7,14 +7,15 @@ TagManager:
   - Enemy
   - Breakable
   - Enemy_trigger
+  - Solid_Object
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Solid_Object
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 

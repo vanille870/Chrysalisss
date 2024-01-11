@@ -15,7 +15,8 @@ public class EnemyHitbox : MonoBehaviour
 
     void Start()
     {
-
+        movementScript = GameObject.Find("MainChar_Parent").GetComponent<PlayerMovement>();
+        playerConditionStatsScript = GameObject.Find("MainChar_Parent").GetComponent<PlayerConditionStats>();
     }
 
 
