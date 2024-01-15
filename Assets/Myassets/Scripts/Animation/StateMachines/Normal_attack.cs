@@ -24,7 +24,7 @@ public class Normal_attack : StateMachineBehaviour
         animator.SetBool("CanStartNextAttack", false);
         animator.SetBool("ReturnToIdle", false);
 
-        movement.PushOnAttack();
+        movement.CallAttackPush();
     }
 
     void OnStateExit()

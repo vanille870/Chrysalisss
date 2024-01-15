@@ -44,6 +44,15 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""cdfe9552-9ec9-4333-bcdf-f1b712fe0762"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -123,6 +132,17 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
                     ""action"": ""Normal_attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d32d2fdd-64dd-45ae-9df7-7c4c7cf95d74"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -144,6 +164,7 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         m_InGame = asset.FindActionMap("InGame", throwIfNotFound: true);
         m_InGame_Movement = m_InGame.FindAction("Movement", throwIfNotFound: true);
         m_InGame_Normal_attack = m_InGame.FindAction("Normal_attack", throwIfNotFound: true);
+        m_InGame_Dodge = m_InGame.FindAction("Dodge", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,12 +228,14 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
     private List<IInGameActions> m_InGameActionsCallbackInterfaces = new List<IInGameActions>();
     private readonly InputAction m_InGame_Movement;
     private readonly InputAction m_InGame_Normal_attack;
+    private readonly InputAction m_InGame_Dodge;
     public struct InGameActions
     {
         private @Crystal_inputs m_Wrapper;
         public InGameActions(@Crystal_inputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_InGame_Movement;
         public InputAction @Normal_attack => m_Wrapper.m_InGame_Normal_attack;
+        public InputAction @Dodge => m_Wrapper.m_InGame_Dodge;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -228,6 +251,9 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
             @Normal_attack.started += instance.OnNormal_attack;
             @Normal_attack.performed += instance.OnNormal_attack;
             @Normal_attack.canceled += instance.OnNormal_attack;
+            @Dodge.started += instance.OnDodge;
+            @Dodge.performed += instance.OnDodge;
+            @Dodge.canceled += instance.OnDodge;
         }
 
         private void UnregisterCallbacks(IInGameActions instance)
@@ -238,6 +264,9 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
             @Normal_attack.started -= instance.OnNormal_attack;
             @Normal_attack.performed -= instance.OnNormal_attack;
             @Normal_attack.canceled -= instance.OnNormal_attack;
+            @Dodge.started -= instance.OnDodge;
+            @Dodge.performed -= instance.OnDodge;
+            @Dodge.canceled -= instance.OnDodge;
         }
 
         public void RemoveCallbacks(IInGameActions instance)
@@ -277,5 +306,6 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnNormal_attack(InputAction.CallbackContext context);
+        void OnDodge(InputAction.CallbackContext context);
     }
 }

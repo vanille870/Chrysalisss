@@ -7,42 +7,44 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
 
+    public enum MovementState
+    {
+        NormalMovment = 0,
+        AttackPush,
+        NoMovemnt,
+        KnockBack,
+        Dodge
+    }
+
+    public MovementState currentMovementState = MovementState.NormalMovment;
+    private System.Action[] runCurrentMovement = null;
+
 
     [Header("Bools")]
     public bool lerpSpeed;
-    public bool isMoving = false;
-    public bool isFallingFromJump;
-    public bool isSprinting;
-    public bool isHoldingJump;
-    private bool multiplySpeed;
     public bool IsPushing;
     public bool isAttacking;
     public bool playerKnockBack = false;
 
     [Header("Movement floats")]
-    public float acceleration;
-    public float AnimAcceleration;
     public float currentSpeed;
     private float currentVelocity;
+
+    public float acceleration;
     public float deAcceleration;
-    private Vector3 currentVectorVelocity;
-    public float vectorVelocity;
-    public float speedDA;
+    public float AnimAcceleration;
+    public float AnimDeacceleration;
     public float maxSpeed;
-    public float maxSprintSpeed;
-    public float mBFloatDummy;
-    public float mBBlendFloatacceleration;
-    public float mBFloatDeacceleration;
+    public float mbBlendFloatDummy;
     private float currentMBVelocity;
     public float pushAmountAttack;
-    private float smoothTurnStorage;
     public float turnSmoothTimeground;
+    public float turnSmoothTimegroundOriginal;
     public float turnSmoothAttack;
-    public float pushTimer;
-    public float pushTime;
     public float KnockbackTimer;
     public float KnockbackTime;
     float knockbackAmountHere;
+    public float DodgeSpeed;
 
 
     [Header("Jump floats")]
@@ -51,17 +53,13 @@ public class PlayerMovement : MonoBehaviour
     public float originalFallSpeed;
     public float timeElapsed;
     public float lerpDuration;
-    float smoothDampingCamera;
     public static float turnSmoothTimeBase = 0.1f;
     public float turnSmoothTimeJump = 1f;
     public float fallSpeed;
     public float JumpForce;
-    bool playerGrounded;
-    bool isJumping;
 
     [Header("Angle")]
     public float turnAngleSkewSmoothTime;
-    float turSmoothVelocity;
     float targetAngle;
     float smoothingAngle;
     float turnSmoothVelocity;
@@ -69,194 +67,181 @@ public class PlayerMovement : MonoBehaviour
     public float skewAmount;
 
     [Header("Vectors 3")]
-    static public Vector3 moveDir;
-    public Vector3 moveDirShowInEditor;
-    private Vector3 playerVelocity;
+    public Vector3 moveDir;
     static public Vector2 Input;
     public Vector3 storeLastMoveDir;
     Vector3 otherPositionHere;
+    Vector3 ForcedRotation;
+    Vector3 DodgeDirection;
 
     [Header("Unity")]
     public Transform cam;
     CharacterController charControl;
-    CapsuleCollider capCol;
 
+    [System.Serializable]
+    public struct TimedEvent
+    {
+        [SerializeField]
+        private float Duration;
+        private float Clock;
 
+        public TimedEvent(float duration, float time = 0f)
+        {
+            Duration = duration;
+            Clock = time;
+        }
 
+        public void SetClock()
+        {
+            Clock = Time.time + Duration;
+        }
+
+        public bool IsFinished => Time.time >= Clock;
+    }
+
+    [Header("Timers")]
+    [SerializeField]
+    private TimedEvent KnockBackTimer = new TimedEvent();
+    [SerializeField]
+    private TimedEvent AttackPushTimer = new TimedEvent();
+    [SerializeField]
+    private TimedEvent DodgeTimer = new TimedEvent();
 
 
     void Start()
     {
         charControl = gameObject.GetComponent<CharacterController>();
-        capCol = gameObject.GetComponent<CapsuleCollider>();
-        turnSmoothTimeBase = turnSmoothTimeground;
-        smoothTurnStorage = turnSmoothTimeground;
-    }
+        turnSmoothTimegroundOriginal = turnSmoothTimeground;
 
-    /*public void EndJump()
-    {
-        isHoldingJump = false;
-        isFallingFromJump = true;
-        airTimer = 0;
-    }*/
+        runCurrentMovement = new System.Action[]
+        {
+            NormalMovement,
+            AttackPush,
+            NotMoving,
+            IncurKnockBack,
+            Dodge
+        };
+    }
 
     void Update()
     {
+        MovementVector3();
         //Detects movement and decides deadzone
         if (moveDir.sqrMagnitude >= 0.1f)
         {
             //smooth turning
-            if (playerKnockBack == false)
+            if (currentMovementState == MovementState.NormalMovment)
             {
                 targetAngle = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
                 smoothingAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTimeground);
             }
 
-            if (isAttacking == false)
+            if (currentMovementState == MovementState.NormalMovment)
             {
                 //smoothly skews angle for top down illusion
                 transform.rotation = Quaternion.Euler(Mathf.SmoothDampAngle(transform.eulerAngles.x, moveDir.z * skewAmount, ref turnSmoothVelocitySkew, turnAngleSkewSmoothTime), smoothingAngle, 0f);
             }
 
-        }
-
-        moveDirShowInEditor = moveDir;
-
-
-        /*if (Pause.gameIsPaused)
-        {
-            return;
-        }*/
-
-        //GroundCheck();
-        //detremines how long you can hold jump to increase height
-
-
-        PlayerControllerMovement();
-        AttackPushtimer();
-
-        //PlayerJumpUpdateFunctions();
-    }
-
-    void GroundCheck()
-    {
-        playerGrounded = charControl.isGrounded;
-    }
-
-    public void StartJump()
-    {
-        /*if (playerGrounded && !ToggleInventoryScreen.GameScreensOpen)
-        {
-
-            isJumping = true;
-            isHoldingJump = true;
-            turnSmoothTimeground = turnSmoothTimeJump;
-            playerVelocity = Vector3.up * JumpForce;
-            originalFallSpeed = fallSpeed;
-        }*/
-
-    }
-
-    public void Sprinting()
-    {
-        isSprinting = !isSprinting;
-    }
-
-    public void MovementVector3()
-    {
-        //reads new input system vector and puts in in the moveDir variable
-        Input = InputManager.playerInput.InGame.Movement.ReadValue<Vector2>();
-        moveDir = new Vector3(Input.x, 0, Input.y);
-    }
-
-    void PlayerControllerMovement()
-    {
-        //Holds player to the ground
-        //playerVelocity += Physics.gravity * Time.deltaTime * fallSpeed;
-
-        /* if (playerGrounded && playerVelocity.y <= 0)
-         {
-             playerVelocity.y = 0f;
-             isJumping = false;
-             //turnSmoothTimeground = turnSmoothTimeBase;
-
-         }*/
-
-        if (isMoving == true)
-        {
-            //Smootly increases variable for idle state machine
-            MovementVector3();
-            mBFloatDummy = Mathf.SmoothDamp(mBFloatDummy, moveDir.magnitude, ref currentMBVelocity, AnimAcceleration);
-            mBFloatDummy = Mathf.Clamp(mBFloatDummy, 0, 1);
-        }
-
-        else
-        {
-            //Smootly decrease variable and character speed for idle state machine, and ensures the character moves forward
-            mBFloatDummy -= mBFloatDeacceleration * Time.deltaTime;
-            mBFloatDummy = Mathf.Clamp(mBFloatDummy, 0, 1);
-
-            moveDir = transform.forward;
-
-            currentSpeed -= deAcceleration * Time.deltaTime;
-            currentSpeed = Mathf.Clamp(currentSpeed, 0, Mathf.Infinity);
-        }
-
-        LerpSpeed();
-
-
-        if (isAttacking == false && playerKnockBack == false)
-        {
-            //if not attacking regular movemnt is performed
-            if (!isSprinting)
-                charControl.Move((moveDir * currentSpeed + ((Physics.gravity / 5)) + playerVelocity) * Time.deltaTime);
-
-            else
-                charControl.Move((moveDir * maxSprintSpeed + ((Physics.gravity / 5)) + playerVelocity) * Time.deltaTime);
-        }
-
-        else if (IsPushing == true)
-        {
-            //if attacking this pushes the character for a more weighty feel.
-            charControl.Move((transform.forward * pushAmountAttack + ((Physics.gravity / 5)) + playerVelocity) * Time.deltaTime);
-        }
-
-        else if (playerKnockBack == true)
-        {
-            knockback();
-        }
-
-
-    }
-
-    //used for hold jump mechanic
-    void PlayerJumpUpdateFunctions()
-    {
-        if (isHoldingJump)
-            playerVelocity = Vector3.up * JumpForce;
-
-
-        if (isHoldingJump)
-            if (JumpairTimer(airSecs))
+            if (currentMovementState == MovementState.NoMovemnt)
             {
-                isHoldingJump = false;
-                isFallingFromJump = true;
-                airTimer = 0;
+                currentMovementState = MovementState.NormalMovment;
+                lerpSpeed = true;
             }
 
+        }
+
+        else if (currentMovementState == MovementState.NormalMovment)
+        {
+            currentMovementState = MovementState.NoMovemnt;
+        }
+
+        runCurrentMovement[(int)currentMovementState]();
+    }
+
+    void IncurKnockBack()
+    {
+        Vector3 knockbackDir = otherPositionHere - transform.position;
+        knockbackDir = -knockbackDir.normalized;
+        charControl.Move((knockbackDir * knockbackAmountHere) * Time.deltaTime);
+
+        ForcedRotation = new Vector3(otherPositionHere.x, transform.position.y, otherPositionHere.z);
+        transform.LookAt(ForcedRotation);
+
+        if (KnockBackTimer.IsFinished)
+        {
+            currentMovementState = MovementState.NoMovemnt;
+            playerKnockBack = false;
+        }
+    }
+
+    public void StartKnockBack(float amountOfKnockback, Vector3 positionOther)
+    {
+        KnockBackTimer.SetClock();
+        currentMovementState = MovementState.KnockBack;
+        otherPositionHere = positionOther;
+        knockbackAmountHere = amountOfKnockback;
+        playerKnockBack = true;
+    }
+
+    void NormalMovement()
+    {
+        //Smootly increases variable for idle state machine
+        MovementVector3();
+        mbBlendFloatDummy = Mathf.SmoothDamp(mbBlendFloatDummy, moveDir.magnitude, ref currentMBVelocity, AnimAcceleration);
+        mbBlendFloatDummy = Mathf.Clamp(mbBlendFloatDummy, 0, 1);
+
+        LerpSpeed();
+        charControl.Move((moveDir * currentSpeed + Physics.gravity) * Time.deltaTime);
+    }
+
+    void NotMoving()
+    {
+        //Smootly decrease variable and character speed for idle state machine, and ensures the character moves forward
+        mbBlendFloatDummy -= AnimDeacceleration * Time.deltaTime;
+        mbBlendFloatDummy = Mathf.Clamp(mbBlendFloatDummy, 0, 1);
+
+        moveDir = transform.forward;
+
+        currentSpeed -= deAcceleration * Time.deltaTime;
+        currentSpeed = Mathf.Clamp(currentSpeed, 0, Mathf.Infinity);
+        charControl.Move(Physics.gravity * Time.deltaTime);
+    }
+
+    public void AttackPush()
+    {
+
+        //if attacking this pushes the character for a more weighty feel.
+        if (AttackPushTimer.IsFinished!)
+            charControl.Move((transform.forward * pushAmountAttack + Physics.gravity) * Time.deltaTime);
+
+        else
+            charControl.Move(Vector3.zero);
+    }
+
+
+
+    //called from statemachine
+    public void CallAttackPush()
+    {
+        AttackPushTimer.SetClock();
+        currentMovementState = MovementState.AttackPush;
+        isAttacking = true;
+        lerpSpeed = false;
+        turnSmoothTimeground = turnSmoothAttack;
 
     }
 
-    public bool JumpairTimer(float sec)
+    //called from statemachine
+    public void FinishAttacking()
     {
-        airTimer += Time.deltaTime;
-        return (airTimer >= sec);
+        currentMovementState = MovementState.NoMovemnt;
+        isAttacking = false;
+        turnSmoothTimeground = turnSmoothTimegroundOriginal;
 
-    }
-
-    public void test(int teeeest)
-    {
-        teeeest = 5;
+        currentSpeed = 0;
+        mbBlendFloatDummy = 0;
+        moveDir = Vector3.zero;
+        lerpSpeed = false;
     }
 
     public void LerpSpeed()
@@ -270,82 +255,50 @@ public class PlayerMovement : MonoBehaviour
 
     public void StopMovement()
     {
-        //smootly increase speed to max
-        if (isAttacking == false)
-        {
-            lerpSpeed = false;
-            isMoving = false;
-        }
+        lerpSpeed = false;
+
+        if (currentMovementState == MovementState.NormalMovment)
+            currentMovementState = MovementState.NoMovemnt;
     }
 
     public void StartMoving()
     {
-        isMoving = true;
-        lerpSpeed = true;
-        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
-    }
-
-    public void PushOnAttack()
-    {
-        currentSpeed = pushAmountAttack;
-        IsPushing = true;
-    }
-
-    public void AttackMovementModeStart()
-    {
-        isAttacking = true;
-        currentSpeed = 0;
-        smoothTurnStorage = turnSmoothTimeground;
-        turnSmoothTimeground = turnSmoothAttack;
-    }
-
-    public void AttackMovementModeStop()
-    {
-        turnSmoothTimeground = smoothTurnStorage;
-        isAttacking = false;
-        currentSpeed = 0;
-    }
-
-    void knockback()
-    {
-        Vector3 knockbackDir = otherPositionHere - transform.position;
-        knockbackDir = -knockbackDir.normalized;
-        charControl.Move((knockbackDir * knockbackAmountHere + playerVelocity) * Time.deltaTime);
-        KnockBackTimer();
-    }
-
-    public void iniateKnockback(float amountOfKnockback, Vector3 positionOther)
-    {
-        otherPositionHere = positionOther;
-        knockbackAmountHere = amountOfKnockback;
-        playerKnockBack = true;
-    }
-
-    public void AttackPushtimer()
-    {
-        if (IsPushing == true)
+        if (currentMovementState == MovementState.NoMovemnt)
         {
-            pushTimer += Time.deltaTime;
-
-            if (pushTimer >= pushTime)
-            {
-                pushTimer = 0;
-                IsPushing = false;
-            }
+            lerpSpeed = true;
+            currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+            MovementVector3();
+            currentMovementState = MovementState.NormalMovment;
         }
     }
 
-    public void KnockBackTimer()
-    {
-        if (playerKnockBack == true)
-        {
-            KnockbackTimer += Time.deltaTime;
 
-            if (KnockbackTimer >= KnockbackTime)
-            {
-                KnockbackTimer = 0;
-                playerKnockBack = false;
-            }
+    public void MovementVector3()
+    {
+        //reads new input system vector and puts in in the moveDir variable
+        Input = InputManager.playerInput.InGame.Movement.ReadValue<Vector2>();
+        moveDir = new Vector3(Input.x, 0, Input.y);
+    }
+
+    public void StartDodge()
+    {
+        if (moveDir.sqrMagnitude >= 0.1f && currentMovementState == MovementState.NormalMovment)
+        {
+            turnSmoothTimeground = 0;
+            currentMovementState = MovementState.Dodge;
+            DodgeDirection = charControl.velocity;
+            DodgeTimer.SetClock();
+        }
+    }
+
+    public void Dodge()
+    {
+        charControl.Move((DodgeDirection * DodgeSpeed + Physics.gravity) * Time.deltaTime);
+       
+
+        if (DodgeTimer.IsFinished)
+        {
+            currentMovementState = MovementState.NoMovemnt;
         }
     }
 }

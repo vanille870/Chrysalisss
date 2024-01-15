@@ -43,6 +43,7 @@ public class GeneralAnimationWeapon : MonoBehaviour
     {
         mainCharAnimator.SetBool("NormalAttack", true);
         isAttacking = true;
+        
     }
 
     public void ResetSpeedVariable()

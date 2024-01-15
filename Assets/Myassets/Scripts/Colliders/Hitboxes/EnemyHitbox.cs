@@ -31,7 +31,7 @@ public class EnemyHitbox : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             GetPositionOfEnemy();
-            movementScript.iniateKnockback(KnockBackAmount, positionEnemy);
+            movementScript.StartKnockBack(KnockBackAmount, positionEnemy);
             playerConditionStatsScript.RecieveDamage(attackDamage);
         }
     }

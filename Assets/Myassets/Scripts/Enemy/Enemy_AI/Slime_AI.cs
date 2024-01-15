@@ -11,6 +11,7 @@ public class Slime_AI : MonoBehaviour
         Idling = 0,
         chasing,
         WaitBeforeReturning,
+        Tracking
     }
 
     public CharacterController playerController;
@@ -31,6 +32,7 @@ public class Slime_AI : MonoBehaviour
     public bool seenPlayer = false;
     public bool isTracking;
     public bool enemyIsRetunring;
+    bool HasPassedDestination = true;
 
     public LayerMask DetectionLayerMask;
     public RaycastHit enemyLineOfSightRaycast;
@@ -59,7 +61,7 @@ public class Slime_AI : MonoBehaviour
 
     [Header("Timers")]
     [SerializeField]
-    private TimedEvent ChaseTimer = new TimedEvent();
+    private TimedEvent TrackTimer = new TimedEvent();
     [SerializeField]
     private TimedEvent WaitBeforeReturnTimer = new TimedEvent();
     [SerializeField]
@@ -81,8 +83,9 @@ public class Slime_AI : MonoBehaviour
         runCurrentEnemyState = new System.Action[]
         {
             IdleWander,
-            ChaseAndTrackPlayer,
+            ChasePlayer,
             ReturnToSpawn,
+            Tracking
         };
 
 
@@ -117,7 +120,6 @@ public class Slime_AI : MonoBehaviour
                 {
                     Debug.DrawRay(visionPoint.position, PlayerPoint.position - transform.position, Color.green);
                     currentEnemyState = EnemyState.chasing;
-                    ChaseTimer.SetClock();
                     seenPlayer = true;
                 }
 
@@ -126,53 +128,13 @@ public class Slime_AI : MonoBehaviour
 
                     Debug.DrawRay(visionPoint.position, PlayerPoint.position - transform.position, Color.red);
                     seenPlayer = false;
-
-                    if (ChaseTimer.IsFinished && currentEnemyState == EnemyState.chasing)
-                    {
-                        currentEnemyState = EnemyState.WaitBeforeReturning;
-                        slimeAgent.autoBraking = true;
-                        WaitBeforeReturnTimer.SetClock();
-                    }
                 }
             }
 
-            else
-            {
-                seenPlayer = false;
-
-                if (ChaseTimer.IsFinished && currentEnemyState == EnemyState.chasing)
-                {
-                    currentEnemyState = EnemyState.WaitBeforeReturning;
-                    slimeAgent.autoBraking = true;
-                    WaitBeforeReturnTimer.SetClock();
-
-                    playerLastSeenLocation += playerLastSeenVelocity;
-
-                    PassDestinationAndCheckIfAiAgenIsActive(playerLastSeenLocation);
-
-                }
-            }
-        }
-
-        else
-        {
-            seenPlayer = false;
-
-            if (ChaseTimer.IsFinished && currentEnemyState == EnemyState.chasing)
-            {
-                currentEnemyState = EnemyState.WaitBeforeReturning;
-                slimeAgent.autoBraking = true;
-                WaitBeforeReturnTimer.SetClock();
-
-                playerLastSeenLocation += playerLastSeenVelocity;
-
-                PassDestinationAndCheckIfAiAgenIsActive(playerLastSeenLocation);
-
-            }
         }
     }
 
-    void ChaseAndTrackPlayer()
+    void ChasePlayer()
     {
         if (seenPlayer == true)
         {
@@ -187,22 +149,34 @@ public class Slime_AI : MonoBehaviour
         else
             slimeAgent.autoBraking = true;
 
-        if (slimeAgent)
+        if (slimeAgent.enabled)
         {
             if (seenPlayer == false && slimeAgent.remainingDistance < 0.1f)
             {
-                isTracking = true;
+                currentEnemyState = EnemyState.Tracking;
+                TrackTimer.SetClock();
             }
         }
+    }
 
-        if (isTracking)
+
+    void Tracking()
+    {
+        playerLastSeenLocation += playerLastSeenVelocity;
+
+        PassDestinationAndCheckIfAiAgenIsActive(playerLastSeenLocation);
+        print("we do a little tracking");
+
+        if (TrackTimer.IsFinished)
         {
-            playerLastSeenLocation += playerLastSeenVelocity;
+            currentEnemyState = EnemyState.WaitBeforeReturning;
+            WaitBeforeReturnTimer.SetClock();
+            PassDestinationAndCheckIfAiAgenIsActive(transform.position + playerLastSeenVelocity / 2);
+            HasPassedDestination = false;
 
-            PassDestinationAndCheckIfAiAgenIsActive(playerLastSeenLocation);
-            print("we do a little tracking");
         }
     }
+
 
     void IdleWander()
     {
@@ -217,21 +191,26 @@ public class Slime_AI : MonoBehaviour
     void ReturnToSpawn()
     {
 
-
         if (WaitBeforeReturnTimer.IsFinished)
         {
-            PassDestinationAndCheckIfAiAgenIsActive(spawnPoint);
-            enemyIsRetunring = true;
+            float remainingDistance = Vector3.Distance(transform.position, spawnPoint);
+
+            if (HasPassedDestination == false)
+            {
+                PassDestinationAndCheckIfAiAgenIsActive(spawnPoint);
+                HasPassedDestination = true;
+                print("hi");
+            }
 
             if (slimeAgent.isActiveAndEnabled)
             {
-                if (slimeAgent.remainingDistance < 0.2)
+                if (remainingDistance < 0.2f)
                 {
-                    enemyIsRetunring = false;
                     currentEnemyState = EnemyState.Idling;
                     IdleWayPointTimer.SetClock();
                 }
             }
+
         }
     }
 
@@ -247,4 +226,5 @@ public class Slime_AI : MonoBehaviour
         if (slimeAgent.isActiveAndEnabled)
             slimeAgent.destination = destination;
     }
+    
 }

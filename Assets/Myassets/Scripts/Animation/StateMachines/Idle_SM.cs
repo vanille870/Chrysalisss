@@ -16,8 +16,7 @@ public class Idle_SM : StateMachineBehaviour
 
     public void OnStateExit()
     {
-        GeneralAnimationWeapon.isAttacking = true;
-        SMmovement.AttackMovementModeStart(); 
+        GeneralAnimationWeapon.isAttacking = true; 
     }
 
     public void OnStateEnter(Animator animator)
@@ -27,15 +26,9 @@ public class Idle_SM : StateMachineBehaviour
         animator.SetBool("NormalAttack", false);
         animator.SetBool("CanStartNextAttack", false);
         animator.SetBool("ReturnToIdle", false);
-        SMmovement.AttackMovementModeStop();
+        SMmovement.FinishAttacking();
+        SMmovement.StartMoving();
 
         
     }
-
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
-
 }

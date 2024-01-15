@@ -22,7 +22,7 @@ public class MainCharAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {       
-        movementBlendFloat = movementScript.mBFloatDummy;
+        movementBlendFloat = movementScript.mbBlendFloatDummy;
         mainCharAnimator.SetFloat("MovementBlend", movementBlendFloat);
     }
 

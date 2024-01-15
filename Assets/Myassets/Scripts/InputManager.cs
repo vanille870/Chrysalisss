@@ -36,6 +36,9 @@ public class InputManager : MonoBehaviour
 
         playerInput.InGame.Normal_attack.performed += _ => generalAnimationWeapon.StartNormalAttacks();
         playerInput.InGame.Movement.Enable();
+
+        playerInput.InGame.Dodge.performed += _ => movementScript.StartDodge();
+        playerInput.InGame.Dodge.Enable();
         
 
         
