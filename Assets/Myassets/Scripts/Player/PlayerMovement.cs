@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     public MovementState currentMovementState = MovementState.NormalMovment;
     private System.Action[] runCurrentMovement = null;
+    public MainCharAnimation mainCharAnimationScript;
 
 
     [Header("Bools")]
@@ -28,13 +29,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement floats")]
     public float currentSpeed;
-    private float currentVelocity;
-
+    public float maxSpeed;
     public float acceleration;
     public float deAcceleration;
     public float AnimAcceleration;
     public float AnimDeacceleration;
-    public float maxSpeed;
     public float mbBlendFloatDummy;
     private float currentMBVelocity;
     public float pushAmountAttack;
@@ -46,6 +45,9 @@ public class PlayerMovement : MonoBehaviour
     float knockbackAmountHere;
     public float DodgeSpeed;
 
+    private float currentVelocity;
+    private float originalMaxSpeed;
+    private float AccelerationOrginal;
 
     [Header("Jump floats")]
     public float airTimer;
@@ -111,7 +113,10 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         charControl = gameObject.GetComponent<CharacterController>();
+
         turnSmoothTimegroundOriginal = turnSmoothTimeground;
+        originalMaxSpeed = maxSpeed;
+        AccelerationOrginal = acceleration;
 
         runCurrentMovement = new System.Action[]
         {
@@ -161,11 +166,12 @@ public class PlayerMovement : MonoBehaviour
     void IncurKnockBack()
     {
         Vector3 knockbackDir = otherPositionHere - transform.position;
+        knockbackDir = new Vector3(knockbackDir.x, 0, knockbackDir.z);
         knockbackDir = -knockbackDir.normalized;
-        charControl.Move((knockbackDir * knockbackAmountHere) * Time.deltaTime);
+        charControl.Move(knockbackDir * knockbackAmountHere * Time.deltaTime);
 
-        ForcedRotation = new Vector3(otherPositionHere.x, transform.position.y, otherPositionHere.z);
-        transform.LookAt(ForcedRotation);
+        //ForcedRotation = new Vector3(otherPositionHere.x, transform.position.y, otherPositionHere.z);
+        //transform.LookAt(ForcedRotation);
 
         if (KnockBackTimer.IsFinished)
         {
@@ -249,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
         //smootly increase speed to max
         if (lerpSpeed == true)
         {
-            currentSpeed = Mathf.SmoothDamp(currentSpeed, maxSpeed, ref currentVelocity, acceleration);
+            currentSpeed = Mathf.SmoothDamp(currentSpeed, maxSpeed, ref currentVelocity, -acceleration);
         }
     }
 
@@ -294,12 +300,27 @@ public class PlayerMovement : MonoBehaviour
     public void Dodge()
     {
         charControl.Move((DodgeDirection * DodgeSpeed + Physics.gravity) * Time.deltaTime);
-       
+
 
         if (DodgeTimer.IsFinished)
         {
             currentMovementState = MovementState.NoMovemnt;
         }
+    }
+
+    public void ZeroSpeedAndTurning()
+    {
+        maxSpeed = 0;
+        turnSmoothTimeground = 999999;
+        currentSpeed = 0;
+        acceleration = -99999;
+    }
+
+    public void RestoreSpeedAndTurning()
+    {
+        maxSpeed = originalMaxSpeed;
+        turnSmoothTimeground = turnSmoothTimegroundOriginal;
+        acceleration = AccelerationOrginal;
     }
 }
 

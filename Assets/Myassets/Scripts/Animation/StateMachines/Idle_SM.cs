@@ -28,6 +28,7 @@ public class Idle_SM : StateMachineBehaviour
         animator.SetBool("ReturnToIdle", false);
         SMmovement.FinishAttacking();
         SMmovement.StartMoving();
+        SMmovement.RestoreSpeedAndTurning();
 
         
     }

@@ -26,8 +26,13 @@ public class MainCharAnimation : MonoBehaviour
         mainCharAnimator.SetFloat("MovementBlend", movementBlendFloat);
     }
 
-    void AlignMoventBlendFloat()
+    public void Stagger()
     {
-        
+        mainCharAnimator.SetTrigger("_StaggerFront");
+    }
+
+    public void StaggerBack()
+    {
+        mainCharAnimator.SetTrigger("_StaggerBack");
     }
 }

@@ -233,8 +233,9 @@ MonoBehaviour:
   EnemyCurrentHealth: 50
   EnemyAnimator: {fileID: 7554675601832430311}
   enemyAnimationScript: {fileID: 7482937410125289088}
-  slime_AIScript: {fileID: 0}
+  slime_AIScript: {fileID: 9120271176045327374}
   EnemyIsDead: 0
+  time: 0
 --- !u!1 &1260487330350758058
 GameObject:
   m_ObjectHideFlags: 0
@@ -5239,7 +5240,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -10318,6 +10319,7 @@ Transform:
   - {fileID: 1714115410827405241}
   - {fileID: 5612944321102218714}
   - {fileID: 6425937424823629640}
+  - {fileID: 6827796896776074693}
   m_Father: {fileID: 8033626077614700387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4167892920449679014
@@ -10483,27 +10485,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8876a3447493e42b44ab3eddd0390f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
   slimeAgent: {fileID: 7500161430516216717}
   PlayerPoint: {fileID: 0}
   visionPoint: {fileID: 6425937424823629640}
+  playerLastSeenLocation: {x: 0, y: 0, z: 0}
+  playerLastSeenVelocity: {x: 0, y: 0, z: 0}
   slimAnimator: {fileID: 7554675601832430311}
   FOVAngle: 0
   EnemyFOV: 90
   SpottingDistance: 10
   DistanceToPlayer: 50
   IdleRadius: 2
-  IsDead: 0
-  playerIsSeen: 0
-  enemyIsIdling: 0
-  enemyIsReturning: 0
+  seenPlayer: 0
+  isTracking: 0
+  enemyIsRetunring: 0
   DetectionLayerMask:
     serializedVersion: 2
     m_Bits: 72
-  IdleTimer: 2
-  IdleTimerCount: 0
-  idleWaypointTimer: 8
-  idleWaypointTimerCount: 0
-  DbugGO: {fileID: 5002465886183845765, guid: 511a09f0a3129774abdc82de4e94bfb7, type: 3}
+  TrackTimer:
+    Duration: 1
+  WaitBeforeReturnTimer:
+    Duration: 5
+  IdleWayPointTimer:
+    Duration: 5
+  currentEnemyState: 0
+  trackingDestination: {x: 0, y: 0, z: 0}
 --- !u!114 &7143420826174826133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10711,6 +10718,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5548799121697842052}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5940713776725147382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6827796896776074693}
+  m_Layer: 0
+  m_Name: StaggerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6827796896776074693
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5940713776725147382}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0042, y: -0.0006, z: 0.0018}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1780867503595223464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6701176296789076149
 GameObject:

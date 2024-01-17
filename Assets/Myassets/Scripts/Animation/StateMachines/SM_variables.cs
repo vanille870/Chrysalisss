@@ -21,6 +21,12 @@ public class SM_variables : MonoBehaviour
             normal_Attack_SM.movement = this.movement;
         }
 
+        Stagger_SM[] StaggerScripts = mainCharAnimator.GetBehaviours<Stagger_SM>();
+        foreach (Stagger_SM staggerSM in StaggerScripts)
+        {
+            staggerSM.playerMovementScript = this.movement;
+        }
+
         mainCharAnimator.GetBehaviour<Idle_SM>().SMmovement = movement;
         mainCharAnimator.GetBehaviour<Idle_SM>().generalAnimationWeapon = generalAnimationWeapon;
     }
