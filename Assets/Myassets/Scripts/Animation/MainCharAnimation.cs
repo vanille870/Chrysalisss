@@ -35,4 +35,14 @@ public class MainCharAnimation : MonoBehaviour
     {
         mainCharAnimator.SetTrigger("_StaggerBack");
     }
+
+    public void Dodge()
+    {
+        mainCharAnimator.SetTrigger("_Dodge");
+    }
+
+    public void DodgeFinish()
+    {
+        mainCharAnimator.SetTrigger("_DodgeFinish");
+    }
 }

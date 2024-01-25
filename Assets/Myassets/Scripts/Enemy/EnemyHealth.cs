@@ -7,6 +7,7 @@ public class EnemyHealth : MonoBehaviour
 {
     public int StaggerValue;
     int maxStaggerValue;
+    int lastAttackHitNumber;
 
     public int EnemyCurrentHealth;
     public Animator EnemyAnimator;
@@ -30,26 +31,33 @@ public class EnemyHealth : MonoBehaviour
         time = Time.time;
     }
 
-    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage)
+    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage, int attackNumber)
     {
-        EnemyCurrentHealth -= recievedDamage;
-        StaggerValue -= staggerDamage;
-        slime_AIScript.currentEnemyState = Slime_AI.EnemyState.chasing;
-
-
-          if (EnemyCurrentHealth <= 0)
+        if (lastAttackHitNumber != attackNumber)
         {
-            EnemyAnimator.SetTrigger("_Dead");
-            enemyAnimationScript.DeadAnimation();
-            EnemyIsDead = true;
+            EnemyCurrentHealth -= recievedDamage;
+            StaggerValue -= staggerDamage;
+            slime_AIScript.currentEnemyState = Slime_AI.EnemyState.chasing;
+            
+            if (StaggerValue <= 0 && EnemyIsDead == false)
+            {
+                StaggerValue = maxStaggerValue;
+                EnemyAnimator.SetTrigger("_Stagger");
+                enemyAnimationScript.FlashStart();
+
+                lastAttackHitNumber = attackNumber;
+            }
+
+            if (EnemyCurrentHealth <= 0)
+            {
+                EnemyAnimator.SetTrigger("_Dead");
+                enemyAnimationScript.DeadAnimation();
+                EnemyIsDead = true;
+            }
         }
 
-        if (StaggerValue <= 0 && EnemyIsDead == false)
-        {
-            StaggerValue = maxStaggerValue;
-            EnemyAnimator.SetTrigger("_Stagger");
 
-            print("staggered");
-        }
+        if (lastAttackHitNumber == attackNumber)
+            print("surplus hit blocked");
     }
 }

@@ -13,8 +13,33 @@ public class GeneralAnimationWeapon : MonoBehaviour
     public bool returnToIdle = false;
 
     public float speedTimer { get; private set; } = 0;
-    public float waitInSeconds;
+    public float AttackCooldown;
+    public float NormalChargeSpeed;
+    public float ChargedChargeSpeed;
 
+    [System.Serializable]
+    public struct TimedEvent
+    {
+        [SerializeField] [Range(0.0f, 2.0f)]
+        private float Duration;
+        private float Clock;
+
+        public TimedEvent(float duration, float time = 0f)
+        {
+            Duration = duration;
+            Clock = time;
+        }
+
+        public void SetClock()
+        {
+            Clock = Time.time + Duration;
+        }
+
+        public bool IsFinished => Time.time >= Clock;
+    }
+
+    [SerializeField]
+    TimedEvent chargeTimer = new TimedEvent();
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +75,7 @@ public class GeneralAnimationWeapon : MonoBehaviour
     {
         if (isRessetingSpeed == true)
         {
-            if (ResetSpeedTimerBool(waitInSeconds))
+            if (ResetSpeedTimerBool(AttackCooldown))
             {
                 isAttacking = false;
                 isRessetingSpeed = false;
@@ -72,4 +97,22 @@ public class GeneralAnimationWeapon : MonoBehaviour
         speedTimer += Time.deltaTime;
         return (speedTimer >= sec);
     } 
+
+    public void StartChargeAttack()
+    {
+        mainCharAnimator.SetBool("_ChargeAttackHeld", true);
+        chargeTimer.SetClock();
+        movement.StartStuckInAttack();
+    }
+
+    public void PerformChargeAttack()
+    {
+        mainCharAnimator.SetBool("_ChargeAttackHeld", false);
+
+        if(chargeTimer.IsFinished)
+        mainCharAnimator.SetFloat("_ChargeAttackSpeed", ChargedChargeSpeed);
+
+        else
+        mainCharAnimator.SetFloat("_ChargeAttackSpeed", NormalChargeSpeed);
+    }
 }

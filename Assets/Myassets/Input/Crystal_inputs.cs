@@ -53,6 +53,15 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChargeAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ad0a384-e45a-4ee7-90e5-5191eef99d68"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -143,6 +152,28 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
                     ""action"": ""Dodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f284845-ed61-4233-ba64-71268426ee2f"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""18bea54f-61c0-433d-9628-b8815db9376b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_mouse"",
+                    ""action"": ""ChargeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -165,6 +196,7 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         m_InGame_Movement = m_InGame.FindAction("Movement", throwIfNotFound: true);
         m_InGame_Normal_attack = m_InGame.FindAction("Normal_attack", throwIfNotFound: true);
         m_InGame_Dodge = m_InGame.FindAction("Dodge", throwIfNotFound: true);
+        m_InGame_ChargeAttack = m_InGame.FindAction("ChargeAttack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,6 +261,7 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_InGame_Movement;
     private readonly InputAction m_InGame_Normal_attack;
     private readonly InputAction m_InGame_Dodge;
+    private readonly InputAction m_InGame_ChargeAttack;
     public struct InGameActions
     {
         private @Crystal_inputs m_Wrapper;
@@ -236,6 +269,7 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_InGame_Movement;
         public InputAction @Normal_attack => m_Wrapper.m_InGame_Normal_attack;
         public InputAction @Dodge => m_Wrapper.m_InGame_Dodge;
+        public InputAction @ChargeAttack => m_Wrapper.m_InGame_ChargeAttack;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -254,6 +288,9 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
             @Dodge.started += instance.OnDodge;
             @Dodge.performed += instance.OnDodge;
             @Dodge.canceled += instance.OnDodge;
+            @ChargeAttack.started += instance.OnChargeAttack;
+            @ChargeAttack.performed += instance.OnChargeAttack;
+            @ChargeAttack.canceled += instance.OnChargeAttack;
         }
 
         private void UnregisterCallbacks(IInGameActions instance)
@@ -267,6 +304,9 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
             @Dodge.started -= instance.OnDodge;
             @Dodge.performed -= instance.OnDodge;
             @Dodge.canceled -= instance.OnDodge;
+            @ChargeAttack.started -= instance.OnChargeAttack;
+            @ChargeAttack.performed -= instance.OnChargeAttack;
+            @ChargeAttack.canceled -= instance.OnChargeAttack;
         }
 
         public void RemoveCallbacks(IInGameActions instance)
@@ -307,5 +347,6 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnNormal_attack(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
+        void OnChargeAttack(InputAction.CallbackContext context);
     }
 }

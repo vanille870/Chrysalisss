@@ -27,17 +27,21 @@ public class InputManager : MonoBehaviour
 
         playerInput.Enable();
 
-        playerInput.InGame.Movement.performed += _ => movementScript.StartMoving();
+        playerInput.InGame.Movement.started += _ => movementScript.StartMoving();
         playerInput.InGame.Movement.Enable();
 
         playerInput.InGame.Movement.canceled += _ => movementScript.MovementVector3();
         playerInput.InGame.Movement.canceled += _ => movementScript.StopMovement();
         playerInput.InGame.Movement.Enable();
 
-        playerInput.InGame.Normal_attack.performed += _ => generalAnimationWeapon.StartNormalAttacks();
+        playerInput.InGame.Normal_attack.started += _ => generalAnimationWeapon.StartNormalAttacks();
         playerInput.InGame.Movement.Enable();
 
-        playerInput.InGame.Dodge.performed += _ => movementScript.StartDodge();
+        playerInput.InGame.Dodge.started += _ => movementScript.StartDodge();
+        playerInput.InGame.Dodge.Enable();
+
+        playerInput.InGame.ChargeAttack.started += _ => generalAnimationWeapon.StartChargeAttack();
+        playerInput.InGame.ChargeAttack.canceled += _ => generalAnimationWeapon.PerformChargeAttack();
         playerInput.InGame.Dodge.Enable();
         
 

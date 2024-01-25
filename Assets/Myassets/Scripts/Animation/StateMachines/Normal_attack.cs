@@ -25,6 +25,8 @@ public class Normal_attack : StateMachineBehaviour
         animator.SetBool("ReturnToIdle", false);
 
         movement.CallAttackPush();
+
+        On_enemy_hit.AttackNumber += 1;
     }
 
     void OnStateExit()

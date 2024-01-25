@@ -13,12 +13,14 @@ public class PlayerMovement : MonoBehaviour
         AttackPush,
         NoMovemnt,
         KnockBack,
-        Dodge
+        Dodge,
+        StuckInAttack
     }
 
     public MovementState currentMovementState = MovementState.NormalMovment;
     private System.Action[] runCurrentMovement = null;
     public MainCharAnimation mainCharAnimationScript;
+    public AfterMiragesPlayer afterMiragesPlayerScript;
 
 
     [Header("Bools")]
@@ -36,7 +38,8 @@ public class PlayerMovement : MonoBehaviour
     public float AnimDeacceleration;
     public float mbBlendFloatDummy;
     private float currentMBVelocity;
-    public float pushAmountAttack;
+    public float pushAmountNormalAttack;
+    public float chargeAttack;
     public float turnSmoothTimeground;
     public float turnSmoothTimegroundOriginal;
     public float turnSmoothAttack;
@@ -48,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
     private float currentVelocity;
     private float originalMaxSpeed;
     private float AccelerationOrginal;
+
+    public Vector3 ControllerVelocity;
 
     [Header("Jump floats")]
     public float airTimer;
@@ -79,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Unity")]
     public Transform cam;
     CharacterController charControl;
+    public ParticleSystem dodgeSparklesPA;
 
     [System.Serializable]
     public struct TimedEvent
@@ -108,6 +114,10 @@ public class PlayerMovement : MonoBehaviour
     private TimedEvent AttackPushTimer = new TimedEvent();
     [SerializeField]
     private TimedEvent DodgeTimer = new TimedEvent();
+    [SerializeField]
+    private TimedEvent DodgeCooldownTimer = new TimedEvent();
+    [SerializeField]
+    private TimedEvent TimeUntilYouCanDodge = new TimedEvent();
 
 
     void Start()
@@ -124,12 +134,15 @@ public class PlayerMovement : MonoBehaviour
             AttackPush,
             NotMoving,
             IncurKnockBack,
-            Dodge
+            Dodge,
+            StuckInAttack
         };
     }
 
     void Update()
     {
+        ControllerVelocity = charControl.velocity;
+
         MovementVector3();
         //Detects movement and decides deadzone
         if (moveDir.sqrMagnitude >= 0.1f)
@@ -200,31 +213,50 @@ public class PlayerMovement : MonoBehaviour
         charControl.Move((moveDir * currentSpeed + Physics.gravity) * Time.deltaTime);
     }
 
+    //Smootly decrease variable and character speed for idle state machine, and ensures the character moves forward
     void NotMoving()
     {
-        //Smootly decrease variable and character speed for idle state machine, and ensures the character moves forward
-        mbBlendFloatDummy -= AnimDeacceleration * Time.deltaTime;
-        mbBlendFloatDummy = Mathf.Clamp(mbBlendFloatDummy, 0, 1);
 
-        moveDir = transform.forward;
+        if (mbBlendFloatDummy > 0)
+        {
+            mbBlendFloatDummy -= AnimDeacceleration * Time.deltaTime;
+            mbBlendFloatDummy = Mathf.Clamp(mbBlendFloatDummy, 0, 1);
 
-        currentSpeed -= deAcceleration * Time.deltaTime;
-        currentSpeed = Mathf.Clamp(currentSpeed, 0, Mathf.Infinity);
-        charControl.Move(Physics.gravity * Time.deltaTime);
+            moveDir = transform.forward;
+        }
+
+        if (currentSpeed > 0)
+        {
+            currentSpeed -= deAcceleration * Time.deltaTime;
+            charControl.Move((moveDir * currentSpeed + Physics.gravity) * Time.deltaTime);
+        }
+
+        else
+            currentSpeed = 0;
+    }
+
+    //called from weapon script
+    public void StartStuckInAttack()
+    {
+        currentMovementState = MovementState.StuckInAttack;
+        currentSpeed = 0;
+    }
+
+    //called from weapon script
+    public void StuckInAttack()
+    {
+        charControl.Move(Vector3.zero);
     }
 
     public void AttackPush()
     {
-
         //if attacking this pushes the character for a more weighty feel.
         if (AttackPushTimer.IsFinished!)
-            charControl.Move((transform.forward * pushAmountAttack + Physics.gravity) * Time.deltaTime);
+            charControl.Move((transform.forward * pushAmountNormalAttack + Physics.gravity) * Time.deltaTime);
 
         else
             charControl.Move(Vector3.zero);
     }
-
-
 
     //called from statemachine
     public void CallAttackPush()
@@ -233,8 +265,8 @@ public class PlayerMovement : MonoBehaviour
         currentMovementState = MovementState.AttackPush;
         isAttacking = true;
         lerpSpeed = false;
+        currentSpeed = 0;
         turnSmoothTimeground = turnSmoothAttack;
-
     }
 
     //called from statemachine
@@ -244,7 +276,7 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = false;
         turnSmoothTimeground = turnSmoothTimegroundOriginal;
 
-        currentSpeed = 0;
+
         mbBlendFloatDummy = 0;
         moveDir = Vector3.zero;
         lerpSpeed = false;
@@ -275,6 +307,7 @@ public class PlayerMovement : MonoBehaviour
             currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
             MovementVector3();
             currentMovementState = MovementState.NormalMovment;
+            TimeUntilYouCanDodge.SetClock();
         }
     }
 
@@ -288,12 +321,22 @@ public class PlayerMovement : MonoBehaviour
 
     public void StartDodge()
     {
-        if (moveDir.sqrMagnitude >= 0.1f && currentMovementState == MovementState.NormalMovment)
+        if (DodgeCooldownTimer.IsFinished == true)
         {
-            turnSmoothTimeground = 0;
-            currentMovementState = MovementState.Dodge;
-            DodgeDirection = charControl.velocity;
-            DodgeTimer.SetClock();
+            if (moveDir.sqrMagnitude >= 0.1f && currentMovementState == MovementState.NormalMovment && TimeUntilYouCanDodge.IsFinished)
+            {
+                turnSmoothTimeground = 0;
+                currentMovementState = MovementState.Dodge;
+                DodgeDirection = charControl.velocity;
+
+                DodgeTimer.SetClock();
+                StartDodgeCooldown();
+
+                mainCharAnimationScript.Dodge();
+                afterMiragesPlayerScript.SetAfterImageToPlayerPos(transform.position, transform.rotation.eulerAngles);
+
+                dodgeSparklesPA.Play();
+            }
         }
     }
 
@@ -301,10 +344,13 @@ public class PlayerMovement : MonoBehaviour
     {
         charControl.Move((DodgeDirection * DodgeSpeed + Physics.gravity) * Time.deltaTime);
 
-
+        //finish dodge
         if (DodgeTimer.IsFinished)
         {
+            mainCharAnimationScript.DodgeFinish();
+            afterMiragesPlayerScript.TogglePlayerVisibilty();
             currentMovementState = MovementState.NoMovemnt;
+            dodgeSparklesPA.Stop();
         }
     }
 
@@ -321,6 +367,14 @@ public class PlayerMovement : MonoBehaviour
         maxSpeed = originalMaxSpeed;
         turnSmoothTimeground = turnSmoothTimegroundOriginal;
         acceleration = AccelerationOrginal;
+    }
+
+    public void StartDodgeCooldown()
+    {
+        if (DodgeCooldownTimer.IsFinished == true)
+        {
+            DodgeCooldownTimer.SetClock();
+        }
     }
 }
 

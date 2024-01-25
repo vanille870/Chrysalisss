@@ -21,20 +21,16 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MainChar
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 8c59406f9ca99a5488da204f69b3d6cd, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _METALLICSPECGLOSSMAP
-  - _NORMALMAP
-  - _PARALLAXMAP
+  m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: _GlossMapScale _OcclusionMap
   m_SavedProperties:
@@ -77,7 +73,51 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: 550360649129bba41935c72f4afda5ec, type: 3}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_036c05207a0b421987b21d8729d10e1f_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 58e77d39eec5ca4429050dbdb94acfd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_06e52f66c68b440aa5a39cd4a22dbc68_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: b6af2d5774be8824895bb55b6c84a46f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_1fa2fc8d53a34e54982464bce9af69fe_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3e6a8d4e447e51f48afe0888af2b5706, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_2a4b2f28e03b4820a88775ac9dff618a_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: ba3c658e4034d714fbdd09f2f551f040, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_4ded44926c7e40fa8926e75953e895ec_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: b6af2d5774be8824895bb55b6c84a46f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_739487f6b36546bd82c0a3b4179b31c0_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 58e77d39eec5ca4429050dbdb94acfd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_85bc7f0e56674b0bbee199ddaa4d6b3a_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: ba3c658e4034d714fbdd09f2f551f040, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_a80fbdfef0a34733859f784473fb195e_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: caf459a6c348e24479b3969ad68c5b46, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_b767b0d1fd694d09bd5677400f045109_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 269f81a5b678e384995200ab20548b03, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_d248b5234f0d4829b9f75ba9c66fc096_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 3e6a8d4e447e51f48afe0888af2b5706, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_da6b69c9537242cbb9d823d07d541155_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 58e77d39eec5ca4429050dbdb94acfd8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -112,15 +152,23 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
+    - _FresnelOpacity: 5.13
+    - _FresnlPower: 14.54
+    - _Fuzzines: 0.38
     - _GlossMapScale: 0.59
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _GlowPower: 0
+    - _MaskRange: 0.25
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Opacity: 0
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _Roughness: 1.61
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -134,5 +182,6 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _GlowColor: {r: 0, g: 0.33070874, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
