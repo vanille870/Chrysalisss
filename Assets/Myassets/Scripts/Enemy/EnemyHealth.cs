@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public int StaggerValue;
+    public int defence;
     int maxStaggerValue;
     int lastAttackHitNumber;
 

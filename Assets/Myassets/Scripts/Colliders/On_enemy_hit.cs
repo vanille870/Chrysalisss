@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class On_enemy_hit : MonoBehaviour
 {
-    public static int AttackNumber = 1;
+    public PlayerStats playerStats;
+
+    public static int AttackNumber = 0;
 
     public ParticleSystem enemyHiteffect;
     private GameObject enemyGameObject;
+
+    EnemyHealth currentEnemyHealthScript;
 
     public int damage;
     public int staggrDamage;
@@ -20,7 +24,8 @@ public class On_enemy_hit : MonoBehaviour
     [System.Serializable]
     public struct HitStopEvent
     {
-        [SerializeField] [Range(0.0f, 10.0f)]
+        [SerializeField]
+        [Range(0.0f, 10.0f)]
         private float Duration;
         private float Clock;
 
@@ -65,8 +70,12 @@ public class On_enemy_hit : MonoBehaviour
             enemyGameObject = thisCollider.gameObject;
             enemyHiteffect = enemyGameObject.GetComponentInChildren<ParticleSystem>();
             enemyHiteffect.Play();
-            thisCollider.GetComponent<EnemyHealth>().EnemyRecieveDamage(damage, staggrDamage, AttackNumber);
             HitStopTimer.SetClock();
+            currentEnemyHealthScript = thisCollider.GetComponent<EnemyHealth>();
+
+            
+            CalculateDamage();
+            InflictDamage();
         }
     }
 
@@ -83,10 +92,16 @@ public class On_enemy_hit : MonoBehaviour
         }
     }
 
-    void CheckIfnemyWasAlreadyHit()
+    int CalculateDamage()
     {
+        damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.damage - currentEnemyHealthScript.defence;
 
+        return damage;
     }
 
-
+    public void InflictDamage()
+    {
+        int clampedDamage = Mathf.Clamp(damage, 1, 9999999);
+        currentEnemyHealthScript.EnemyRecieveDamage(clampedDamage, clampedDamage, AttackNumber);
+    }
 }

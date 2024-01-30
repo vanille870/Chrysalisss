@@ -32,6 +32,5 @@ public class AnimationEvents : MonoBehaviour
     {
         On_breakable_hit.canBreakObjects = true;
         On_breakable_hit.hasBreaked = false;
-
     }
 }
