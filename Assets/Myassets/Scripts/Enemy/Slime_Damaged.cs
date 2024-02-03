@@ -23,7 +23,7 @@ public class Slime_Damaged : MonoBehaviour
     public float DeathScrollSpeed;
     public float DeathNoiseOffset;
 
-    private bool lerpFresnel;
+    [SerializeField] bool lerpFresnel = false;
     public bool lerpFresnelForward;
     public float timeBetweenLerps;
     public float timerCount;
@@ -46,6 +46,8 @@ public class Slime_Damaged : MonoBehaviour
         shaderProperties.SetFloat("_FresnelFactor", HitFresnelFactor);
         LerpFresnelFactor();
         enemyRenderer.SetPropertyBlock(shaderProperties);
+
+        if (lerpFresnel == true)
         Timer();
     }
 

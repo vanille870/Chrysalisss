@@ -17,11 +17,15 @@ public class Charge_Attack_SM : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         On_enemy_hit.AttackNumber += 1;
+        generalAnimationWeapon.isPerformingChargAttack = true;
+        movement.StartStuckInAttack();
+        generalAnimationWeapon.StartChargeAttack();
     }
 
     void OnStateExit()
     {
         On_breakable_hit.canBreakObjects = false;
+        movement.StartStuckInAttack();
     }
 
 

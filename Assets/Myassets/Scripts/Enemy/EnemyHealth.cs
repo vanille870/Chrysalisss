@@ -17,8 +17,6 @@ public class EnemyHealth : MonoBehaviour
     public Slime_AI slime_AIScript;
     public bool EnemyIsDead;
 
-    public float time;
-
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +27,7 @@ public class EnemyHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time = Time.time;
+
     }
 
     public void EnemyRecieveDamage(int recievedDamage, int staggerDamage, int attackNumber)
@@ -39,7 +37,15 @@ public class EnemyHealth : MonoBehaviour
             EnemyCurrentHealth -= recievedDamage;
             StaggerValue -= staggerDamage;
             slime_AIScript.currentEnemyState = Slime_AI.EnemyState.chasing;
-            
+
+            if (EnemyCurrentHealth <= 0)
+            {
+                EnemyAnimator.SetTrigger("_Dead");
+                enemyAnimationScript.DeadAnimation();
+                EnemyIsDead = true;
+                return;
+            }
+
             if (StaggerValue <= 0 && EnemyIsDead == false)
             {
                 StaggerValue = maxStaggerValue;
@@ -49,11 +55,11 @@ public class EnemyHealth : MonoBehaviour
                 lastAttackHitNumber = attackNumber;
             }
 
-            if (EnemyCurrentHealth <= 0)
+            else
             {
-                EnemyAnimator.SetTrigger("_Dead");
-                enemyAnimationScript.DeadAnimation();
-                EnemyIsDead = true;
+                enemyAnimationScript.FlashStart();
+
+                lastAttackHitNumber = attackNumber;
             }
         }
 

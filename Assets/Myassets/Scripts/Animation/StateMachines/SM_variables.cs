@@ -30,5 +30,8 @@ public class SM_variables : MonoBehaviour
         mainCharAnimator.GetBehaviour<Idle_SM>().SMmovement = movement;
         mainCharAnimator.GetBehaviour<Idle_SM>().generalAnimationWeapon = generalAnimationWeapon;
 
+        mainCharAnimator.GetBehaviour<Charge_Attack_SM>().generalAnimationWeapon = generalAnimationWeapon;
+        mainCharAnimator.GetBehaviour<Charge_Attack_SM>().movement = movement;
+
     }
 }

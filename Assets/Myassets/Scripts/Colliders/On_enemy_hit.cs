@@ -6,6 +6,7 @@ using UnityEngine;
 public class On_enemy_hit : MonoBehaviour
 {
     public PlayerStats playerStats;
+    public GeneralAnimationWeapon generalAnimationWeaponScript;
 
     public static int AttackNumber = 0;
 
@@ -15,18 +16,15 @@ public class On_enemy_hit : MonoBehaviour
     EnemyHealth currentEnemyHealthScript;
 
     public int damage;
-    public int staggrDamage;
-
-    [Range(0.0f, 1.0f)]
-    public float hitSTopTimeScale;
-
+    public int staggerDamage;
+    public int chargeDamagePenaltyMultiplier;
+    float TimeScaleToUse;
 
     [System.Serializable]
     public struct HitStopEvent
     {
-        [SerializeField]
-        [Range(0.0f, 10.0f)]
-        private float Duration;
+        [HideInInspector]
+        public float Duration;
         private float Clock;
 
         public HitStopEvent(float duration, float time = 0f)
@@ -43,8 +41,37 @@ public class On_enemy_hit : MonoBehaviour
         public bool IsFinished => Time.unscaledTime >= Clock;
     }
 
+    [System.Serializable]
+    public struct TimeScaleAmountsPerAttack
+    {
+        public float RegularAttack;
+        public float ChargedAttack;
+        public float UnchargedAttack;
+    }
+
+    [System.Serializable]
+    public struct DurationPerAttack
+    {
+        public float ChargedAttack;
+        public float RegularAttack;
+    }
+
+    [System.Serializable]
+    public struct HitStopVariables
+    {
+        public TimeScaleAmountsPerAttack timeScaleAmountsPerAttack;
+        public DurationPerAttack durationPerAttack;
+    }
+
     [SerializeField]
     private HitStopEvent HitStopTimer = new HitStopEvent();
+
+    [SerializeField]
+    private HitStopVariables hitStopVariables = new HitStopVariables();
+
+
+
+
 
     // Start is called before the first frame update
     void Awake()
@@ -58,11 +85,6 @@ public class On_enemy_hit : MonoBehaviour
         HitStop();
     }
 
-    void PlayEnemyHitEffect()
-    {
-
-    }
-
     void OnTriggerEnter(Collider thisCollider)
     {
         if (thisCollider.tag == "Enemy")
@@ -70,12 +92,13 @@ public class On_enemy_hit : MonoBehaviour
             enemyGameObject = thisCollider.gameObject;
             enemyHiteffect = enemyGameObject.GetComponentInChildren<ParticleSystem>();
             enemyHiteffect.Play();
-            HitStopTimer.SetClock();
             currentEnemyHealthScript = thisCollider.GetComponent<EnemyHealth>();
 
-            
-            CalculateDamage();
+
+            CalculateDamageAndHitstop();
             InflictDamage();
+
+            HitStopTimer.SetClock();
         }
     }
 
@@ -83,7 +106,7 @@ public class On_enemy_hit : MonoBehaviour
     {
         if (HitStopTimer.IsFinished == false)
         {
-            Time.timeScale = hitSTopTimeScale;
+            Time.timeScale = TimeScaleToUse;
         }
 
         else
@@ -92,16 +115,47 @@ public class On_enemy_hit : MonoBehaviour
         }
     }
 
-    int CalculateDamage()
+    int CalculateDamageAndHitstop()
     {
-        damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.damage - currentEnemyHealthScript.defence;
+        if (generalAnimationWeaponScript.isPerformingChargAttack == false)
+        {
+            damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.damage - currentEnemyHealthScript.defence;
+            staggerDamage = damage;
 
-        return damage;
+            TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.RegularAttack;
+            HitStopTimer.Duration = hitStopVariables.durationPerAttack.RegularAttack;
+
+
+            return damage;
+        }
+
+        else if (generalAnimationWeaponScript.ChargeAttackCharged)
+        {
+            damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.chargeDamage - currentEnemyHealthScript.defence;
+            staggerDamage = damage * 2;
+
+            TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.ChargedAttack;
+            HitStopTimer.Duration = hitStopVariables.durationPerAttack.ChargedAttack;
+
+            return damage;
+        }
+
+        else
+        {
+            damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.chargeDamage / chargeDamagePenaltyMultiplier - currentEnemyHealthScript.defence;
+            staggerDamage = damage / 2;
+
+            TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.UnchargedAttack;
+            HitStopTimer.Duration = hitStopVariables.durationPerAttack.RegularAttack;
+
+            return damage;
+        }
     }
 
     public void InflictDamage()
     {
         int clampedDamage = Mathf.Clamp(damage, 1, 9999999);
-        currentEnemyHealthScript.EnemyRecieveDamage(clampedDamage, clampedDamage, AttackNumber);
+        int clampedStaggerDamage = Mathf.Clamp(staggerDamage, 1, 9999999);
+        currentEnemyHealthScript.EnemyRecieveDamage(clampedDamage, staggerDamage, AttackNumber);
     }
 }

@@ -32,6 +32,7 @@ public class Normal_attack : StateMachineBehaviour
     void OnStateExit()
     {
         On_breakable_hit.canBreakObjects = false;
+        generalAnimationWeapon.hasSparkled = true;
     }
 
 

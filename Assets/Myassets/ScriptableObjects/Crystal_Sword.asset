@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Crystal_Sword
   m_EditorClassIdentifier: 
   Name: sword
+  StaggerDamage: 0
+  ChargeStaggerDamage: 0
   damage: 5
-  chargeDamage: 12
+  chargeDamage: 10

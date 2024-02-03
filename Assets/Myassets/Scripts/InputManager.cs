@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
         playerInput.InGame.Dodge.started += _ => movementScript.StartDodge();
         playerInput.InGame.Dodge.Enable();
 
-        playerInput.InGame.ChargeAttack.started += _ => generalAnimationWeapon.StartChargeAttack();
+        playerInput.InGame.ChargeAttack.started += _ => generalAnimationWeapon.SetChargeAttackInAnimator();
         playerInput.InGame.ChargeAttack.canceled += _ => generalAnimationWeapon.PerformChargeAttack();
         playerInput.InGame.Dodge.Enable();
         

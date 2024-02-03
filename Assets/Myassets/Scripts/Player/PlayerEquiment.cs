@@ -11,18 +11,10 @@ public class PlayerEquiment : MonoBehaviour
 
     void Start()
     {
-        InitializeEquipmentSoDictionary();
+        swordStorageSO.InitializeEquipmentSoDictionary();
         //print(swordStorageSO.SwordID["Crystal_Sword"]);
     }
 
-    void InitializeEquipmentSoDictionary()
-    {
-        foreach (Sword sword in swordStorageSO.swordList)
-        {
-            swordStorageSO.SwordDick.Add(sword.name, sword);
-        }
-
-        CurrentSwordOfPlayer = swordStorageSO.SwordDick["Crystal_Sword"];
-    }
+    
     
 }

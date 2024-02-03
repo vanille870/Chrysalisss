@@ -14,20 +14,23 @@ public class Idle_SM : StateMachineBehaviour
     
     }
 
-    public void OnStateExit()
+    public void OnStateExit(Animator animator)
     {
-        GeneralAnimationWeapon.isAttacking = true; 
+        generalAnimationWeapon.isAttacking = true; 
+        animator.ResetTrigger("_ForceChargeAttack");
     }
 
     public void OnStateEnter(Animator animator)
     {
-        GeneralAnimationWeapon.isAttacking = false;
+        generalAnimationWeapon.isAttacking = false;
 
         animator.SetBool("NormalAttack", false);
         animator.SetBool("CanStartNextAttack", false);
         animator.SetBool("ReturnToIdle", false);
+        animator.ResetTrigger("_ForceChargeAttack");
         SMmovement.FinishAttacking();
         SMmovement.StartMoving();
         SMmovement.RestoreSpeedAndTurning();
+        generalAnimationWeapon.isPerformingChargAttack = false;
     }
 }
