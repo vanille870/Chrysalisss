@@ -10,9 +10,7 @@ public class Enemy_StaggerSM : StateMachineBehaviour
     // Start is called before the first frame update
     void OnStateEnter()
     {
-        Enemy_AnimationScript.slimeAgent.speed = 0;
-        Enemy_AnimationScript.slimeAgent.angularSpeed = 0;
-        Debug.Log("start stagger");
+        Enemy_AnimationScript.StartStagger();
     }
 
     void OnStateExit()

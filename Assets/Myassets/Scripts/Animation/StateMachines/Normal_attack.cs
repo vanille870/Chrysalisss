@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 public class Normal_attack : StateMachineBehaviour
 {
@@ -20,9 +21,9 @@ public class Normal_attack : StateMachineBehaviour
 
         onStateEnterOR?.Invoke(animator, stateInfo);
 
-        animator.SetBool("NormalAttack", false);
+        animator.ResetTrigger("_NormalAttack");
         animator.SetBool("CanStartNextAttack", false);
-        animator.SetBool("ReturnToIdle", false);
+        animator.ResetTrigger("_ReturnToIdle");
 
         movement.CallAttackPush();
 
@@ -32,7 +33,7 @@ public class Normal_attack : StateMachineBehaviour
     void OnStateExit()
     {
         On_breakable_hit.canBreakObjects = false;
-        generalAnimationWeapon.hasSparkled = true;
+        generalAnimationWeapon.stopSparkle = true;
     }
 
 

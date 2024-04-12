@@ -18,6 +18,7 @@ public class On_enemy_hit : MonoBehaviour
     public int damage;
     public int staggerDamage;
     public int chargeDamagePenaltyMultiplier;
+    [SerializeField] int chargeDamageMultiplier;
     float TimeScaleToUse;
 
     [System.Serializable]
@@ -90,8 +91,6 @@ public class On_enemy_hit : MonoBehaviour
         if (thisCollider.tag == "Enemy")
         {
             enemyGameObject = thisCollider.gameObject;
-            enemyHiteffect = enemyGameObject.GetComponentInChildren<ParticleSystem>();
-            enemyHiteffect.Play();
             currentEnemyHealthScript = thisCollider.GetComponent<EnemyHealth>();
 
 
@@ -132,7 +131,7 @@ public class On_enemy_hit : MonoBehaviour
         else if (generalAnimationWeaponScript.ChargeAttackCharged)
         {
             damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.chargeDamage - currentEnemyHealthScript.defence;
-            staggerDamage = damage * 2;
+            staggerDamage = damage * chargeDamageMultiplier;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.ChargedAttack;
             HitStopTimer.Duration = hitStopVariables.durationPerAttack.ChargedAttack;
@@ -143,7 +142,7 @@ public class On_enemy_hit : MonoBehaviour
         else
         {
             damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.chargeDamage / chargeDamagePenaltyMultiplier - currentEnemyHealthScript.defence;
-            staggerDamage = damage / 2;
+            staggerDamage = damage / chargeDamagePenaltyMultiplier;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.UnchargedAttack;
             HitStopTimer.Duration = hitStopVariables.durationPerAttack.RegularAttack;

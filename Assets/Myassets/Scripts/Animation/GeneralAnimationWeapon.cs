@@ -15,8 +15,8 @@ public class GeneralAnimationWeapon : MonoBehaviour
     public bool isRessetingSpeed = false;
     public bool returnToIdle = false;
     [HideInInspector]
-    public bool hasSparkled;
-    bool performedChargeAttack;
+    public bool stopSparkle;
+    bool performedChargeAttack = true;
     [SerializeField] bool hasPerformedCaThisPress = false;
 
     public float speedTimer { get; private set; } = 0;
@@ -30,7 +30,7 @@ public class GeneralAnimationWeapon : MonoBehaviour
     public struct TimedEvent
     {
         [SerializeField]
-        [Range(0.0f, 2.0f)]
+        [Range(0.0f, 4.0f)]
         private float Duration;
         private float Clock;
 
@@ -52,11 +52,12 @@ public class GeneralAnimationWeapon : MonoBehaviour
     TimedEvent chargeTimer = new TimedEvent();
     [SerializeField]
     TimedEvent forceChargeTimer = new TimedEvent();
+    [SerializeField]
+    TimedEvent waitAfterNormalAttack = new TimedEvent();
 
-    // Start is called before the first frame update
-    void Start()
+    public void StopSparkle()
     {
-        hasSparkled = true;
+        stopSparkle = true;
     }
 
     // Update is called once per frame
@@ -66,10 +67,10 @@ public class GeneralAnimationWeapon : MonoBehaviour
         ResetSpeedVariable();
         debugg = forceChargeTimer.IsFinished;
 
-        if (hasSparkled == false && chargeTimer.IsFinished == true)
+        if (stopSparkle == false && chargeTimer.IsFinished == true)
         {
             sparklAnimator.SetTrigger("_Sparkle");
-            hasSparkled = true;
+            stopSparkle = true;
 
         }
 
@@ -84,37 +85,26 @@ public class GeneralAnimationWeapon : MonoBehaviour
 
     public void StartNormalAttacks()
     {
-        mainCharAnimator.SetBool("NormalAttack", true);
+        mainCharAnimator.SetTrigger("_NormalAttack");
         isAttacking = true;
+        waitAfterNormalAttack.SetClock();
     }
 
     public void ResetSpeedVariable()
     {
         if (isRessetingSpeed == true)
         {
-            if (ResetSpeedTimerBool(AttackCooldown))
+            if (waitAfterNormalAttack.IsFinished)
             {
                 isAttacking = false;
                 isRessetingSpeed = false;
-                mainCharAnimator.SetBool("ReturnToIdle", true);
-                speedTimer = 0;
+                mainCharAnimator.SetTrigger("_ReturnToIdle");
             }
         }
 
     }
 
-    public void ResetSpeedTimer(Animator animator, AnimatorStateInfo animatorStateInfo)
-    {
-        speedTimer = 0;
-        isRessetingSpeed = false;
-    }
-
-    public bool ResetSpeedTimerBool(float sec)
-    {
-        speedTimer += Time.deltaTime;
-        return (speedTimer >= sec);
-    }
-
+    //called from input
     public void SetChargeAttackInAnimator()
     {
         if (hasPerformedCaThisPress == false)
@@ -130,14 +120,14 @@ public class GeneralAnimationWeapon : MonoBehaviour
         chargeTimer.SetClock();
         forceChargeTimer.SetClock();
         movement.StartStuckInAttack();
-        hasSparkled = false;
+        stopSparkle = false;
         performedChargeAttack = false;
     }
 
     public void PerformChargeAttack()
     {
         mainCharAnimator.SetBool("_ChargeAttackHeld", false);
-        hasSparkled = true;
+        stopSparkle = true;
         hasPerformedCaThisPress = false;
         performedChargeAttack = true;
 
@@ -145,7 +135,6 @@ public class GeneralAnimationWeapon : MonoBehaviour
         {
             mainCharAnimator.SetFloat("_ChargeAttackSpeed", ChargedChargeSpeed);
             ChargeAttackCharged = true;
-
         }
 
         else

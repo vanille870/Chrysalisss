@@ -1,16 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 public class InputManager : MonoBehaviour
 {
     [Header("Input-Setup")]
     public static Crystal_inputs playerInput;
-    static public float moveDirectionX;
-    static public float moveDirectionY;
-    static float accelerationVelocity;
-    public float acceleration;
 
     [Header("Scripts")]
     [SerializeField] PlayerMovement movementScript;

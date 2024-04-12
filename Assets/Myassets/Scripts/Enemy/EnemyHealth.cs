@@ -14,7 +14,8 @@ public class EnemyHealth : MonoBehaviour
     public Animator EnemyAnimator;
 
     public Slime_Damaged enemyAnimationScript;
-    public Slime_AI slime_AIScript;
+    public Basic_Enemy_AI AIScript;
+    [SerializeField] ParticleSystem enemyHitEffect;
     public bool EnemyIsDead;
 
 
@@ -36,7 +37,9 @@ public class EnemyHealth : MonoBehaviour
         {
             EnemyCurrentHealth -= recievedDamage;
             StaggerValue -= staggerDamage;
-            slime_AIScript.currentEnemyState = Slime_AI.EnemyState.chasing;
+            AIScript.seenPlayer = true;
+            AIScript.currentEnemyState = Basic_Enemy_AI.EnemyState.chasing;
+            enemyHitEffect.Play();
 
             if (EnemyCurrentHealth <= 0)
             {

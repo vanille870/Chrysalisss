@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60067c427dc903d4e8abd4c3b0cb38df, type: 3}
+  m_Name: PlayerAudio
+  m_EditorClassIdentifier: 
+  footStepSoundsClassArray:
+  - albedo: {fileID: 2800000, guid: 98037910f5034e7438129facd229cb0a, type: 3}
+    audioClips:
+    - {fileID: 8300000, guid: bf555d625bcff6947b9956a4a3123084, type: 3}
+    - {fileID: 8300000, guid: 4e459a3af73d10748891503e6e153e59, type: 3}
+    - {fileID: 8300000, guid: 5724ac17696eb5044aaecd649927523c, type: 3}
+    - {fileID: 8300000, guid: e310b0447aacfdb459ead6bee9757fd2, type: 3}
+    - {fileID: 8300000, guid: e07e77b67adf2134ab0511eb3fa0fc0e, type: 3}
+    - {fileID: 8300000, guid: 27f0d1e335457384fb6e58c03796a1bc, type: 3}
+  - albedo: {fileID: 2800000, guid: 144cf0ad84916d94aaf959d7c626c06c, type: 3}
+    audioClips:
+    - {fileID: 8300000, guid: b24c80f6058c955459872b5f66215844, type: 3}
+    - {fileID: 8300000, guid: 894d2f13909acd9428c2f7991b66d925, type: 3}
+    - {fileID: 8300000, guid: 157a5aa23dbbcb040878b172ee698854, type: 3}
+    - {fileID: 8300000, guid: c6337614034a8dd42b7104cdc16d11b8, type: 3}
+    - {fileID: 8300000, guid: 304527ff596dc414bbc31aa67e82113a, type: 3}
+  - albedo: {fileID: 2800000, guid: 7e64ff6c18523c7429912ffd960d5258, type: 3}
+    audioClips:
+    - {fileID: 8300000, guid: 3225f6ab36659ca4d89dedc7afbae817, type: 3}
+    - {fileID: 8300000, guid: 45b3c2da1f16b85458a03a563a6ecb2d, type: 3}
+    - {fileID: 8300000, guid: 0bdd9d121916be74787e361c1fa32d81, type: 3}
+    - {fileID: 8300000, guid: 08fac320e5a68ee4fb6eb200b0fb84ad, type: 3}
+    - {fileID: 8300000, guid: 610eae33dcafb0b48ac7f4f45e33ceec, type: 3}
+    - {fileID: 8300000, guid: 907d8951fe43d2d4baa0ce642d81c903, type: 3}
+  swordSounds:
+    normalSwordAttackSounds:
+    - SwordAttack_DEBUG: Diagonal
+      ID: 0
+      audioClips:
+      - {fileID: 8300000, guid: 33ab0d3cf0283a14289bcc812e2e7d90, type: 3}
+      - {fileID: 8300000, guid: 9781402c84bdee94c96d6e2e009362ae, type: 3}
+    - SwordAttack_DEBUG: Sweep
+      ID: 1
+      audioClips:
+      - {fileID: 8300000, guid: 23bd240531d39384291131798ecef3ba, type: 3}
+      - {fileID: 8300000, guid: afe51689aa3d6194ba2bc885e6b0e022, type: 3}
+      - {fileID: 8300000, guid: 31e42bdaab6f4d34ebe2e49a3236e495, type: 3}
+    - SwordAttack_DEBUG: Chop
+      ID: 2
+      audioClips:
+      - {fileID: 8300000, guid: 7aee3aa0911d47548aebd5e33f390dd6, type: 3}
+      - {fileID: 8300000, guid: 47a016e9156e5f548ba1459afda4dba2, type: 3}
+      - {fileID: 8300000, guid: 22f947e82b6627e48825158f2b1c54aa, type: 3}
+    - SwordAttack_DEBUG: Stab
+      ID: 3
+      audioClips: []

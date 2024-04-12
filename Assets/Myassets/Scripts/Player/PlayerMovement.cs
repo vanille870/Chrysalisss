@@ -19,8 +19,9 @@ public class PlayerMovement : MonoBehaviour
 
     public MovementState currentMovementState = MovementState.NormalMovment;
     private System.Action[] runCurrentMovement = null;
-    public MainCharAnimation mainCharAnimationScript;
-    public AfterMiragesPlayer afterMiragesPlayerScript;
+    [SerializeField] MainCharAnimation mainCharAnimationScript;
+    [SerializeField] AfterMiragesPlayer afterMiragesPlayerScript;
+    [SerializeField] GeneralAnimationWeapon generalAnimationWeapon;
 
 
     [Header("Bools")]
@@ -89,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
     [System.Serializable]
     public struct TimedEvent
     {
-        [SerializeField]
+        [SerializeField] [Range(0f, 4f)]
         private float Duration;
         private float Clock;
 
@@ -200,6 +201,7 @@ public class PlayerMovement : MonoBehaviour
         otherPositionHere = positionOther;
         knockbackAmountHere = amountOfKnockback;
         playerKnockBack = true;
+        generalAnimationWeapon.StopSparkle();
     }
 
     void NormalMovement()
@@ -251,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
     public void AttackPush()
     {
         //if attacking this pushes the character for a more weighty feel.
-        if (AttackPushTimer.IsFinished!)
+        if (AttackPushTimer.IsFinished == false)
             charControl.Move((transform.forward * pushAmountNormalAttack + Physics.gravity) * Time.deltaTime);
 
         else

@@ -24,9 +24,9 @@ public class Idle_SM : StateMachineBehaviour
     {
         generalAnimationWeapon.isAttacking = false;
 
-        animator.SetBool("NormalAttack", false);
+        animator.ResetTrigger("_NormalAttack");
         animator.SetBool("CanStartNextAttack", false);
-        animator.SetBool("ReturnToIdle", false);
+        animator.ResetTrigger("_ReturnToIdle");
         animator.ResetTrigger("_ForceChargeAttack");
         SMmovement.FinishAttacking();
         SMmovement.StartMoving();

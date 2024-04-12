@@ -18,10 +18,14 @@ public class Enemy_Animation : MonoBehaviour
     public float currentSpeed;
     [Range(0, 1)]
     public float speedPercent;
+    [Range(0, 1)]
+    public float AIMagnitudeTest;
 
     public float attackspeed;
     public float attackAcceleration;
     public float attackAnimationSmoothFactor;
+    [SerializeField] float SmoothTimeFromAttacking;
+    [SerializeField] float SmoothTimeFromStagger;
 
     float agentOriginalSpeed;
     float agentOrginalAcceleration;
@@ -30,13 +34,11 @@ public class Enemy_Animation : MonoBehaviour
 
     SphereCollider attackRangeSphere;
     public Transform PlayerPoint;
-    bool SmoothBlendWhenAttacking;
     bool isRoatingToPlayer;
     public bool isAttacking;
     public float rotationSpeed;
 
     public Collider[] TriggerCollection;
-
 
     // Start is called before the first frame update
     void Start()
@@ -63,34 +65,20 @@ public class Enemy_Animation : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
+        AIMagnitudeTest = slimeAgent.velocity.magnitude;
 
         currentSpeed = slimeAgent.velocity.magnitude;
-        speedPercent = currentSpeed / slimeAgent.speed;
+        speedPercent = currentSpeed / 0.7f;
         slimeAnimator.SetFloat("_IdleBlend", speedPercent);
-
-        /*if (SmoothBlendWhenAttacking == false)
-        {
-            currentSpeed = slimeAgent.velocity.magnitude;
-            speedPercent = currentSpeed / slimeAgent.speed;
-            slimAnimator.SetFloat("_IdleBlend", speedPercent);
-        }
-
-        else
-        {
-            speedPercent -= Time.deltaTime * attackAnimationSmoothFactor;
-            speedPercent = Mathf.Clamp(speedPercent, 0, Mathf.Infinity);
-            slimAnimator.SetFloat("_IdleBlend", speedPercent);
-        }*/
     }
 
     public void StartAttack()
     {
         if (isAttacking == false)
         {
-            SmoothBlendWhenAttacking = true;
+
             slimeAgent.speed = attackspeed;
             slimeAgent.acceleration = attackAcceleration;
             isAttacking = true;
@@ -100,18 +88,24 @@ public class Enemy_Animation : MonoBehaviour
 
     public void FinishAttack()
     {
-        SmoothBlendWhenAttacking = false;
         isAttacking = false;
+
         slimeAgent.speed = agentOriginalSpeed;
         slimeAgent.acceleration = agentOrginalAcceleration;
-        print(slimeAgent.acceleration);
-        print(slimeAgent.speed);
+    }
+
+    public void StartStagger()
+    {
+        slimeAgent.speed = 0;
+        slimeAgent.angularSpeed = 0;
+        slimeAgent.acceleration = 10;
     }
 
     public void RestoreFromStagger()
     {
         slimeAgent.speed = agentOriginalSpeed;
         slimeAgent.angularSpeed = agentOrginalAnglSpeed;
+        slimeAgent.acceleration = agentOrginalAcceleration;
     }
 
     public void ResetAnimatorINT()
@@ -133,21 +127,6 @@ public class Enemy_Animation : MonoBehaviour
         slimeAnimator.SetInteger("_TriggerINT", colliderNumber);
     }
 
-
-    //key events
-    public void CheckIfPlayerIsInRangeKEY()
-    {
-        /*if (attackRangeSphere.bounds.Contains(PlayerPoint.position))
-        {
-            StartAttack();
-        }
-
-        else
-        {
-            FinishAttack();
-        }*/
-    }
-
     void RotateTowardsTarget()
     {
         // Determine which direction to rotate towards
@@ -160,6 +139,8 @@ public class Enemy_Animation : MonoBehaviour
         Debug.DrawRay(transform.position, newDirection, Color.red);
         transform.rotation = Quaternion.LookRotation(newDirection);
     }
+
+
 
     public void DeactivateEnemy()
     {

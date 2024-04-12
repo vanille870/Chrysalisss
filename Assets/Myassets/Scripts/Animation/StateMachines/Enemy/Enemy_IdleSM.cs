@@ -9,7 +9,6 @@ public class Enemy_IdleSM : StateMachineBehaviour
 
     public void OnStateEnter()
     {
-        Enemy_AnimationScript.CheckIfPlayerIsInRangeKEY();
         Enemy_AnimationScript.FinishAttack();
         Enemy_AnimationScript.RestoreFromStagger();
     }
