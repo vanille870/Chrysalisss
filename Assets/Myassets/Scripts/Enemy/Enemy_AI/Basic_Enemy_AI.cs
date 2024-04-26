@@ -15,6 +15,7 @@ public class Basic_Enemy_AI : MonoBehaviour
     }
 
     [SerializeField] Enemy_Animation enemy_AnimationS;
+    [SerializeField] Enemy_Sound enemy_Sound;
 
     public CharacterController playerController;
     public NavMeshAgent slimeAgent;
@@ -32,9 +33,8 @@ public class Basic_Enemy_AI : MonoBehaviour
     public float IdleRadius;
 
     public bool seenPlayer = false;
-    public bool isTracking;
-    public bool enemyIsRetunring;
     bool HasPassedDestination = true;
+    bool PlayAlertSound;
 
     public LayerMask DetectionLayerMask;
     public RaycastHit enemyLineOfSightRaycast;
@@ -91,8 +91,6 @@ public class Basic_Enemy_AI : MonoBehaviour
             ReturnToSpawn,
             Tracking
         };
-
-
     }
 
     // Update is called once per frame
@@ -125,6 +123,12 @@ public class Basic_Enemy_AI : MonoBehaviour
                     Debug.DrawRay(visionPoint.position, PlayerPoint.position - transform.position, Color.green);
                     currentEnemyState = EnemyState.chasing;
                     seenPlayer = true;
+
+                    if (PlayAlertSound == false)
+                    {
+                        enemy_Sound.PlayAlertSound();
+                        PlayAlertSound = true;
+                    }
                 }
 
                 if (enemyLineOfSightRaycast.collider.tag == "Solid_Object")
@@ -146,7 +150,6 @@ public class Basic_Enemy_AI : MonoBehaviour
             PassDestinationAndCheckIfAiAgenIsActive(playerLastSeenLocation);
             playerLastSeenVelocity = playerController.velocity;
             playerLastSeenLocation = PlayerPoint.position;
-            isTracking = false;
             slimeAgent.autoBraking = false;
         }
 
@@ -155,7 +158,7 @@ public class Basic_Enemy_AI : MonoBehaviour
 
         if (slimeAgent.enabled)
         {
-            if (seenPlayer == false && slimeAgent.remainingDistance < 0.1f)
+            if (slimeAgent.remainingDistance < 0.1f)
             {
                 currentEnemyState = EnemyState.Tracking;
                 TrackTimer.SetClock();
@@ -183,6 +186,7 @@ public class Basic_Enemy_AI : MonoBehaviour
             WaitBeforeReturnTimer.SetClock();
             PassDestinationAndCheckIfAiAgenIsActive(transform.position + playerLastSeenVelocity / 2);
             HasPassedDestination = false;
+            PlayAlertSound = false;
 
         }
     }
@@ -217,6 +221,7 @@ public class Basic_Enemy_AI : MonoBehaviour
                 {
                     currentEnemyState = EnemyState.Idling;
                     IdleWayPointTimer.SetClock();
+
                 }
             }
 
@@ -227,7 +232,7 @@ public class Basic_Enemy_AI : MonoBehaviour
     {
         idleWaypointFinderRaycastPoint = new Vector3(spawnPoint.x + (Random.insideUnitCircle.x * IdleRadius), spawnPoint.y, spawnPoint.z + (Random.insideUnitCircle.y * IdleRadius));
         Physics.Raycast(idleWaypointFinderRaycastPoint, Vector3.down, out idleWaypointRaycast);
-        slimeAgent.SetDestination(idleWaypointRaycast.point);
+        //slimeAgent.SetDestination(idleWaypointRaycast.point);
     }
 
     void PassDestinationAndCheckIfAiAgenIsActive(Vector3 destination)
@@ -246,5 +251,5 @@ public class Basic_Enemy_AI : MonoBehaviour
     {
         AttackCheckTimer.SetClock();
     }
-    
+
 }

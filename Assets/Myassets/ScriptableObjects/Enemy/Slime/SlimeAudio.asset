@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a33866f9ac63cdd40a6012716df6e358, type: 3}
+  m_Name: SlimeAudio
+  m_EditorClassIdentifier: 
+  slimeSounds:
+    attackSounds:
+    - slimeAttack_DEBUG: Sweep
+      ID: 0
+      audioClips:
+      - {fileID: 8300000, guid: e1ea99c1f35a01b4b80aa740dddf5657, type: 3}
+      - {fileID: 8300000, guid: 72a1a869600bba14f8fffa4718f578b7, type: 3}
+      - {fileID: 8300000, guid: 979ab022ea51f96409a3affc540d5ccc, type: 3}
+    - slimeAttack_DEBUG: Bash
+      ID: 1
+      audioClips:
+      - {fileID: 8300000, guid: 498de344e9055a24ba47b498dd1a6b61, type: 3}
+      - {fileID: 8300000, guid: 11e222168158bd3419a4b40c30110d64, type: 3}
+      - {fileID: 8300000, guid: 1f78d7a2d2d246d47aaab67bb7b52e5f, type: 3}
+      - {fileID: 8300000, guid: 522fa4e249e66904d97bbd523fe30d06, type: 3}
+  hitSounds:
+  - {fileID: 8300000, guid: cae7ac69f103e7e45b63e55d8ddb1271, type: 3}
+  - {fileID: 8300000, guid: 68874e7fee835f044b1285cd6b4fb88b, type: 3}
+  - {fileID: 8300000, guid: 78320b0bc32691444ae83d021c24a12a, type: 3}
+  - {fileID: 8300000, guid: b7066fa7b61ce8b448cdee51d30acc06, type: 3}
+  deadNoiseSounds:
+  - {fileID: 8300000, guid: 519a98ac247a3a24594e16754466fec3, type: 3}
+  - {fileID: 8300000, guid: 2056d821ddac2384f80c148063a16847, type: 3}
+  - {fileID: 8300000, guid: b3fb0205a3c6ff74a8e6a927f6b3f4ae, type: 3}
+  deadSlashSounds:
+  - {fileID: 8300000, guid: 969430fac19247d4b890016da56431e7, type: 3}
+  - {fileID: 8300000, guid: 7ffdf5877fe66844099a4422bc820b14, type: 3}
+  - {fileID: 8300000, guid: e9d70a887240eea4abb6f67f0aae0608, type: 3}

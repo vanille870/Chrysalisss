@@ -39,6 +39,9 @@ public class PlayerAudioStorage : ScriptableObject
     [SerializeField] public FootStepSounds[] footStepSoundsClassArray;
     [SerializeField] public SwordSounds swordSounds;
 
+    [SerializeField] public AudioClip[] Dodge;
+    [SerializeField] public AudioClip[] PainGrunts;
+
     public AudioClip GetFootstepSoundClip(Texture ComparedTexture)
     {
         foreach (FootStepSounds ftsClass in footStepSoundsClassArray)

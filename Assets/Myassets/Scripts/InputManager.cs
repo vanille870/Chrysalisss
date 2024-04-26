@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -9,6 +12,10 @@ public class InputManager : MonoBehaviour
     [Header("Scripts")]
     [SerializeField] PlayerMovement movementScript;
     [SerializeField] GeneralAnimationWeapon generalAnimationWeapon;
+    [SerializeField] Interact interactionScript;
+    [SerializeField] ObjectInteraction textBoxInteractionScript;
+
+    public static Action<InputAction.CallbackContext> currentInteractFunction;
 
     void Awake()
     {
@@ -37,23 +44,33 @@ public class InputManager : MonoBehaviour
         playerInput.InGame.ChargeAttack.started += _ => generalAnimationWeapon.SetChargeAttackInAnimator();
         playerInput.InGame.ChargeAttack.canceled += _ => generalAnimationWeapon.PerformChargeAttack();
         playerInput.InGame.Dodge.Enable();
-        
 
-        
+        playerInput.InGame.Interact.started += _ => interactionScript.FindInteractionObjects();
+        playerInput.InGame.Dodge.Enable();
+
+        playerInput.Interacting.ContinueInteraction.Enable();
+        playerInput.Interacting.Disable();
     }
 
-    public static void DeActivateAllInputMaps()
+    public static void SetInteractFunction(Action<InputAction.CallbackContext> interactionFunction)
     {
-  
+        playerInput.InGame.Disable();
+        print("function set");
+
+        currentInteractFunction = interactionFunction;
+
+        playerInput.Interacting.ContinueInteraction.started -= currentInteractFunction;
+        playerInput.Interacting.ContinueInteraction.started += currentInteractFunction;
+
+        playerInput.Interacting.Enable();
     }
 
-    public static void ActivateUI()
+    public static void ResetInteractionFunction()
     {
+        playerInput.Interacting.ContinueInteraction.started -= currentInteractFunction;
+        print("function reset");
 
-    }
-
-    public static void ActivatePlayer()
-    {
-       
+        playerInput.InGame.Enable();
+        playerInput.Interacting.Disable();
     }
 }

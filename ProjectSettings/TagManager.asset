@@ -10,6 +10,7 @@ TagManager:
   - Solid_Object
   - Player_Dodging
   - Terrain
+  - InteractableObject
   layers:
   - Default
   - TransparentFX

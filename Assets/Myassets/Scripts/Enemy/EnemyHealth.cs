@@ -8,12 +8,13 @@ public class EnemyHealth : MonoBehaviour
     public int StaggerValue;
     public int defence;
     int maxStaggerValue;
-    int lastAttackHitNumber;
+    public int lastAttackHitNumber = 0;
 
     public int EnemyCurrentHealth;
     public Animator EnemyAnimator;
 
     public Slime_Damaged enemyAnimationScript;
+    public Enemy_Sound slimeSoundScript;
     public Basic_Enemy_AI AIScript;
     [SerializeField] ParticleSystem enemyHitEffect;
     public bool EnemyIsDead;
@@ -25,49 +26,41 @@ public class EnemyHealth : MonoBehaviour
         maxStaggerValue = StaggerValue;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage)
     {
+        print("recieved damage");
+        EnemyCurrentHealth -= recievedDamage;
+        StaggerValue -= staggerDamage;
+        AIScript.seenPlayer = true;
+        AIScript.currentEnemyState = Basic_Enemy_AI.EnemyState.chasing;
+        enemyHitEffect.Play();
 
-    }
-
-    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage, int attackNumber)
-    {
-        if (lastAttackHitNumber != attackNumber)
+        if (EnemyCurrentHealth <= 0)
         {
-            EnemyCurrentHealth -= recievedDamage;
-            StaggerValue -= staggerDamage;
-            AIScript.seenPlayer = true;
-            AIScript.currentEnemyState = Basic_Enemy_AI.EnemyState.chasing;
-            enemyHitEffect.Play();
-
-            if (EnemyCurrentHealth <= 0)
-            {
-                EnemyAnimator.SetTrigger("_Dead");
-                enemyAnimationScript.DeadAnimation();
-                EnemyIsDead = true;
-                return;
-            }
-
-            if (StaggerValue <= 0 && EnemyIsDead == false)
-            {
-                StaggerValue = maxStaggerValue;
-                EnemyAnimator.SetTrigger("_Stagger");
-                enemyAnimationScript.FlashStart();
-
-                lastAttackHitNumber = attackNumber;
-            }
-
-            else
-            {
-                enemyAnimationScript.FlashStart();
-
-                lastAttackHitNumber = attackNumber;
-            }
+            EnemyDeath();
+            return;
         }
 
+        else
+            slimeSoundScript.PlayHitSound();
 
-        if (lastAttackHitNumber == attackNumber)
-            print("surplus hit blocked");
+        if (StaggerValue <= 0 && EnemyIsDead == false)
+        {
+            StaggerValue = maxStaggerValue;
+            EnemyAnimator.SetTrigger("_Stagger");
+        }
+
+        enemyAnimationScript.FlashStart();
+    }
+
+
+
+    public void EnemyDeath()
+    {
+        slimeSoundScript.PlayDeathSlashSound();
+        EnemyAnimator.SetTrigger("_Dead");
+        enemyAnimationScript.DeadAnimation();
+        EnemyIsDead = true;
     }
 }
+

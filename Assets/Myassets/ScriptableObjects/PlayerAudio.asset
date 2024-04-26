@@ -58,3 +58,10 @@ MonoBehaviour:
     - SwordAttack_DEBUG: Stab
       ID: 3
       audioClips: []
+  Dodge:
+  - {fileID: 8300000, guid: 4baa94593aa249e46a7384da8a2a81a9, type: 3}
+  PainGrunts:
+  - {fileID: 8300000, guid: a8602a8e90164a840bbeec4d1bc23bb0, type: 3}
+  - {fileID: 8300000, guid: a846ee5713ef00e4c8a9ddd096f226c6, type: 3}
+  - {fileID: 8300000, guid: 068624c9bb03b334f8cdc10f8d6bf7c2, type: 3}
+  - {fileID: 8300000, guid: 5f065722f380da6498048a95ece85484, type: 3}

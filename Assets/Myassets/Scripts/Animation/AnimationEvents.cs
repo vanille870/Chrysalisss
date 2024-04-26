@@ -1,5 +1,4 @@
 
-using System;
 using UnityEngine;
 
 public class AnimationEvents : MonoBehaviour
@@ -8,7 +7,8 @@ public class AnimationEvents : MonoBehaviour
     public GeneralAnimationWeapon generalAnimationWeapon;
     public Animator mainCharAnim;
 
-    [SerializeField] AudioSource PlayerAudioSource;
+    [SerializeField] AudioSource PlayerAudioSourceFootsteps;
+    [SerializeField] AudioSource PlayerAudioSourceEffcts;
     [SerializeField] CharacterController characterController;
 
 
@@ -50,7 +50,7 @@ public class AnimationEvents : MonoBehaviour
                     }
                 }
 
-                PlayerAudioSource.PlayOneShot(playerAudioStorage.GetFootstepSoundClip(currentTrain.terrainData.terrainLayers[primaryIndex].diffuseTexture));
+                PlayerAudioSourceFootsteps.PlayOneShot(playerAudioStorage.GetFootstepSoundClip(currentTrain.terrainData.terrainLayers[primaryIndex].diffuseTexture));
             }
         }
     }
@@ -70,12 +70,22 @@ public class AnimationEvents : MonoBehaviour
 
     void SwordSwingSounds(AudioClip SwingSound)
     {
-        PlayerAudioSource.PlayOneShot(SwingSound);
+        PlayerAudioSourceEffcts.PlayOneShot(SwingSound);
     }
 
     void PlayNormalSwordSound(NormalSwordAttacksEnum swordAttack)
     {
-        PlayerAudioSource.PlayOneShot(playerAudioStorage.GetNormalSwordSoundClip((int)swordAttack));
+        PlayerAudioSourceEffcts.PlayOneShot(playerAudioStorage.GetNormalSwordSoundClip((int)swordAttack));
+    }
+
+    void PlayDodgeSound()
+    {
+        PlayerAudioSourceEffcts.PlayOneShot(playerAudioStorage.Dodge[Random.Range(0, playerAudioStorage.Dodge.Length)]);
+    }
+
+    void PlayPainGrunt()
+    {
+        PlayerAudioSourceEffcts.PlayOneShot(playerAudioStorage.PainGrunts[Random.Range(0, playerAudioStorage.PainGrunts.Length)]);
     }
 
 

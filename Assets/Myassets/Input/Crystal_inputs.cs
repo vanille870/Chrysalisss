@@ -62,6 +62,15 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a7938a4-94b9-4506-94f8-b9eef1725859"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -174,6 +183,67 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
                     ""action"": ""ChargeAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eceae8c9-8f57-492b-9e7b-f3fc88b97241"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_mouse"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Interacting"",
+            ""id"": ""488d8e2d-819e-4e80-a80a-39ccdc7addac"",
+            ""actions"": [
+                {
+                    ""name"": ""ContinueInteraction"",
+                    ""type"": ""Button"",
+                    ""id"": ""82afb4a1-49d5-4418-964a-e6ea3ac93736"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6ec27ee1-fea0-4aa2-86cc-7dfb25f9cf15"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_mouse"",
+                    ""action"": ""ContinueInteraction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""81c5dea7-add6-463b-a717-4b60eddbb983"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_mouse"",
+                    ""action"": ""ContinueInteraction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df351a9f-146e-48b8-ac52-d188892dd4fd"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ContinueInteraction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -197,6 +267,10 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         m_InGame_Normal_attack = m_InGame.FindAction("Normal_attack", throwIfNotFound: true);
         m_InGame_Dodge = m_InGame.FindAction("Dodge", throwIfNotFound: true);
         m_InGame_ChargeAttack = m_InGame.FindAction("ChargeAttack", throwIfNotFound: true);
+        m_InGame_Interact = m_InGame.FindAction("Interact", throwIfNotFound: true);
+        // Interacting
+        m_Interacting = asset.FindActionMap("Interacting", throwIfNotFound: true);
+        m_Interacting_ContinueInteraction = m_Interacting.FindAction("ContinueInteraction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -262,6 +336,7 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_InGame_Normal_attack;
     private readonly InputAction m_InGame_Dodge;
     private readonly InputAction m_InGame_ChargeAttack;
+    private readonly InputAction m_InGame_Interact;
     public struct InGameActions
     {
         private @Crystal_inputs m_Wrapper;
@@ -270,6 +345,7 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         public InputAction @Normal_attack => m_Wrapper.m_InGame_Normal_attack;
         public InputAction @Dodge => m_Wrapper.m_InGame_Dodge;
         public InputAction @ChargeAttack => m_Wrapper.m_InGame_ChargeAttack;
+        public InputAction @Interact => m_Wrapper.m_InGame_Interact;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -291,6 +367,9 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
             @ChargeAttack.started += instance.OnChargeAttack;
             @ChargeAttack.performed += instance.OnChargeAttack;
             @ChargeAttack.canceled += instance.OnChargeAttack;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IInGameActions instance)
@@ -307,6 +386,9 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
             @ChargeAttack.started -= instance.OnChargeAttack;
             @ChargeAttack.performed -= instance.OnChargeAttack;
             @ChargeAttack.canceled -= instance.OnChargeAttack;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IInGameActions instance)
@@ -324,6 +406,52 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         }
     }
     public InGameActions @InGame => new InGameActions(this);
+
+    // Interacting
+    private readonly InputActionMap m_Interacting;
+    private List<IInteractingActions> m_InteractingActionsCallbackInterfaces = new List<IInteractingActions>();
+    private readonly InputAction m_Interacting_ContinueInteraction;
+    public struct InteractingActions
+    {
+        private @Crystal_inputs m_Wrapper;
+        public InteractingActions(@Crystal_inputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ContinueInteraction => m_Wrapper.m_Interacting_ContinueInteraction;
+        public InputActionMap Get() { return m_Wrapper.m_Interacting; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InteractingActions set) { return set.Get(); }
+        public void AddCallbacks(IInteractingActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InteractingActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InteractingActionsCallbackInterfaces.Add(instance);
+            @ContinueInteraction.started += instance.OnContinueInteraction;
+            @ContinueInteraction.performed += instance.OnContinueInteraction;
+            @ContinueInteraction.canceled += instance.OnContinueInteraction;
+        }
+
+        private void UnregisterCallbacks(IInteractingActions instance)
+        {
+            @ContinueInteraction.started -= instance.OnContinueInteraction;
+            @ContinueInteraction.performed -= instance.OnContinueInteraction;
+            @ContinueInteraction.canceled -= instance.OnContinueInteraction;
+        }
+
+        public void RemoveCallbacks(IInteractingActions instance)
+        {
+            if (m_Wrapper.m_InteractingActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInteractingActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InteractingActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InteractingActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InteractingActions @Interacting => new InteractingActions(this);
     private int m_Keyboard_mouseSchemeIndex = -1;
     public InputControlScheme Keyboard_mouseScheme
     {
@@ -348,5 +476,10 @@ public partial class @Crystal_inputs: IInputActionCollection2, IDisposable
         void OnNormal_attack(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
         void OnChargeAttack(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+    }
+    public interface IInteractingActions
+    {
+        void OnContinueInteraction(InputAction.CallbackContext context);
     }
 }

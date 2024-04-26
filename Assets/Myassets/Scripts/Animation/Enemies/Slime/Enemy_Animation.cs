@@ -67,9 +67,9 @@ public class Enemy_Animation : MonoBehaviour
 
     void Update()
     {
-        AIMagnitudeTest = slimeAgent.velocity.magnitude;
-
         currentSpeed = slimeAgent.velocity.magnitude;
+
+        //Enemy Max speed
         speedPercent = currentSpeed / 0.7f;
         slimeAnimator.SetFloat("_IdleBlend", speedPercent);
     }
