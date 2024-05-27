@@ -11,14 +11,19 @@ public class On_breakable_hit : MonoBehaviour
     public static bool canBreakObjects;
     public static bool hasBreaked;
 
-    // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += BreakObjects;
+    }
 
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= BreakObjects;
     }
 
     // Update is called once per frame
-    void Update()
+    //needs optimization
+    void BreakObjects()
     {
         if (canBreakObjects == true && hasBreaked == false)
         {
@@ -29,7 +34,7 @@ public class On_breakable_hit : MonoBehaviour
             {
                 if (col.tag == "Breakable")
                 {
-                   col.GetComponent<BreakableObjectSpawner>().Damage(0f, radius, center.position);
+                    col.GetComponent<BreakableObjectSpawner>().Damage(0f, radius, center.position);
                 }
             }
         }

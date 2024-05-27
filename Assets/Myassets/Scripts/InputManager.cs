@@ -13,19 +13,24 @@ public class InputManager : MonoBehaviour
     [SerializeField] PlayerMovement movementScript;
     [SerializeField] GeneralAnimationWeapon generalAnimationWeapon;
     [SerializeField] Interact interactionScript;
-    [SerializeField] ObjectInteraction textBoxInteractionScript;
+    [SerializeField] Pause_Menu pause_MenuScript;
+    [SerializeField] InventoryMenu inventoryMenuScript;
 
     public static Action<InputAction.CallbackContext> currentInteractFunction;
+    public static Action<InputAction.CallbackContext> currentSkipInteractionFunction;
 
     void Awake()
     {
         playerInput = new Crystal_inputs();
+
+        playerInput.InGame.Enable();
+        playerInput.Interacting.Disable();
+        playerInput.UI.Disable();
     }
 
     //Set what each input does here, enable the first used control scheme
     void OnEnable()
     {
-
         playerInput.Enable();
 
         playerInput.InGame.Movement.started += _ => movementScript.StartMoving();
@@ -48,8 +53,22 @@ public class InputManager : MonoBehaviour
         playerInput.InGame.Interact.started += _ => interactionScript.FindInteractionObjects();
         playerInput.InGame.Dodge.Enable();
 
+        playerInput.InGame.Pause.started += _ => pause_MenuScript.TogglePause();
+        playerInput.InGame.Pause.Enable();
+
+        playerInput.InGame.OpenInventory.started += _ => inventoryMenuScript.ToggleInventory();
+        playerInput.InGame.OpenInventory.Enable();
+
+        playerInput.UI.Unpause.started += _ => pause_MenuScript.TogglePause();
+        playerInput.UI.Unpause.Enable(); 
+
+        playerInput.UI.CloseInventory.started += _ => inventoryMenuScript.ToggleInventory();
+        playerInput.UI.CloseInventory.Enable();
+
         playerInput.Interacting.ContinueInteraction.Enable();
+        playerInput.Interacting.SkipInterAction.Enable();
         playerInput.Interacting.Disable();
+        playerInput.UI.Disable();
     }
 
     public static void SetInteractFunction(Action<InputAction.CallbackContext> interactionFunction)
@@ -65,12 +84,42 @@ public class InputManager : MonoBehaviour
         playerInput.Interacting.Enable();
     }
 
+    public static void SetSkipInteractionFunction(Action<InputAction.CallbackContext> skipInteractionFunction)
+    {
+        print("skip function set");
+        currentSkipInteractionFunction = skipInteractionFunction;
+
+        playerInput.Interacting.SkipInterAction.started -= currentSkipInteractionFunction;
+        playerInput.Interacting.SkipInterAction.started += currentSkipInteractionFunction;
+    }
+
     public static void ResetInteractionFunction()
     {
         playerInput.Interacting.ContinueInteraction.started -= currentInteractFunction;
+        playerInput.Interacting.SkipInterAction.started -= currentSkipInteractionFunction;
         print("function reset");
 
         playerInput.InGame.Enable();
         playerInput.Interacting.Disable();
+
+        currentInteractFunction = null;
+        currentSkipInteractionFunction = null;
+    }
+
+    public void ToggleMenuControls()
+    {
+        if (Pause_Menu.GameIsPaused == false)
+        {
+            playerInput.InGame.Disable();
+            playerInput.Interacting.Disable();
+            playerInput.UI.Enable();
+        }
+
+        else if (Pause_Menu.GameIsPaused == true)
+        {
+            playerInput.InGame.Enable();
+            playerInput.Interacting.Disable();
+            playerInput.UI.Disable();
+        }
     }
 }

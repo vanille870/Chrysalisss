@@ -15,10 +15,4 @@ public class bakeMeshArchived : MonoBehaviour
         TargetMesh.BakeMesh(mirageMesh, false);
         GetComponent<MeshFilter>().mesh = mirageMesh;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

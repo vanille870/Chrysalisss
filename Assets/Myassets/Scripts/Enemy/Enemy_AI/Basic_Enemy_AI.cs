@@ -93,8 +93,18 @@ public class Basic_Enemy_AI : MonoBehaviour
         };
     }
 
+    void OnEnable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += PlayerDetection;
+    }
+
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= PlayerDetection;
+    }
+
     // Update is called once per frame
-    void Update()
+    void PlayerDetection()
     {
 
         DetectPlayer();

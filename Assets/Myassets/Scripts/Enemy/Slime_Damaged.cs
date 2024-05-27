@@ -40,15 +40,24 @@ public class Slime_Damaged : MonoBehaviour
         HitFresnelFactor = OriginalFresnelFactor;
     }
 
-    void Update()
+    void OnEnable()
     {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += UpdateShaderParams;
+    }
 
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= UpdateShaderParams;
+    }
+
+    void UpdateShaderParams()
+    {
         shaderProperties.SetFloat("_FresnelFactor", HitFresnelFactor);
         LerpFresnelFactor();
         enemyRenderer.SetPropertyBlock(shaderProperties);
 
         if (lerpFresnel == true)
-        Timer();
+            Timer();
     }
 
     public void FlashStart()

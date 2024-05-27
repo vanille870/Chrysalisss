@@ -43,6 +43,16 @@ public class BreakableObjectSpawner : MonoBehaviour, IBreakable
     bool hasParticleSys = false;
     public string particlSysName;
 
+    void OnEnable()
+    {
+        CustomGameLoop.UpdateLoopFunctionsSubscriber += RenderGUIInstances;
+    }
+
+    void OnDisable()
+    {
+        CustomGameLoop.UpdateLoopFunctionsSubscriber -= RenderGUIInstances;
+    }
+
     void Awake()
     {
 
@@ -78,7 +88,7 @@ public class BreakableObjectSpawner : MonoBehaviour, IBreakable
         }
     }
 
-    void Update()
+    void RenderGUIInstances()
     {
         renderP = new RenderParams(grassMaterial);
         renderP.matProps = propertyBlock;

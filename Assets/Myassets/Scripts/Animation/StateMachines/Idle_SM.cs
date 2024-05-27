@@ -31,6 +31,7 @@ public class Idle_SM : StateMachineBehaviour
         SMmovement.FinishAttacking();
         SMmovement.StartMoving();
         SMmovement.RestoreSpeedAndTurning();
+        generalAnimationWeapon.DoChargeAttack();
         generalAnimationWeapon.isPerformingChargAttack = false;
     }
 }

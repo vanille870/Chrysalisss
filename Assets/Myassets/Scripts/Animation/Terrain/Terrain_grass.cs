@@ -20,10 +20,4 @@ public class Terrain_grass : MonoBehaviour
 
         grassPosition = terrain.transform.position;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

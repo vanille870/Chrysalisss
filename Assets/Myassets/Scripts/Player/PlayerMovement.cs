@@ -120,6 +120,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private TimedEvent TimeUntilYouCanDodge = new TimedEvent();
 
+    void OnEnable()
+    {
+        CustomGameLoop.UpdateLoopFunctionsSubscriber += MovementUpdate;
+    }
+
+     void OnDisable()
+    {
+        CustomGameLoop.UpdateLoopFunctionsSubscriber -= MovementUpdate;
+    }
 
     void Start()
     {
@@ -140,9 +149,14 @@ public class PlayerMovement : MonoBehaviour
         };
     }
 
-    void Update()
+    void MovementUpdate()
     {
         ControllerVelocity = charControl.velocity;
+
+        if(Pause_Menu.GameIsPaused)
+        {
+            return;
+        }
 
         MovementVector3();
         //Detects movement and decides deadzone

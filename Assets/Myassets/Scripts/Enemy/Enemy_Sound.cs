@@ -20,9 +20,18 @@ public class Enemy_Sound : MonoBehaviour
     [SerializeField] NavMeshAgent EnemyAgent;
     [SerializeField] AudioClip AlertSound;
 
+    void OnEnable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += UpdateMovingSounds;
+    }
+    
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= UpdateMovingSounds;
+    }
 
     // Update is called once per frame
-    void Update()
+    void UpdateMovingSounds()
     {
         MovingSounds();
     }

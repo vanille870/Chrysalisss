@@ -58,8 +58,21 @@ public class AnimationEvents : MonoBehaviour
     void CanStartNextAttack()
     {
         mainCharAnim.SetBool("CanStartNextAttack", true);
-        generalAnimationWeapon.isRessetingSpeed = true;
-        //generalAnimationWeapon.speedTimer = 0;
+    }
+
+    void ReturnToIdle()
+    {
+        mainCharAnim.SetTrigger("_ReturnToIdle");
+    }
+
+    void ForceChargeAttac()
+    {
+        generalAnimationWeapon.PerformChargeAttack();
+    }
+
+    void SetChargeAttackAsAcharged()
+    {
+        generalAnimationWeapon.ChargeAttackCharged = true;
     }
 
     void CanBreakObjects()
@@ -87,7 +100,4 @@ public class AnimationEvents : MonoBehaviour
     {
         PlayerAudioSourceEffcts.PlayOneShot(playerAudioStorage.PainGrunts[Random.Range(0, playerAudioStorage.PainGrunts.Length)]);
     }
-
-
-
 }

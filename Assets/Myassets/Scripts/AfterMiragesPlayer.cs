@@ -53,19 +53,24 @@ public class AfterMiragesPlayer : MonoBehaviour
     [SerializeField]
     private LerpEvent LerpPlayerGlowPowerEV = new LerpEvent();
 
-    // Start is called before the first frame update
-    void Start()
+    void OnDisable()
     {
-
+        CustomGameLoop.UpdateLoopFunctionsSubscriber -= UpdateLerps;
+        ResetAllLerps();
     }
 
     // Update is called once per frame
-    void Update()
+    void UpdateLerps()
     {
         LerpOpacity();
         LerpPlayerGlow();
         LerpPlayerGlowOpacity();
         //playerRenderer.material.SetFloat("er", 1);
+
+        if (LerpAfterImageOpacityEV.LerpFinished && LerpPlayerGloweOpacityEV.LerpFinished && LerpPlayerGlowPowerEV.LerpFinished)
+        {
+            CustomGameLoop.UpdateLoopFunctionsSubscriber -= UpdateLerps;
+        }
     }
 
     public void SetAfterImageToPlayerPos(Vector3 playerPos, Vector3 playerRot)
@@ -75,6 +80,8 @@ public class AfterMiragesPlayer : MonoBehaviour
         transform.rotation = Quaternion.Euler(playerRot.x, playerRot.y, playerRot.z);
         ResetAllLerps();
         TogglePlayerVisibilty();
+        
+        CustomGameLoop.UpdateLoopFunctionsSubscriber += UpdateLerps;
     }
 
     public void LerpOpacity()
@@ -93,7 +100,7 @@ public class AfterMiragesPlayer : MonoBehaviour
         {
             LerpPlayerGlowPowerEV.Lerp();
             playerGlow = Mathf.Lerp(1, 0, LerpPlayerGlowPowerEV.LerpFloat);
-            playerMaterial.SetFloat("_GlowPower", playerGlow); 
+            playerMaterial.SetFloat("_GlowPower", playerGlow);
         }
     }
 

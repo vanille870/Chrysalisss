@@ -4,11 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public interface IInteractable
-{
-    Action<InputAction.CallbackContext> InitInteractionFunction();
-}
-
 public class Interact : MonoBehaviour
 {
     [SerializeField] float interactSphereSize;
@@ -17,35 +12,75 @@ public class Interact : MonoBehaviour
 
     [SerializeField] Collider[] InteractedColliders;
 
+    int foundColliders;
+    int i;
+    Collider currentCol;
+
+    IInteractableTextbox IinteractableText;
+
+
 
     public void FindInteractionObjects()
     {
-        Physics.OverlapSphereNonAlloc(interactSphereOrigin.position, interactSphereSize, InteractedColliders);
-        print("finding objects to interact with");
+        foundColliders = Physics.OverlapSphereNonAlloc(interactSphereOrigin.position, interactSphereSize, InteractedColliders);
 
-        foreach (Collider col in InteractedColliders)
-        {
-            if (col != null && col.gameObject.CompareTag("InteractableObject"))
-            {
-                PassFunctionToInput( col.gameObject.GetComponent<IInteractable>().InitInteractionFunction());
-                Array.Clear(InteractedColliders, 0, InteractedColliders.Length);
-                print("found object");
-                break;
-            }
-        }
-
-        Array.Clear(InteractedColliders, 0, InteractedColliders.Length);
+        CheckInterface();
     }
 
-    void PassFunctionToInput(Action<InputAction.CallbackContext> passedInteractFunction)
+    void PassFunctionToInput(Action<InputAction.CallbackContext> passedInteractFunction, bool isSkipFunction)
     {
-        InputManager.SetInteractFunction(passedInteractFunction);
-        print("Passing function");
+        if (isSkipFunction == false)
+        {
+            InputManager.SetInteractFunction(passedInteractFunction);
+            print("Passing function");
+        }
+
+        else
+        {
+            InputManager.SetSkipInteractionFunction(passedInteractFunction);
+        }
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(interactSphereOrigin.position, interactSphereSize);
+    }
+
+    void CheckInterface()
+    {
+        for (i = 0; i < foundColliders; i++)
+        {
+            if (InteractedColliders[i].gameObject.CompareTag("InteractableObject"))
+            {
+                if (InteractedColliders[i].gameObject.TryGetComponent<IInteractableTextbox>(out var interactableTextBox))
+                {
+                    currentCol = InteractedColliders[i];
+                    IinteractableText = currentCol.gameObject.GetComponent<IInteractableTextbox>();
+
+                    if (IinteractableText.IsInteractable == true)
+                    {
+                        if (IinteractableText.TakesControlAway == true)
+                        {
+                            PassFunctionToInput(IinteractableText.InitInteractionFunction(), false);
+                            PassFunctionToInput(IinteractableText.InitSecondaryInteractionFunction(), true);
+                        }
+
+                        else
+                        {
+                            IinteractableText.InitInteractionFunction();
+                        }
+                    }
+
+                    break;
+                }
+
+                else if (InteractedColliders[i].gameObject.TryGetComponent<IInteractable>(out var interactable))
+                {
+                    InteractedColliders[i].gameObject.GetComponent<IInteractable>().InteractFunction();
+                }
+            }
+
+        }
     }
 }

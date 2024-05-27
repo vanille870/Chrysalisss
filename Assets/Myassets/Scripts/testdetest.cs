@@ -42,12 +42,4 @@ public class testdetest : MonoBehaviour
 
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-       boooool = TrackTimer.IsFinished;
-  
-       
-    }
 }

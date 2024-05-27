@@ -65,7 +65,17 @@ public class Enemy_Animation : MonoBehaviour
 
     }
 
-    void Update()
+    void OnEnable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += UpdateSpeed;
+    }
+
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= UpdateSpeed;
+    }
+
+    void UpdateSpeed()
     {
         currentSpeed = slimeAgent.velocity.magnitude;
 

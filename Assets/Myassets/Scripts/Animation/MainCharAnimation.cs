@@ -13,14 +13,18 @@ public class MainCharAnimation : MonoBehaviour
     [Range(0, 1)]
     public float movementBlendFloat;
 
-    // Start is called before the first frame update
-    void Start()
+     void OnEnable()
     {
-        
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += UpdateMovementBlendFloat;
+    }
+    
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= UpdateMovementBlendFloat;
     }
 
     // Update is called once per frame
-    void Update()
+    void UpdateMovementBlendFloat()
     {       
         movementBlendFloat = movementScript.mbBlendFloatDummy;
         mainCharAnimator.SetFloat("MovementBlend", movementBlendFloat);

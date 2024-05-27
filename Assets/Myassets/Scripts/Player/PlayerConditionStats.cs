@@ -30,10 +30,4 @@ public class PlayerConditionStats : MonoBehaviour
         playerHealthSlider.value = playerHealth;
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

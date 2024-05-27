@@ -26,15 +26,15 @@ public class On_enemy_hit : MonoBehaviour
     [SerializeField] int chargeDamageMultiplier;
     [SerializeField] float DeathHitStopMultiplier;
 
-    float TimeScaleToUse;
+    public float TimeScaleToUse;
     float OriginalHitStop;
 
     bool HasAlreadyTriggeredShakeSafetyCheck = false;
+    bool timeScaleIsNormal;
 
     [System.Serializable]
     public struct HitStopEvent
     {
-        [HideInInspector]
         public float Duration;
         private float Clock;
 
@@ -85,8 +85,6 @@ public class On_enemy_hit : MonoBehaviour
     [SerializeField]
     private HitStopEvent HitStopTimer = new HitStopEvent();
     [SerializeField]
-    private HitStopEvent DeathHitStopTimer = new HitStopEvent();
-    [SerializeField]
     private HitStopVariables hitStopVariables = new HitStopVariables();
 
     [System.Serializable]
@@ -107,19 +105,25 @@ public class On_enemy_hit : MonoBehaviour
 
     [SerializeField] ShakeParametersCollection shakeParamameters = new ShakeParametersCollection();
 
+    public bool TestTimer;
 
-    // Start is called before the first frame update
-    void Awake()
+    void OnEnable()
     {
-
+        CustomGameLoop.UpdateLoopFunctionsSubscriber += UpdateHitStop;
     }
 
+    void OnDisable()
+    {
+        print("disbaled");
+        CustomGameLoop.UpdateLoopFunctionsSubscriber -= UpdateHitStop;
+    }
+
+
     // Update is called once per frame
-    void Update()
+    void UpdateHitStop()
     {
         HitStop();
-
-        AttackNumberDEBUG = AttackNumber;
+        TestTimer = HitStopTimer.IsFinished;
     }
 
     void OnTriggerEnter(Collider thisCollider)
@@ -157,6 +161,7 @@ public class On_enemy_hit : MonoBehaviour
         else
         {
             Time.timeScale = 1;
+            CustomGameLoop.LateupdateLoopFunctionsSubscriber -= UpdateHitStop;
         }
     }
 
@@ -173,7 +178,6 @@ public class On_enemy_hit : MonoBehaviour
             if (shakeParamameters.NormalAttack.EnableShake == true)
             {
                 cameraShakeScript.StartCamShakeCouretine(shakeParamameters.NormalAttack.ShakeDuration, shakeParamameters.NormalAttack.ShakeAmount);
-                print("1");
             }
 
             return damage;
@@ -190,7 +194,6 @@ public class On_enemy_hit : MonoBehaviour
             if (shakeParamameters.ChargeAttack.EnableShake == true)
             {
                 cameraShakeScript.StartCamShakeCouretine(shakeParamameters.ChargeAttack.ShakeDuration, shakeParamameters.ChargeAttack.ShakeAmount);
-                print("1");
             }
 
             return damage;
@@ -222,7 +225,13 @@ public class On_enemy_hit : MonoBehaviour
             HitStopTimer.Duration = hitStopVariables.enemyDeathParams.Duration;
             TimeScaleToUse = hitStopVariables.enemyDeathParams.TimeScale;
             HitStopTimer.SetClock();
+            CustomGameLoop.UpdateLoopFunctionsSubscriber += UpdateHitStop;
+        }
 
+        else
+        {
+            CustomGameLoop.UpdateLoopFunctionsSubscriber += UpdateHitStop;
+            HitStopTimer.SetClock();
         }
     }
 }

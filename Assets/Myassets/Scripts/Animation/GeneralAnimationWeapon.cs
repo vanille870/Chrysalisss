@@ -17,7 +17,6 @@ public class GeneralAnimationWeapon : MonoBehaviour
     [HideInInspector]
     public bool stopSparkle;
     bool performedChargeAttack = true;
-    [SerializeField] bool hasPerformedCaThisPress = false;
 
     public float speedTimer { get; private set; } = 0;
     public float AttackCooldown;
@@ -48,100 +47,72 @@ public class GeneralAnimationWeapon : MonoBehaviour
         public bool IsFinished => Time.time >= Clock;
     }
 
-    [SerializeField]
-    TimedEvent chargeTimer = new TimedEvent();
-    [SerializeField]
-    TimedEvent forceChargeTimer = new TimedEvent();
-    [SerializeField]
-    TimedEvent waitAfterNormalAttack = new TimedEvent();
 
     public void StopSparkle()
     {
         stopSparkle = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    void SparkleUpdate()
     {
-        isAttacking_DEBUG = isAttacking;
-        ResetSpeedVariable();
-        debugg = forceChargeTimer.IsFinished;
 
-        if (stopSparkle == false && chargeTimer.IsFinished == true)
-        {
-            sparklAnimator.SetTrigger("_Sparkle");
-            stopSparkle = true;
+        sparklAnimator.SetTrigger("_Sparkle");
+        stopSparkle = true;
 
-        }
 
-        if (performedChargeAttack == false && forceChargeTimer.IsFinished == true)
-        {
-            mainCharAnimator.SetTrigger("_ForceChargeAttack");
-            mainCharAnimator.SetBool("_ChargeAttackHeld", false);
-            performedChargeAttack = true;
-            hasPerformedCaThisPress = true;
-        }
     }
 
     public void StartNormalAttacks()
     {
         mainCharAnimator.SetTrigger("_NormalAttack");
         isAttacking = true;
-        waitAfterNormalAttack.SetClock();
     }
 
-    public void ResetSpeedVariable()
-    {
-        if (isRessetingSpeed == true)
-        {
-            if (waitAfterNormalAttack.IsFinished)
-            {
-                isAttacking = false;
-                isRessetingSpeed = false;
-                mainCharAnimator.SetTrigger("_ReturnToIdle");
-            }
-        }
-
-    }
 
     //called from input
     public void SetChargeAttackInAnimator()
     {
-        if (hasPerformedCaThisPress == false)
-        {
-            mainCharAnimator.SetBool("_ChargeAttackHeld", true);
-            hasPerformedCaThisPress = true;
-        }
+        mainCharAnimator.SetBool("_ChargeAttackHeld", true);
     }
 
     //called from stateMachine
     public void StartChargeAttack()
     {
-        chargeTimer.SetClock();
-        forceChargeTimer.SetClock();
         movement.StartStuckInAttack();
         stopSparkle = false;
         performedChargeAttack = false;
     }
 
+    //called from State Machine
+    public void DoChargeAttack()
+    {
+        mainCharAnimator.SetTrigger("_ForceChargeAttack");
+        mainCharAnimator.SetBool("_ChargeAttackHeld", false);
+        performedChargeAttack = true;
+    }
+
+    //called from input
     public void PerformChargeAttack()
     {
         mainCharAnimator.SetBool("_ChargeAttackHeld", false);
         stopSparkle = true;
-        hasPerformedCaThisPress = false;
         performedChargeAttack = true;
 
-        if (chargeTimer.IsFinished)
+        if (ChargeAttackCharged == true)
         {
+            DoChargeAttack();
             mainCharAnimator.SetFloat("_ChargeAttackSpeed", ChargedChargeSpeed);
-            ChargeAttackCharged = true;
         }
 
         else
         {
+            DoChargeAttack();
+
             mainCharAnimator.SetFloat("_ChargeAttackSpeed", NormalChargeSpeed);
-            ChargeAttackCharged = false;
         }
 
+        ChargeAttackCharged = false;
+
     }
+
 }

@@ -6,12 +6,22 @@ public class BillBoard : MonoBehaviour
 {
     Camera mainCamera;
 
+    void OnEnable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber += MakeBillboard;
+    }
+    
+    void OnDisable()
+    {
+        CustomGameLoop.LateupdateLoopFunctionsSubscriber -= MakeBillboard;
+    }
+
     void Start()
     {
         mainCamera = Camera.main;
     }
 
-    void LateUpdate()
+    void MakeBillboard()
     {
         transform.LookAt(mainCamera.transform);
     }
