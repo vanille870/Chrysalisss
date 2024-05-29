@@ -6,14 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class AreaChange : MonoBehaviour
 {
-    [SerializeField] int sceneIndex;
-    [SerializeField] int currentSceneIndex;
+    [SerializeField] string sceneName;
+    [SerializeField] string currentScene;
 
 
     // Start is called before the first frame update
     void OnTriggerEnter()
     {
-        SceneManager.UnloadSceneAsync(currentSceneIndex);
-        SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     }
 }

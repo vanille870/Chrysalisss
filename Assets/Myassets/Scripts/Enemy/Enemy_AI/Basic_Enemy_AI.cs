@@ -22,7 +22,7 @@ public class Basic_Enemy_AI : MonoBehaviour
     public Transform PlayerPoint;
     public Transform visionPoint;
     public Vector3 playerLastSeenLocation;
-    public Vector3 playerLastSeenVelocity = Vector3.zero;
+    public Vector3 playerLastSeenVelocity;
     Vector3 spawnPoint;
     Vector3 idleWaypointFinderRaycastPoint;
     public Animator slimAnimator;

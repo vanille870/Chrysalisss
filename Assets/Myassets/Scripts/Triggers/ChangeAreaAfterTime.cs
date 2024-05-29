@@ -2,16 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using SpawPoints;
-using System;
 
 public class ChangeAreaAfterTime : MonoBehaviour
 {
-    [SerializeField] Transform playerSpawnPos;
-    [SerializeField] Transform playerParent;
-    [SerializeField] PlayerSpawner playerSpawner;
-
-    [Serializable]
+    [System.Serializable]
     public struct TimedEvent
     {
         [SerializeField]
@@ -27,7 +21,7 @@ public class ChangeAreaAfterTime : MonoBehaviour
 
         public void SetClock()
         {
-            Clock = Time.time + Duration;
+            Clock = Time.time + 0.5f;
         }
 
         public bool IsFinished => Time.time >= Clock;
@@ -38,6 +32,7 @@ public class ChangeAreaAfterTime : MonoBehaviour
 
     void Awake()
     {
+        print("hiiiiiiiiiiiii");
         timer.SetClock();
         CustomGameLoop.UpdateLoopFunctionsSubscriber += Timer;
     }
@@ -46,12 +41,9 @@ public class ChangeAreaAfterTime : MonoBehaviour
     {
         if (timer.IsFinished)
         {
-            playerParent.position = SpawPoints.Field.fromInit;
+            print("loading") ;
+            SceneManager.LoadScene("Enemy_Testing");
             CustomGameLoop.UpdateLoopFunctionsSubscriber -= Timer;
-
-            SceneManager.LoadScene("Enemy_Testing", LoadSceneMode.Additive);
         }
     }
-
-    
 }

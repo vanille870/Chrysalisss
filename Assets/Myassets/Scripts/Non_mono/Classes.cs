@@ -65,32 +65,6 @@ public class InventoryItemSlot
     }
 }
 
-namespace SpawPoints
-{
-    [Serializable]
-    public struct PerLocation
-    {
-        public Field fieldSpawnPoints;
-        public Town townSpawnPoints;
-    }
-
-    [Serializable]
-    public struct Field
-    {
-        public Vector3 fromTown;
-        public Vector3 fromInit;
-    }
-
-    [Serializable]
-    public struct Town
-    {
-        public Vector3 fromFieldPos;
-    }
-}
-
-
-
-
 
 
 
