@@ -392,6 +392,11 @@ public class PlayerMovement : MonoBehaviour
             DodgeCooldownTimer.SetClock();
         }
     }
+
+    public void LockPlayerVelocity()
+    {
+
+    }
 }
 
 

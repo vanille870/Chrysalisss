@@ -65,6 +65,30 @@ public class InventoryItemSlot
     }
 }
 
+namespace SpawnByLocation
+{
+    [Serializable]
+    public class Spawns
+    {
+        public int ID;
+
+        [PostitionToVector3]
+        public Vector3 Location;
+
+        public Spawns(Vector3 inputLoc)
+        {
+            Location = inputLoc;
+        }
+    }
+}
+
+public class PostitionToVector3 : PropertyAttribute
+{
+    public GameObject spawnGO;
+    public Vector3 vector3;
+}
+
+
 
 
 
