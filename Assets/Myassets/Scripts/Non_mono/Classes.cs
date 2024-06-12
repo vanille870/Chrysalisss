@@ -39,14 +39,14 @@ public class InventoryItemSlot
 
     public void UpdateGO()
     {
-        itemImage.enabled = true;
         itemImage.sprite = inventoryItemsDataSO.itemImage;
         GOtext.text = inventoryItemsDataSO.itemName;
-        itemImage.enabled = true;
 
         GObutton.onClick.AddListener(() => inventoryItemsDataSO.itemFunction(inventoryItemsDataSO.effectMagintude));
         GObutton.onClick.AddListener(DisableGO);
         slotGO.SetActive(true);
+        itemImage.enabled = true;
+        Debug.Log("ENABLED GO item");
     }
 
     public void DisableGO()
@@ -57,11 +57,15 @@ public class InventoryItemSlot
         itemImage.sprite = null;
         GObutton.onClick.RemoveAllListeners();
         reorderItems();
+        Debug.Log("disabled GO item");
     }
 
     public void ReadyGO()
     {
+        if(itemImage.sprite == null)
         itemImage.enabled = false;
+        
+        Debug.Log("READY GO item");
     }
 }
 

@@ -15,6 +15,9 @@ public class AnimationEvents : MonoBehaviour
     [SerializeField] LayerMask floorMask;
     [SerializeField] Transform PlayerPoint;
     [SerializeField] PlayerAudioStorage playerAudioStorage;
+    [SerializeField] GameObject PlayerGO;
+
+    private Quaternion storedPlayerRota;
 
     public enum NormalSwordAttacksEnum {Diagonal = 0, Sweep, Chop, Stab};
 
@@ -52,6 +55,9 @@ public class AnimationEvents : MonoBehaviour
 
                 PlayerAudioSourceFootsteps.PlayOneShot(playerAudioStorage.GetFootstepSoundClip(currentTrain.terrainData.terrainLayers[primaryIndex].diffuseTexture));
             }
+
+            else 
+            Debug.LogWarning("No Terrain Found");
         }
     }
 
@@ -99,5 +105,15 @@ public class AnimationEvents : MonoBehaviour
     void PlayPainGrunt()
     {
         PlayerAudioSourceEffcts.PlayOneShot(playerAudioStorage.PainGrunts[Random.Range(0, playerAudioStorage.PainGrunts.Length)]);
+    }
+
+    void StoreRotation()
+    {
+        storedPlayerRota = PlayerGO.transform.rotation;
+    }
+
+    void RestoreRotation()
+    {
+        PlayerGO.transform.rotation = storedPlayerRota;
     }
 }

@@ -31,4 +31,15 @@ public class CustomGameLoop : MonoBehaviour
     {
         enabled = true;
     }
+
+    public void Start()
+    {
+        UpdateLoopFunctionsSubscriber += test;
+        LateupdateLoopFunctionsSubscriber += test;
+    }
+
+    public void test()
+    {
+
+    }
 }

@@ -26,7 +26,6 @@ public class SpawnToVector3 : PropertyDrawer
         }
 
         EditorGUI.Vector3Field(position, property.name, property.vector3Value);
-
     }
 
     void ConvertTransformToPos(SerializedProperty serializedProperty)

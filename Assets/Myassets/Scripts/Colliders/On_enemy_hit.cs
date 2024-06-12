@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class On_enemy_hit : MonoBehaviour
 {
-    public PlayerStats playerStats;
     public GeneralAnimationWeapon generalAnimationWeaponScript;
     public CameraShake cameraShakeScript;
 
@@ -114,7 +113,6 @@ public class On_enemy_hit : MonoBehaviour
 
     void OnDisable()
     {
-        print("disbaled");
         CustomGameLoop.UpdateLoopFunctionsSubscriber -= UpdateHitStop;
     }
 
@@ -169,7 +167,7 @@ public class On_enemy_hit : MonoBehaviour
     {
         if (generalAnimationWeaponScript.isPerformingChargAttack == false)
         {
-            damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.damage - currentEnemyHealthScript.defence;
+            damage = 5 - currentEnemyHealthScript.defence;
             staggerDamage = damage;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.RegularAttack;
@@ -185,7 +183,7 @@ public class On_enemy_hit : MonoBehaviour
 
         else if (generalAnimationWeaponScript.ChargeAttackCharged)
         {
-            damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.chargeDamage - currentEnemyHealthScript.defence;
+            damage = 15 - currentEnemyHealthScript.defence;
             staggerDamage = damage * chargeDamageMultiplier;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.ChargedAttack;
@@ -201,7 +199,7 @@ public class On_enemy_hit : MonoBehaviour
 
         else
         {
-            damage = playerStats.Strength + PlayerEquiment.CurrentSwordOfPlayer.chargeDamage / chargeDamagePenaltyMultiplier - currentEnemyHealthScript.defence;
+            damage = 4 - currentEnemyHealthScript.defence;
             staggerDamage = damage / chargeDamagePenaltyMultiplier;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.UnchargedAttack;

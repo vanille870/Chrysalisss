@@ -8,10 +8,10 @@ using UnityEngine.InputSystem;
 
 public class Sign : MonoBehaviour, IInteractableTextbox
 {
-    [SerializeField] TextBox textBoxScript;
-    [SerializeField] Interact interactScript;
-
-    [SerializeField] Transform playerPos;
+    public TextBox textBoxScript;
+    public Interact interactScript;
+    public Transform playerPos;
+    
     [SerializeField] string[] textArrayFront;
     [SerializeField] string[] textArraySide;
     [SerializeField] string[] textArrayBack;

@@ -4,19 +4,22 @@ using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 
 public class Idle_SM : StateMachineBehaviour
-{       
-  
+{
+
     public GeneralAnimationWeapon generalAnimationWeapon;
     public PlayerMovement SMmovement;
+    public GameObject PlayerParentGO;
 
-    public void Awake() 
+    private Quaternion playerRot;
+
+    public void Awake()
     {
-    
+
     }
 
     public void OnStateExit(Animator animator)
     {
-        generalAnimationWeapon.isAttacking = true; 
+        generalAnimationWeapon.isAttacking = true;
         animator.ResetTrigger("_ForceChargeAttack");
     }
 
@@ -28,6 +31,7 @@ public class Idle_SM : StateMachineBehaviour
         animator.SetBool("CanStartNextAttack", false);
         animator.ResetTrigger("_ReturnToIdle");
         animator.ResetTrigger("_ForceChargeAttack");
+        animator.ResetTrigger("_ToggleFallInPit");
         SMmovement.FinishAttacking();
         SMmovement.StartMoving();
         SMmovement.RestoreSpeedAndTurning();

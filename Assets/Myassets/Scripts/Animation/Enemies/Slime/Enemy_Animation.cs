@@ -46,7 +46,7 @@ public class Enemy_Animation : MonoBehaviour
         slimeAnimator = GetComponent<Animator>();
 
 
-        PlayerPoint = GameObject.Find("PlayerPoint").GetComponent<Transform>();
+        //PlayerPoint = GameObject.Find("PlayerPoint").GetComponent<Transform>();
 
         agentOriginalSpeed = slimeAgent.speed;
         agentOrginalAcceleration = slimeAgent.acceleration;
@@ -137,7 +137,7 @@ public class Enemy_Animation : MonoBehaviour
         slimeAnimator.SetInteger("_TriggerINT", colliderNumber);
     }
 
-    void RotateTowardsTarget()
+   /* void RotateTowardsTarget()
     {
         // Determine which direction to rotate towards
         Vector3 targetDirection = PlayerPoint.position - transform.position;
@@ -148,7 +148,7 @@ public class Enemy_Animation : MonoBehaviour
         // Draw a ray pointing at our target in
         Debug.DrawRay(transform.position, newDirection, Color.red);
         transform.rotation = Quaternion.LookRotation(newDirection);
-    }
+    }*/
 
 
 

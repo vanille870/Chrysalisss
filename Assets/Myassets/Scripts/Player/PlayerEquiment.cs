@@ -13,12 +13,12 @@ public class PlayerEquiment : MonoBehaviour
 
     void Start()
     {
-        if (HasRunned == false)
+        /*if (HasRunned == false)
         {
             swordStorageSO.InitializeEquipmentSoDictionary();
             //print(swordStorageSO.SwordID["Crystal_Sword"]);
             HasRunned = true;
-        }
+        }*/
     }
 
 

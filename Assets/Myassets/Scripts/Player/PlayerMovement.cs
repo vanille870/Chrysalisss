@@ -90,7 +90,8 @@ public class PlayerMovement : MonoBehaviour
     [System.Serializable]
     public struct TimedEvent
     {
-        [SerializeField] [Range(0f, 4f)]
+        [SerializeField]
+        [Range(0f, 4f)]
         private float Duration;
         private float Clock;
 
@@ -125,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
         CustomGameLoop.UpdateLoopFunctionsSubscriber += MovementUpdate;
     }
 
-     void OnDisable()
+    void OnDisable()
     {
         CustomGameLoop.UpdateLoopFunctionsSubscriber -= MovementUpdate;
     }
@@ -134,6 +135,8 @@ public class PlayerMovement : MonoBehaviour
     {
         charControl = gameObject.GetComponent<CharacterController>();
 
+        GameMaster.gameMasterSingleton.playerController = this.GetComponent<CharacterController>();
+        GameMaster.gameMasterSingleton.playerTrans = transform;
         turnSmoothTimegroundOriginal = turnSmoothTimeground;
         originalMaxSpeed = maxSpeed;
         AccelerationOrginal = acceleration;
@@ -153,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ControllerVelocity = charControl.velocity;
 
-        if(Pause_Menu.GameIsPaused)
+        if (Pause_Menu.GameIsPaused)
         {
             return;
         }
@@ -248,7 +251,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         else
+        {
+            charControl.Move(Physics.gravity * Time.deltaTime);
             currentSpeed = 0;
+        }
+
     }
 
     //called from weapon script

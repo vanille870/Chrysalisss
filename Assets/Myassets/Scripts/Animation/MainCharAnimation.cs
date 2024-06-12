@@ -49,4 +49,10 @@ public class MainCharAnimation : MonoBehaviour
     {
         mainCharAnimator.SetTrigger("_DodgeFinish");
     }
+
+    public void ToggleFallInPit()
+    {
+       mainCharAnimator.SetBool("_ToggleFallInPit", !mainCharAnimator.GetBool("_ToggleFallInPit")); 
+       print("fall toggled");
+    }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyHitbox : MonoBehaviour
 {
+    public Transform playerPoint;
     public PlayerMovement movementScript;
     public PlayerConditionStats playerConditionStatsScript;
     public MainCharAnimation mainCharAnimationScript;
@@ -15,8 +16,7 @@ public class EnemyHitbox : MonoBehaviour
 
     public GameObject StaggerpointGO;
     Vector3 EnemyStaggerPointPos;
-    public GameObject playerPoint;
-    Vector3 playerPointPos;
+
 
     // Start is called before the first frame update
     void OnTriggerEnter(Collider collider)
@@ -41,7 +41,7 @@ public class EnemyHitbox : MonoBehaviour
         else
         {
             mainCharAnimationScript.StaggerBack();
-             print("Back");
+            print("Back");
         }
     }
 }

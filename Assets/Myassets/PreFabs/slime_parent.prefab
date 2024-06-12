@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 7500161430516216717}
   - component: {fileID: 2897957767091224922}
   - component: {fileID: 7998908229410287793}
+  - component: {fileID: 657218338504310199}
   m_Layer: 0
   m_Name: slime_parent
   m_TagString: Untagged
@@ -344,7 +345,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718602139097786197}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.23
   m_Speed: 0.7
@@ -551,6 +552,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &657218338504310199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718602139097786197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46ef7bc5c3054c4b9fc294f82418c35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WaitUntilLoading:
+    Duration: 0.2
+  basic_Enemy_AIScript: {fileID: 9120271176045327374}
+  enemyHitbox: {fileID: 8534234503949458642}
 --- !u!1 &1753003470774491146
 GameObject:
   m_ObjectHideFlags: 0
@@ -10710,6 +10727,8 @@ MonoBehaviour:
     Duration: 5
   AttackCheckTimer:
     Duration: 1
+  WaitUntilLoading:
+    Duration: 2
   currentEnemyState: 0
   trackingDestination: {x: 0, y: 0, z: 0}
 --- !u!114 &7143420826174826133

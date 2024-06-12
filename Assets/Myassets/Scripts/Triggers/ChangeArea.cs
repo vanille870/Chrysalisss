@@ -3,38 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SpawnByLocation;
+using UnityEditor;
+using Unity.Mathematics;
 
 public class ChangeArea : MonoBehaviour
 {
+    [SerializeField] GameObject PlayerPrefab;
     [SerializeField] GameObject LoadingScreen;
-    [SerializeField] GameObject Player;
     [SerializeField] CustomGameLoop customGameLoopScript;
     [SerializeField] SpawnPoints spawnPointsSO;
 
     [SerializeField] string SceneToLoad;
     [SerializeField] int spawnNumber;
 
-
     [SerializeField] bool isInitScene;
 
 
+    private GameObject PlayerGO;
+
+
+    [System.Serializable]
+    public struct Timer
+    {
+        public float Duration;
+        private float Clock;
+
+        public Timer(float duration, float time = 0f)
+        {
+            Duration = duration;
+            Clock = time;
+        }
+
+        public void SetClock()
+        {
+            Clock = Time.unscaledTime + Duration;
+        }
+
+        public bool IsFinished => Time.unscaledTime >= Clock;
+    }
+
+    [SerializeField]
+    Timer SceneLoad = new Timer();
 
     public void OnTriggerEnter()
     {
-        LoadingScreen.SetActive(true);
-        GameMaster.gameMasterSingleton.playerController.enabled = false;
-
-        if (isInitScene == false)
-        {
-            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-        }
-
-        SceneManager.sceneLoaded += OnSceneLoad;
-        print("loading");
-        SceneManager.LoadSceneAsync(SceneToLoad, LoadSceneMode.Additive);
-        customGameLoopScript.DisableLoop();
-
-        Destroy(gameObject);
+        ChangeAreaFunction();
     }
 
     public void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
@@ -42,21 +55,18 @@ public class ChangeArea : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(SceneToLoad));
         SceneManager.sceneLoaded -= OnSceneLoad;
 
-        LoadingScreen.SetActive(false);
-
         customGameLoopScript.EnableLoop();
-        FindSpawnPointAndMovePlayer(spawnNumber);
-
-        GameMaster.gameMasterSingleton.playerController.enabled = true;
+        FindSpawnPointAndSpawnlayer(spawnNumber);
     }
 
-    public void FindSpawnPointAndMovePlayer(int InputSpawnNumber)
+    public void FindSpawnPointAndSpawnlayer(int InputSpawnNumber)
     {
         foreach (Spawns spawn in spawnPointsSO.spawnPointColections)
         {
-            if (spawnNumber == spawn.ID)
+            if (InputSpawnNumber == spawn.ID)
             {
-                GameMaster.gameMasterSingleton.MovePlayer(spawn.Location);
+                PlayerGO = Instantiate(PlayerPrefab, spawn.Location, quaternion.identity);
+                PlayerGO.GetComponent<InitReferencesToMaster>().InitPlayer();
                 return;
             }
         }
@@ -64,7 +74,19 @@ public class ChangeArea : MonoBehaviour
         Debug.LogError("Warning: no spawn found");
     }
 
-    
+    public void ChangeAreaFunction()
+    {
+        print("loading");
 
 
+        if (isInitScene == false)
+        {
+            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+            LoadingScreen.SetActive(true);
+        }
+
+        SceneManager.sceneLoaded += OnSceneLoad;
+        customGameLoopScript.DisableLoop();
+        SceneManager.LoadSceneAsync(SceneToLoad, LoadSceneMode.Additive);
+    }
 }

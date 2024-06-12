@@ -6,20 +6,13 @@ using UnityEngine.UI;
 
 public class InventoryMenu : MonoBehaviour
 {
-    public static bool InventoryOpen;
+    public static bool InventoryOpen = false;
     [SerializeField] GameObject InventoryUI;
     [SerializeField] CustomGameLoop customGameLoopScript;
 
     [SerializeField] Button FirstButton;
 
     EventSystem eventSystem;
-
-
-    void Awake()
-    {
-        print("started");
-        InventoryUI.SetActive(false);
-    }
 
     // Update is called once per frame
     public void ToggleInventory()
@@ -32,7 +25,6 @@ public class InventoryMenu : MonoBehaviour
 
         if (InventoryOpen == false)
         {
-            print("InventoryOpen");
             customGameLoopScript.DisableLoop();
             Time.timeScale = 0;
             InventoryOpen = true;
@@ -44,7 +36,6 @@ public class InventoryMenu : MonoBehaviour
 
         else
         {
-            print("Inventory closed");
             customGameLoopScript.EnableLoop();
             Time.timeScale = 1;
             InventoryOpen = false;

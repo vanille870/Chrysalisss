@@ -1401,6 +1401,10 @@ PrefabInstance:
       propertyPath: SceneToLoad
       value: Field
       objectReference: {fileID: 0}
+    - target: {fileID: 1547198104168449152, guid: 828c687f668fe064091e47f3469f72f9, type: 3}
+      propertyPath: PlayerPrefab
+      value: 
+      objectReference: {fileID: 9189218076048371629, guid: 023d24dda23534f4e94d5d2fa0cdb38d, type: 3}
     - target: {fileID: 6564387692041023812, guid: 828c687f668fe064091e47f3469f72f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.7936172
@@ -2432,8 +2436,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.3
+  m_Color: {r: 1, g: 0.6551724, b: 0, a: 1}
+  m_Intensity: 0.24
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3048,9 +3052,9 @@ GameObject:
   - component: {fileID: 1888834496}
   - component: {fileID: 1888834495}
   - component: {fileID: 1888834494}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

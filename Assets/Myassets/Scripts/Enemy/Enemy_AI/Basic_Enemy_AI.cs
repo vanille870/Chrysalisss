@@ -70,6 +70,8 @@ public class Basic_Enemy_AI : MonoBehaviour
     private TimedEvent IdleWayPointTimer = new TimedEvent();
     [SerializeField]
     private TimedEvent AttackCheckTimer = new TimedEvent();
+    [SerializeField]
+    private TimedEvent WaitUntilLoading = new TimedEvent();
 
     public EnemyState currentEnemyState = EnemyState.Idling;
     private System.Action[] runCurrentEnemyState = null;
@@ -81,7 +83,8 @@ public class Basic_Enemy_AI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerPoint = GameObject.Find("PlayerPoint").GetComponent<Transform>();
+        PlayerPoint = transform;
+        WaitUntilLoading.SetClock();
         spawnPoint = gameObject.transform.position;
 
         runCurrentEnemyState = new System.Action[]

@@ -9,7 +9,7 @@ public class AfterMiragesPlayer : MonoBehaviour
     public Renderer afterImageRenderer;
     public Material playerMaterial;
     public float afterImageOpacity;
-    public float playerGlow;
+    public float playerGlow; 
     public float playerGlowOpacity;
 
     private float lerSpeedOpacityFloat = 1;
@@ -65,7 +65,6 @@ public class AfterMiragesPlayer : MonoBehaviour
         LerpOpacity();
         LerpPlayerGlow();
         LerpPlayerGlowOpacity();
-        //playerRenderer.material.SetFloat("er", 1);
 
         if (LerpAfterImageOpacityEV.LerpFinished && LerpPlayerGloweOpacityEV.LerpFinished && LerpPlayerGlowPowerEV.LerpFinished)
         {

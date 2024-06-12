@@ -15,4 +15,4 @@ MonoBehaviour:
   go: {fileID: 0}
   spawnPointColections:
   - ID: 0
-    Location: {x: 45.88, y: -11.56, z: -7.66}
+    Location: {x: 47.311, y: 50.19, z: -1.82}

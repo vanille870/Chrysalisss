@@ -82,4 +82,11 @@ public class ItemPickup : MonoBehaviour, IInteractableTextbox
     {
         textBoxScript.SkipText();
     }
+
+    public void InitReferences(PlayerInventory InputPlayerInventory, Transform InputPlayerPos, TextBox InputTextBoxScript)
+    {
+        playerInventoryScript = InputPlayerInventory;
+        playerPos = InputPlayerPos;
+        textBoxScript = InputTextBoxScript;
+    }
 }

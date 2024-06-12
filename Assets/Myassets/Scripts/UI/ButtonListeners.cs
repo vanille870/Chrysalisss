@@ -41,11 +41,6 @@ public class ButtonListeners : MonoBehaviour
         public bool IsFinished => Time.unscaledTime >= Clock;
     }
 
-    public void Start()
-    {
-        this.enabled = false;
-    }
-
     public void SelectDelay()
     {
 
@@ -59,6 +54,7 @@ public class ButtonListeners : MonoBehaviour
         {
             this.enabled = false;
             CostumGameLoopPause.PauseLateUpdateLoopFunctionsSubscriber -= SelectDelay;
+            print("hiiiiiiiiiiiiiiiiiiiiiii");
         }
 
     }

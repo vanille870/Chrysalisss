@@ -5,6 +5,7 @@ public class SM_variables : MonoBehaviour
     //make space to put the scripts in
     public GeneralAnimationWeapon generalAnimationWeapon;
     public PlayerMovement movement;
+    public GameObject PlayerParent;
 
     private Animator mainCharAnimator;
 
@@ -29,6 +30,7 @@ public class SM_variables : MonoBehaviour
 
         mainCharAnimator.GetBehaviour<Idle_SM>().SMmovement = movement;
         mainCharAnimator.GetBehaviour<Idle_SM>().generalAnimationWeapon = generalAnimationWeapon;
+        mainCharAnimator.GetBehaviour<Idle_SM>().PlayerParentGO = PlayerParent;
 
         mainCharAnimator.GetBehaviour<Charge_Attack_SM>().generalAnimationWeapon = generalAnimationWeapon;
         mainCharAnimator.GetBehaviour<Charge_Attack_SM>().movement = movement;

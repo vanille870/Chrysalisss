@@ -7,7 +7,6 @@ using UnityEngine.Events;
 public class PlayerInventory : MonoBehaviour
 {
     public static List<InventoryItemSlot> playerInventory = new List<InventoryItemSlot>();
-    public GameObject inventoryParentObject;
     public static GameObject inventoryParentObjectStatic;
     int maximumInventorySpace = 10;
 
@@ -25,11 +24,12 @@ public class PlayerInventory : MonoBehaviour
     private static int i;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        inventoryParentObjectStatic = inventoryParentObject;
+        inventoryParentObjectStatic = GameMaster.gameMasterSingleton.InventoryParent;
 
-        foreach (Transform invGOTransform in inventoryParentObject.transform)
+
+        foreach (Transform invGOTransform in inventoryParentObjectStatic.transform)
         {
             InventoryItemSlot itemSlot = new InventoryItemSlot(invGOTransform.gameObject);
             itemSlot.ReadyGO();
@@ -38,19 +38,6 @@ public class PlayerInventory : MonoBehaviour
         }
 
         ReAssignIndex();
-
-
-        AddItemToInventoryIfRoom(Test);
-        AddItemToInventoryIfRoom(Test2);
-
-        AddItemToInventoryIfRoom(Test);
-        AddItemToInventoryIfRoom(Test2);
-
-        AddItemToInventoryIfRoom(Test);
-        AddItemToInventoryIfRoom(Test2);
-
-        AddItemToInventoryIfRoom(Test);
-        AddItemToInventoryIfRoom(Test2);
     }
 
     public bool AddItemToInventoryIfRoom(InventoryItemsData inventoryItemData)
