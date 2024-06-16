@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class OnSceneLoad : MonoBehaviour
 {
+    [SerializeField] SaveObjects saveObjectsScript;
+
     [System.Serializable]
     public struct TimerBeforeControl
     {
@@ -42,6 +44,11 @@ public class OnSceneLoad : MonoBehaviour
             InputManager.EnableControls();
             GameMaster.gameMasterSingleton.playerController.enabled = true;
             Destroy(gameObject);
+
+            if (saveObjectsScript != null)
+            {
+                saveObjectsScript.LoadFromJson();
+            }
         }
     }
 }

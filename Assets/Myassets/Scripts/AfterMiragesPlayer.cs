@@ -85,7 +85,7 @@ public class AfterMiragesPlayer : MonoBehaviour
 
     public void LerpOpacity()
     {
-        if (LerpAfterImageOpacityEV.LerpFinished == false)
+        if (LerpAfterImageOpacityEV.LerpFinished == false && afterImageRenderer != null)
         {
             LerpAfterImageOpacityEV.Lerp();
             afterImageOpacity = Mathf.Lerp(1, 0, LerpAfterImageOpacityEV.LerpFloat);
@@ -143,5 +143,11 @@ public class AfterMiragesPlayer : MonoBehaviour
 
             playerIsInvisible = false;
         }
+    }
+
+    public void ResetShaderParams()
+    {
+        playerMaterial.SetFloat("_GlowPower", 0);
+        playerMaterial.SetFloat("_Opacity", playerGlow);
     }
 }

@@ -75,6 +75,7 @@ public class InitReferencesInteract : MonoBehaviour
             fallInPit.inputManagerScript = singleton.inputManagerScript;
             fallInPit.playerController = singleton.playerController;
             fallInPit.originalPlayerRot = singleton.playerGO.transform.rotation;
+            fallInPit.playerVisibilityParent = singleton.playerVisibilityParent;
         }
 
     }

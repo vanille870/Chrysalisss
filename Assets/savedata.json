@@ -1,0 +1,27 @@
+{
+  "0": {
+    "name": "chest",
+    "ID": 0,
+    "Open": false
+  },
+  "1": {
+    "name": "chesttttt",
+    "ID": 1,
+    "Open": true
+  },
+  "2": {
+    "name": "treasure chest",
+    "ID": 2,
+    "Open": false
+  },
+  "3": {
+    "name": "nice chest",
+    "ID": 3,
+    "Open": true
+  },
+  "4": {
+    "name": "trapped chest",
+    "ID": 4,
+    "Open": true
+  }
+}

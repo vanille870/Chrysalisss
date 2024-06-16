@@ -6,9 +6,11 @@ using UnityEngine.InputSystem;
 
 public class ItemPickup : MonoBehaviour, IInteractableTextbox
 {
+    public int ID;
     [SerializeField] PlayerInventory playerInventoryScript;
     [SerializeField] InventoryItemsData itemToGive;
     [SerializeField] Animator animator;
+    [SerializeField] SaveObjects saveObjectsScript;
 
     [SerializeField] Transform playerPos;
     [SerializeField] TextBox textBoxScript;
@@ -44,6 +46,7 @@ public class ItemPickup : MonoBehaviour, IInteractableTextbox
                 textBoxScript.InitTextBox(TypeWritingSpeed, typeWritingFasterSpeed, textArrayItem, TextStyles.Item);
                 animator.SetTrigger("_Open");
                 IsInteractable = false;
+                saveObjectsScript.Update2StateObject(TwoStateType.chest, ID);
             }
 
             else
@@ -88,5 +91,12 @@ public class ItemPickup : MonoBehaviour, IInteractableTextbox
         playerInventoryScript = InputPlayerInventory;
         playerPos = InputPlayerPos;
         textBoxScript = InputTextBoxScript;
+    }
+
+    public void OpenOnLoad()
+    {
+        animator.SetTrigger("_Open");
+        IsInteractable = false;
+        print("sesam ooooooooooooooopen");
     }
 }

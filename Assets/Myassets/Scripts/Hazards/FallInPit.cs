@@ -7,6 +7,7 @@ public class FallInPit : MonoBehaviour
 {
     [Header("init refrences")]
     public GameObject playerGO;
+    public GameObject playerVisibilityParent;
     public Quaternion originalPlayerRot;
     public MainCharAnimation playerAnim;
     public InputManager inputManagerScript;
@@ -122,6 +123,7 @@ public class FallInPit : MonoBehaviour
 
             playerGO.transform.rotation = originalPlayerRot;
             playerGO.transform.position = PositionPlayerWhenFallen;
+            playerVisibilityParent.SetActive(false);
         }
     }
 
@@ -134,7 +136,7 @@ public class FallInPit : MonoBehaviour
 
     void MovePlayerToRespawn()
     {
-        newPos = Vector3.MoveTowards(playerGO.transform.position, RespawnPosition, RespawnSpeed);
+        newPos = Vector3.Lerp(playerGO.transform.position, RespawnPosition, RespawnSpeed);
         playerGO.transform.position = newPos;
 
         if ((playerGO.transform.position - RespawnPosition).sqrMagnitude < 0.002)
@@ -144,6 +146,7 @@ public class FallInPit : MonoBehaviour
 
             InputManager.EnableControls();
             playerController.enabled = true;
+            playerVisibilityParent.SetActive(true);
         }
     }
 

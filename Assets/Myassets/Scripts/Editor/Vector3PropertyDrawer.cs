@@ -6,8 +6,7 @@ using UnityEngine;
 public class SpawnToVector3 : PropertyDrawer
 {
     [SerializeField] Object currentGameObject;
-    [SerializeField] Vector3 currenVector3;
-    Vector3 _Vector3;
+    Vector3 currenVector3;
 
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -25,7 +24,7 @@ public class SpawnToVector3 : PropertyDrawer
             ConvertTransformToPos(property);
         }
 
-        EditorGUI.Vector3Field(position, property.name, property.vector3Value);
+        property.vector3Value = EditorGUI.Vector3Field(position, property.name, property.vector3Value);
     }
 
     void ConvertTransformToPos(SerializedProperty serializedProperty)
@@ -33,6 +32,7 @@ public class SpawnToVector3 : PropertyDrawer
         if (currentGameObject == null)
         {
             Debug.LogWarning("No GameObject selected");
+            return;
         }
 
         serializedProperty.vector3Value = ((GameObject)currentGameObject).transform.position;

@@ -9,6 +9,7 @@ public class GameMaster : MonoBehaviour
 
     public CharacterController playerController;
     public GameObject playerGO;
+    public GameObject playerVisibilityParent;
     public Transform playerTrans;
     public InputManager inputManagerScript;
     public TextBox textBoxScript;
@@ -90,5 +91,5 @@ public class GameMaster : MonoBehaviour
         gameMasterSingleton.playerTrans.position = TargetPosition;
         print("teleport");
     }
-    
+
 }

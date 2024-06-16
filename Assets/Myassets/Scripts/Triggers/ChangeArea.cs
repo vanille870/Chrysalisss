@@ -12,6 +12,7 @@ public class ChangeArea : MonoBehaviour
     [SerializeField] GameObject LoadingScreen;
     [SerializeField] CustomGameLoop customGameLoopScript;
     [SerializeField] SpawnPoints spawnPointsSO;
+    [SerializeField] SaveObjects saveObjectsScript;
 
     [SerializeField] string SceneToLoad;
     [SerializeField] int spawnNumber;
@@ -48,6 +49,9 @@ public class ChangeArea : MonoBehaviour
     public void OnTriggerEnter()
     {
         ChangeAreaFunction();
+
+        if (saveObjectsScript != null)
+        saveObjectsScript.SaveToJSON();
     }
 
     public void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)

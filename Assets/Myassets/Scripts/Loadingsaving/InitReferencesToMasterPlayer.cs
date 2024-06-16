@@ -8,12 +8,14 @@ public class InitReferencesToMaster : MonoBehaviour
     [SerializeField] PlayerMovement playerMovementScript;
     [SerializeField] GeneralAnimationWeapon generalAnimationWeaponScript;
     [SerializeField] Interact interactScript;
+    
 
     [SerializeField] CharacterController characterController;
     [SerializeField] PlayerConditionStats playerConditionStatsScript;
     [SerializeField] MainCharAnimation mainCharAnimationScript;
     [SerializeField] PlayerInventory playerInventoryScript;
     [SerializeField] GameObject playerGO;
+    [SerializeField] GameObject playerVisibilityParent;
     [SerializeField] CinemachineVirtualCamera playerCam;
 
     private GameMaster singleton;
@@ -35,8 +37,16 @@ public class InitReferencesToMaster : MonoBehaviour
         singleton.playerController = characterController;
         singleton.playerGO = playerGO;
         singleton.playerCam = playerCam;
+        singleton.playerVisibilityParent = playerVisibilityParent;
 
         PlayerInventory.inventoryParentObjectStatic = singleton.InventoryParent;
+        ResetAfterimageShaderParams();
+
+    }
+
+    void ResetAfterimageShaderParams()
+    {
+        GetComponentInChildren<AfterMiragesPlayer>().ResetShaderParams();
     }
 
 

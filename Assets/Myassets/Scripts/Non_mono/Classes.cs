@@ -62,9 +62,9 @@ public class InventoryItemSlot
 
     public void ReadyGO()
     {
-        if(itemImage.sprite == null)
-        itemImage.enabled = false;
-        
+        if (itemImage.sprite == null)
+            itemImage.enabled = false;
+
         Debug.Log("READY GO item");
     }
 }
@@ -90,6 +90,14 @@ public class PostitionToVector3 : PropertyAttribute
 {
     public GameObject spawnGO;
     public Vector3 vector3;
+}
+
+[Serializable]
+public class Saveable2stateObject
+{
+    public string name;
+    public int ID;
+    public bool Open;
 }
 
 

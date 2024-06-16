@@ -123,6 +123,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &1375683462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1375683463}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1375683463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375683462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5894682693071785485}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1899953016
 GameObject:
   m_ObjectHideFlags: 0
@@ -9000,6 +9031,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
+  playerGO: {fileID: 0}
+  playerVisibilityParent: {fileID: 0}
   playerTrans: {fileID: 3340122785357414578, guid: 023d24dda23534f4e94d5d2fa0cdb38d, type: 3}
   inputManagerScript: {fileID: 7559903665598586880}
   textBoxScript: {fileID: 2289327576634324026}
@@ -9007,6 +9040,7 @@ MonoBehaviour:
   playerConditionStatsScript: {fileID: 0}
   mainCharAnimationScript: {fileID: 0}
   playerInventory: {fileID: 0}
+  playerCam: {fileID: 0}
   interactScript: {fileID: 0}
 --- !u!224 &4702467718229814116
 RectTransform:
@@ -10177,6 +10211,7 @@ Transform:
   - {fileID: 8082295081612160221}
   - {fileID: 569863166938497295}
   - {fileID: 1517898929372930790}
+  - {fileID: 1375683463}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5959276512780890524
