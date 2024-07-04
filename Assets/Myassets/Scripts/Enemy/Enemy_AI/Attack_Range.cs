@@ -17,7 +17,7 @@ public class Attack_Range : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-            EnemyAnimationScript.SetTriggerBool(triggerNumber);
+            EnemyAnimationScript.TriggerAttack(triggerNumber);
         }
     }
 

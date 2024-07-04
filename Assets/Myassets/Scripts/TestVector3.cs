@@ -6,5 +6,4 @@ public class TestVector3 : MonoBehaviour
 {
     [PostitionToVector3]
     [SerializeField] Vector3 vector3;
-    [SerializeField] Vector3 vector3_2;
 }

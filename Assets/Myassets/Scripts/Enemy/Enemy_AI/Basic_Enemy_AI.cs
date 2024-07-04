@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,15 +7,18 @@ public class Basic_Enemy_AI : MonoBehaviour
     {
         Idling = 0,
         chasing,
-        WaitBeforeReturning,
+        Returning,
         Tracking
     }
+
+    public Collider[] triggerArray;
+    public int[] attackCheckNumbers;
 
     [SerializeField] Enemy_Animation enemy_AnimationS;
     [SerializeField] Enemy_Sound enemy_Sound;
 
     public CharacterController playerController;
-    public NavMeshAgent slimeAgent;
+    [SerializeField] NavMeshAgent slimeAgent;
     public Transform PlayerPoint;
     public Transform visionPoint;
     public Vector3 playerLastSeenLocation;
@@ -171,7 +171,7 @@ public class Basic_Enemy_AI : MonoBehaviour
 
         if (slimeAgent.enabled)
         {
-            if (slimeAgent.remainingDistance < 0.1f)
+            if (slimeAgent.remainingDistance < 0.3f)
             {
                 currentEnemyState = EnemyState.Tracking;
                 TrackTimer.SetClock();
@@ -191,11 +191,10 @@ public class Basic_Enemy_AI : MonoBehaviour
         playerLastSeenLocation += playerLastSeenVelocity;
 
         PassDestinationAndCheckIfAiAgenIsActive(playerLastSeenLocation);
-        print("we do a little tracking");
 
         if (TrackTimer.IsFinished)
         {
-            currentEnemyState = EnemyState.WaitBeforeReturning;
+            currentEnemyState = EnemyState.Returning;
             WaitBeforeReturnTimer.SetClock();
             PassDestinationAndCheckIfAiAgenIsActive(transform.position + playerLastSeenVelocity / 2);
             HasPassedDestination = false;
@@ -245,7 +244,7 @@ public class Basic_Enemy_AI : MonoBehaviour
     {
         idleWaypointFinderRaycastPoint = new Vector3(spawnPoint.x + (Random.insideUnitCircle.x * IdleRadius), spawnPoint.y, spawnPoint.z + (Random.insideUnitCircle.y * IdleRadius));
         Physics.Raycast(idleWaypointFinderRaycastPoint, Vector3.down, out idleWaypointRaycast);
-        //slimeAgent.SetDestination(idleWaypointRaycast.point);
+        slimeAgent.SetDestination(idleWaypointRaycast.point);
     }
 
     void PassDestinationAndCheckIfAiAgenIsActive(Vector3 destination)
@@ -256,8 +255,16 @@ public class Basic_Enemy_AI : MonoBehaviour
 
     void CheckIfPlayerisInRange()
     {
-        enemy_AnimationS.CheckIfPlayerIsInRange(0);
-        enemy_AnimationS.CheckIfPlayerIsInRange(1);
+        foreach (int number in attackCheckNumbers)
+        {
+            triggerArray[number].enabled = false;
+            triggerArray[number].enabled = true;
+        }
+    }
+
+    void CheckIfPlayerisInRangeFixedUpdate()
+    {
+
     }
 
     void StartAttackCheckTimer()

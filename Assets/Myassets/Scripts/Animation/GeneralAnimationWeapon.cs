@@ -110,9 +110,6 @@ public class GeneralAnimationWeapon : MonoBehaviour
 
             mainCharAnimator.SetFloat("_ChargeAttackSpeed", NormalChargeSpeed);
         }
-
-        ChargeAttackCharged = false;
-
     }
 
 }

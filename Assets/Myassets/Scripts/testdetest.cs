@@ -31,8 +31,6 @@ public class testdetest : MonoBehaviour
 
     [SerializeField]
     private TimedEvent TrackTimer = default;
-    [SerializeField]
-    private TimedEvent TrackTimer2 = default;
 
     // Start is called before the first frame update
     void Start()

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InitReferencesInteract : MonoBehaviour
+public class InitStaticReferencesStorageInteract : MonoBehaviour
 {
-    GameMaster singleton;
+    public StaticReferencesStorage StaticReferencesStorageSO;
 
     [System.Serializable]
     public struct TimedEvent
@@ -48,34 +48,32 @@ public class InitReferencesInteract : MonoBehaviour
 
     void InitReference()
     {
-        singleton = GameMaster.gameMasterSingleton;
-
         if (TryGetComponent<Sign>(out Sign sign))
         {
-            sign.interactScript = singleton.interactScript;
-            sign.playerPos = singleton.playerTrans;
+            sign.interactScript = StaticReferencesStorageSO.interactScript;
+            sign.playerPos = StaticReferencesStorageSO.playerTrans;
 
-            sign.textBoxScript = singleton.textBoxScript;
+            sign.textBoxScript = StaticReferencesStorageSO.textBoxScript;
         }
 
         else if (TryGetComponent<ItemPickup>(out ItemPickup itemPickup))
         {
-            itemPickup.InitReferences
+            itemPickup.InitStaticReferencesStorage
             (
-                singleton.playerInventory,
-                singleton.playerTrans,
-                singleton.textBoxScript
+                StaticReferencesStorageSO.playerInventory,
+                StaticReferencesStorageSO.playerTrans,
+                StaticReferencesStorageSO.textBoxScript
             );
         }
 
         else if (TryGetComponent<FallInPit>(out FallInPit fallInPit))
         {
-            fallInPit.playerGO = singleton.playerGO;
-            fallInPit.playerAnim = singleton.mainCharAnimationScript;
-            fallInPit.inputManagerScript = singleton.inputManagerScript;
-            fallInPit.playerController = singleton.playerController;
-            fallInPit.originalPlayerRot = singleton.playerGO.transform.rotation;
-            fallInPit.playerVisibilityParent = singleton.playerVisibilityParent;
+            fallInPit.playerGO = StaticReferencesStorageSO.playerGO;
+            fallInPit.playerAnim = StaticReferencesStorageSO.mainCharAnimationScript;
+            fallInPit.inputManagerScript = StaticReferencesStorageSO.inputManagerScript;
+            fallInPit.playerController = StaticReferencesStorageSO.playerController;
+            fallInPit.originalPlayerRot = StaticReferencesStorageSO.playerGO.transform.rotation;
+            fallInPit.playerVisibilityParent = StaticReferencesStorageSO.playerVisibilityParent;
         }
 
     }

@@ -8,6 +8,8 @@ using Unity.Mathematics;
 
 public class ChangeArea : MonoBehaviour
 {
+    [SerializeField] StatsStorage StatsStorageSO;
+
     [SerializeField] GameObject PlayerPrefab;
     [SerializeField] GameObject LoadingScreen;
     [SerializeField] CustomGameLoop customGameLoopScript;
@@ -43,15 +45,18 @@ public class ChangeArea : MonoBehaviour
         public bool IsFinished => Time.unscaledTime >= Clock;
     }
 
-    [SerializeField]
-    Timer SceneLoad = new Timer();
-
-    public void OnTriggerEnter()
+    public void OnTriggerEnter(Collider collider)
     {
-        ChangeAreaFunction();
+       
+        if (collider.CompareTag("Player"))
+        {
+            collider.GetComponent<PlayerStats>().SaveStatsToSO();
 
-        if (saveObjectsScript != null)
-        saveObjectsScript.SaveToJSON();
+            ChangeAreaFunction();
+
+            if (saveObjectsScript != null)
+                saveObjectsScript.SaveToJSON();
+        }
     }
 
     public void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
@@ -70,7 +75,7 @@ public class ChangeArea : MonoBehaviour
             if (InputSpawnNumber == spawn.ID)
             {
                 PlayerGO = Instantiate(PlayerPrefab, spawn.Location, quaternion.identity);
-                PlayerGO.GetComponent<InitReferencesToMaster>().InitPlayer();
+                PlayerGO.GetComponent<InitStaticReferencesStorageToMaster>().InitPlayer();
                 return;
             }
         }

@@ -10,7 +10,7 @@ public class BillBoard : MonoBehaviour
     {
         CustomGameLoop.LateupdateLoopFunctionsSubscriber += MakeBillboard;
     }
-    
+
     void OnDisable()
     {
         CustomGameLoop.LateupdateLoopFunctionsSubscriber -= MakeBillboard;
@@ -23,6 +23,12 @@ public class BillBoard : MonoBehaviour
 
     void MakeBillboard()
     {
-        transform.LookAt(mainCamera.transform);
+        if (mainCamera != null)
+        {
+            mainCamera = Camera.main;
+            transform.LookAt(new Vector3(mainCamera.transform.position.x, 0, mainCamera.transform.position.y));
+        }
+
+
     }
 }

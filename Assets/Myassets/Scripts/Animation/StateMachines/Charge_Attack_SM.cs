@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Charge_Attack_SM : StateMachineBehaviour
 {
-    public event System.Action<Animator, AnimatorStateInfo> onStateEnterOR;
     public GeneralAnimationWeapon generalAnimationWeapon;
     public PlayerMovement movement;
 

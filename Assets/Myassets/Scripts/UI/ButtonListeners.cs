@@ -54,7 +54,6 @@ public class ButtonListeners : MonoBehaviour
         {
             this.enabled = false;
             CostumGameLoopPause.PauseLateUpdateLoopFunctionsSubscriber -= SelectDelay;
-            print("hiiiiiiiiiiiiiiiiiiiiiii");
         }
 
     }

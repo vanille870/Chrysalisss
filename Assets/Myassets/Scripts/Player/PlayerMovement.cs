@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public StaticReferencesStorage StaticReferencesStorage;
 
     public enum MovementState
     {
@@ -135,8 +136,8 @@ public class PlayerMovement : MonoBehaviour
     {
         charControl = gameObject.GetComponent<CharacterController>();
 
-        GameMaster.gameMasterSingleton.playerController = this.GetComponent<CharacterController>();
-        GameMaster.gameMasterSingleton.playerTrans = transform;
+        StaticReferencesStorage.playerController = this.GetComponent<CharacterController>();
+        StaticReferencesStorage.playerTrans = transform;
         turnSmoothTimegroundOriginal = turnSmoothTimeground;
         originalMaxSpeed = maxSpeed;
         AccelerationOrginal = acceleration;

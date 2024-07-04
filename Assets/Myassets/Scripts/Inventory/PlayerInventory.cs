@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class PlayerInventory : MonoBehaviour
 {
+    public StaticReferencesStorage StaticReferencesStorage;
+
     public static List<InventoryItemSlot> playerInventory = new List<InventoryItemSlot>();
     public static GameObject inventoryParentObjectStatic;
     int maximumInventorySpace = 10;
@@ -20,13 +22,12 @@ public class PlayerInventory : MonoBehaviour
     Sprite potionS;
     Sprite torchs;
 
-    private int currentID = 0;
     private static int i;
 
     // Start is called before the first frame update
     public void Start()
     {
-        inventoryParentObjectStatic = GameMaster.gameMasterSingleton.InventoryParent;
+        inventoryParentObjectStatic = StaticReferencesStorage.InventoryParent;
 
 
         foreach (Transform invGOTransform in inventoryParentObjectStatic.transform)

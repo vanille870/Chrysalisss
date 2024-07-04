@@ -7,18 +7,12 @@ public class PlayerEquiment : MonoBehaviour
 {
     [SerializeField] SwordStorage swordStorageSO;
 
-    public static Sword CurrentSwordOfPlayer;
-
-    bool HasRunned;
+    public Sword CurrentSwordOfPlayer;
 
     void Start()
     {
-        /*if (HasRunned == false)
-        {
-            swordStorageSO.InitializeEquipmentSoDictionary();
-            //print(swordStorageSO.SwordID["Crystal_Sword"]);
-            HasRunned = true;
-        }*/
+        swordStorageSO.InitializeEquipmentSoDictionary();
+        //print(swordStorageSO.SwordID["Crystal_Sword"]);
     }
 
 

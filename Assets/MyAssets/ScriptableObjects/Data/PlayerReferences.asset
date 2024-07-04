@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7477b04d9d601f545ae8010a61199e17, type: 3}
+  m_Name: PlayerReferences
+  m_EditorClassIdentifier: 
+  StatsStorageSO: {fileID: 11400000, guid: e155090e580af7e40bab5bfab5aff710, type: 2}
+  inputManagerScript: {fileID: 0}
+  textBoxScript: {fileID: 0}
+  damageNumberManager: {fileID: 0}
+  InventoryParent: {fileID: 0}
+  DamageNumbrPool: {fileID: 0}
+  grassParticlSystemPool: {fileID: 0}
+  playerController: {fileID: 0}
+  playerGO: {fileID: 0}
+  playerPoint: {fileID: 0}
+  playerVisibilityParent: {fileID: 0}
+  playerTrans: {fileID: 0}
+  mainCharAnimationScript: {fileID: 0}
+  playerInventory: {fileID: 0}
+  playerCam: {fileID: 0}
+  interactScript: {fileID: 0}

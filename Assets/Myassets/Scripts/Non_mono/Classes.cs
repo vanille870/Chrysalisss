@@ -7,9 +7,6 @@ using UnityEngine.Events;
 
 
 [Serializable]
-public enum ItemFunctionType { Heal, Torch, Bomb };
-
-[Serializable]
 public class InventoryItemInstance
 {
     public InventoryItemsData inventoryItemsDataSO;
@@ -42,11 +39,11 @@ public class InventoryItemSlot
         itemImage.sprite = inventoryItemsDataSO.itemImage;
         GOtext.text = inventoryItemsDataSO.itemName;
 
+        inventoryItemsDataSO.InventoryItemsDataSetup();
         GObutton.onClick.AddListener(() => inventoryItemsDataSO.itemFunction(inventoryItemsDataSO.effectMagintude));
         GObutton.onClick.AddListener(DisableGO);
         slotGO.SetActive(true);
         itemImage.enabled = true;
-        Debug.Log("ENABLED GO item");
     }
 
     public void DisableGO()
@@ -57,7 +54,6 @@ public class InventoryItemSlot
         itemImage.sprite = null;
         GObutton.onClick.RemoveAllListeners();
         reorderItems();
-        Debug.Log("disabled GO item");
     }
 
     public void ReadyGO()
@@ -65,8 +61,18 @@ public class InventoryItemSlot
         if (itemImage.sprite == null)
             itemImage.enabled = false;
 
-        Debug.Log("READY GO item");
     }
+}
+
+public class PostitionToVector3 : PropertyAttribute { }
+public class ItemFunctionPicker : PropertyAttribute { }
+
+[Serializable]
+public class Saveable2stateObject
+{
+    public string name;
+    public int ID;
+    public bool Open;
 }
 
 namespace SpawnByLocation
@@ -86,19 +92,78 @@ namespace SpawnByLocation
     }
 }
 
-public class PostitionToVector3 : PropertyAttribute
+[System.Serializable]
+public struct TimerScaled
 {
-    public GameObject spawnGO;
-    public Vector3 vector3;
+    public float Duration;
+    private float Clock;
+
+    public TimerScaled(float duration, float time = 0f)
+    {
+        Duration = duration;
+        Clock = time;
+    }
+
+    public void SetClock()
+    {
+        Clock = Time.time + Duration;
+    }
+
+    public bool IsFinished => Time.time >= Clock;
+}
+
+[System.Serializable]
+public struct LerpEvent
+{
+    [SerializeField]
+    public float DurationMultiplier;
+    public float LerpFloat;
+
+    public LerpEvent(float durationmult, float time = 0f)
+    {
+        DurationMultiplier = durationmult;
+        LerpFloat = time;
+    }
+
+    public void Lerp()
+    {
+        LerpFloat += Time.deltaTime * DurationMultiplier;
+    }
+
+    public void ResetLerp()
+    {
+        LerpFloat = 0;
+    }
+
+    public bool LerpFinished => 1 <= LerpFloat;
 }
 
 [Serializable]
-public class Saveable2stateObject
+public struct PlayerStatSet
 {
-    public string name;
-    public int ID;
-    public bool Open;
+    [SerializeField] public StatPoints health;
+    [SerializeField] public int strength;
+    [SerializeField] public int defence;
+    [SerializeField] public int magicDefense;
+    [SerializeField] public int maxMagic;
 }
+
+[Serializable]
+public struct StatPoints
+{
+    [SerializeField]
+    public int Current;
+    public int Max;
+
+    // optional; public float Modifier { get; private set; }, you'll need to adjust how Max works with a modifier.
+
+    public float Percentage => Current / Max;
+
+    public void AdjustCurrent(float amount) => Current = (int)Mathf.Clamp(Current + amount, 0f, Max);
+
+    public void SetMax(float max) { Max = (int)max; Current = (int)Mathf.Min(Current, max); }
+}
+
 
 
 

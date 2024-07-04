@@ -13,15 +13,6 @@ public class SwordStorage : ScriptableObject
 
     public void InitializeEquipmentSoDictionary()
     {
-        foreach (Sword sword in swordList)
-        {
-            SwordDic.Add(sword.name, sword);
-        }
-
-        if (SwordDic.TryGetValue("Crystal_Sword", out PlayerEquiment.CurrentSwordOfPlayer) == false)
-        {
-            Debug.LogWarning("Sword not found");
-        }
         
     }
 

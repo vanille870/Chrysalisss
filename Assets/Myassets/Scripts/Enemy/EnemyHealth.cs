@@ -19,6 +19,8 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] ParticleSystem enemyHitEffect;
     public bool EnemyIsDead;
 
+    public Transform trans;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +30,6 @@ public class EnemyHealth : MonoBehaviour
 
     public void EnemyRecieveDamage(int recievedDamage, int staggerDamage)
     {
-        print("recieved damage");
         EnemyCurrentHealth -= recievedDamage;
         StaggerValue -= staggerDamage;
         AIScript.seenPlayer = true;

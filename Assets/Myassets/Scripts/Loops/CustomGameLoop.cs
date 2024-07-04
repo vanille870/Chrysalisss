@@ -11,6 +11,9 @@ public class CustomGameLoop : MonoBehaviour
     public delegate void LateUpdateLoopFunction();
     public static event LateUpdateLoopFunction LateupdateLoopFunctionsSubscriber;
 
+    public delegate void FixedUpdateLoopFunction();
+    public static event FixedUpdateLoopFunction FixedUpdateLoopFunctionSubsciber;
+
     // Update is called once per frame
     void Update()
     {
@@ -20,6 +23,11 @@ public class CustomGameLoop : MonoBehaviour
     void LateUpdate()
     {
         LateupdateLoopFunctionsSubscriber();
+    }
+
+    void FixedUpdate()
+    {
+        FixedUpdateLoopFunctionSubsciber();
     }
 
     public void DisableLoop()
@@ -36,6 +44,7 @@ public class CustomGameLoop : MonoBehaviour
     {
         UpdateLoopFunctionsSubscriber += test;
         LateupdateLoopFunctionsSubscriber += test;
+        FixedUpdateLoopFunctionSubsciber += test;
     }
 
     public void test()

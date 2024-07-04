@@ -12,8 +12,6 @@ public class AfterMiragesPlayer : MonoBehaviour
     public float playerGlow; 
     public float playerGlowOpacity;
 
-    private float lerSpeedOpacityFloat = 1;
-    private float lerpSpeedGlowFloat = 1;
     public float fadeSpeedMultiplier;
 
     public GameObject[] InvisibleGOs;

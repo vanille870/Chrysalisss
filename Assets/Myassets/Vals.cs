@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -125,3 +126,4 @@ public class CuttableMass : MonoBehaviour
         }
     }
 }
+#endif

@@ -1,34 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum ItemFunction { Heal, Light, Explode }
+
 [CreateAssetMenu(fileName = "InventoryItemData", menuName = "ScriptableObjects/Items/InventoryItem", order = 1)]
 public class InventoryItemsData : ScriptableObject
 {
     public string itemName;
+
     public int itemID;
     public int effectMagintude;
     public Sprite itemImage;
-    public ItemFunctionType itemFunctionType;
     public UnityAction<int> itemFunction;
+    private bool isSetUp = false;
+    public ItemFunction itemFunctionEnum;
 
-    public InventoryItemsData()
+    public void InventoryItemsDataSetup()
     {
-        itemFunction = ItemFunctions.functionDictionary[itemFunctionType];
+        Debug.Log("setup");
+        itemFunction = ItemFunctions.functionDictionary[itemFunctionEnum];
+        isSetUp = true;
+
     }
 }
 
-public static class ItemFunctions
+public class ItemFunctions : MonoBehaviour
 {
-    public static Dictionary<ItemFunctionType, UnityAction<int>> functionDictionary = new Dictionary<ItemFunctionType, UnityAction<int>>();
+    public static Dictionary<ItemFunction, UnityAction<int>> functionDictionary = new Dictionary<ItemFunction, UnityAction<int>>();
 
 
     static ItemFunctions()
     {
-        functionDictionary[ItemFunctionType.Heal] = Heal;
-        functionDictionary[ItemFunctionType.Torch] = Light;
-        functionDictionary[ItemFunctionType.Bomb] = Explode;
+        functionDictionary[ItemFunction.Heal] = Heal;
+        functionDictionary[ItemFunction.Light] = Light;
+        functionDictionary[ItemFunction.Explode] = Explode;
+
+        Debug.Log("items functions set");
     }
 
     static void Heal(int amount)
@@ -46,5 +56,6 @@ public static class ItemFunctions
         Debug.Log("BOOM " + radius);
     }
 }
+
 
 

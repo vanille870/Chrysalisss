@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Reflection.Emit;
@@ -31,5 +32,5 @@ public class TransformToVector3 : Editor
         spawnPointsScript.spawnPointColections.Add(currentSpawn);
     }
 }*/
-
+#endif
 

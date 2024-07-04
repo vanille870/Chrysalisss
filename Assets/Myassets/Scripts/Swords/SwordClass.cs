@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,11 +7,38 @@ using UnityEngine;
 public class Sword : ScriptableObject
 {
     public string Name = "Crystal_Sword";
-    public int StaggerDamage;
-    public int ChargeStaggerDamage;
-    public int damage;
-    public int chargeDamage;
+    public SwordAttackTypes swordAttackTypes;
 }
+
+[Serializable]
+public struct SwordAttackTypes
+{
+    public NormalAttack normalAttack;
+    public ChargedAttack chargedAttack;
+    public FailedAttack failedAttack;
+}
+
+[Serializable]
+public struct NormalAttack
+{
+    public int damage;
+    public int staggerDamage;
+}
+
+[Serializable]
+public struct ChargedAttack
+{
+    public int damage;
+    public int staggerDamage;
+}
+
+[Serializable]
+public struct FailedAttack
+{
+    public int damage;
+    public int staggerDamage;
+}
+
 
 
 

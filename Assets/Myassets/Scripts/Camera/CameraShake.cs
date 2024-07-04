@@ -24,7 +24,6 @@ public class CameraShake : MonoBehaviour
 
     void OnDisable()
     {
-        print("disbaled");
         CustomGameLoop.UpdateLoopFunctionsSubscriber -= CamShakeUpdate;
     }
 
@@ -58,8 +57,6 @@ public class CameraShake : MonoBehaviour
             PerlinNoise.m_AmplitudeGain = Strength * (1f - t);
 
             CurrentShakeAmount = PerlinNoise.m_AmplitudeGain;
-
-            print(CurrentShakeAmount);
 
             return;
         }

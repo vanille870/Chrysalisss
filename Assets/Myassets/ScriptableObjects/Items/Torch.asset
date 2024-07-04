@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Torch
   itemID: 1
-  effectMagintude: 420
+  effectMagintude: 755755
   itemImage: {fileID: 21300000, guid: bd157c73f9f04034e9c918cca98495d3, type: 3}
-  itemFunctionType: 1
+  itemFunctionEnum: 1

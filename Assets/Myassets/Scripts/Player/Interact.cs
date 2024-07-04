@@ -32,7 +32,6 @@ public class Interact : MonoBehaviour
         if (isSkipFunction == false)
         {
             InputManager.SetInteractFunction(passedInteractFunction);
-            print("Passing function");
         }
 
         else

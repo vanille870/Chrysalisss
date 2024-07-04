@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StaggerValue: 1
-  defence: 0
+  defence: 3
   lastAttackHitNumber: 0
   EnemyCurrentHealth: 15
   EnemyAnimator: {fileID: 7554675601832430311}
@@ -240,6 +240,7 @@ MonoBehaviour:
   AIScript: {fileID: 9120271176045327374}
   enemyHitEffect: {fileID: 8678222856202147450}
   EnemyIsDead: 0
+  trans: {fileID: 0}
 --- !u!1 &1260487330350758058
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,8 +769,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.36
-      minScalar: 0
+      scalar: 0.8
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -10701,6 +10702,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8876a3447493e42b44ab3eddd0390f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerArray: []
+  attackCheckNumbers: 
   enemy_AnimationS: {fileID: 7143420826174826133}
   enemy_Sound: {fileID: 15834542719468642}
   playerController: {fileID: 3845523790628162605, guid: 30d7de992ec51f942adcbfe30ed0fa1d, type: 3}
@@ -10748,6 +10751,7 @@ MonoBehaviour:
   CollisonGO: {fileID: 7506392506731656149}
   EnemyHurtBoxGO: {fileID: 1124128430945163153}
   EnemyDeathParticleSystem: {fileID: 197459044329940950}
+  test: {fileID: 0}
   currentSpeed: 0.10858117
   speedPercent: 0
   AIMagnitudeTest: 0
@@ -10759,9 +10763,6 @@ MonoBehaviour:
   PlayerPoint: {fileID: 0}
   isAttacking: 0
   rotationSpeed: 0
-  TriggerCollection:
-  - {fileID: 4139048406114132972}
-  - {fileID: 5259018244664687387}
 --- !u!114 &3032937798588560275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10861,13 +10862,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebf68776079dd641b6a02ed603ef7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPoint: {fileID: 0}
   movementScript: {fileID: 0}
   playerConditionStatsScript: {fileID: 0}
   mainCharAnimationScript: {fileID: 0}
   KnockBackAmount: 2
-  attackDamage: 10
+  attackDamage: 35
   StaggerpointGO: {fileID: 1718602139097786197}
-  playerPoint: {fileID: 0}
 --- !u!54 &3945252726023073544
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11975,7 +11976,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 20
+        scalar: 25
         minScalar: 30
         maxCurve:
           serializedVersion: 2

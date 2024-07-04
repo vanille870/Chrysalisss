@@ -16,4 +16,4 @@ MonoBehaviour:
   itemID: 0
   effectMagintude: 69
   itemImage: {fileID: 21300000, guid: 0e5f060c372e4834c8fe5df25b88c049, type: 3}
-  itemFunctionType: 0
+  ItemFunctionInt: 0

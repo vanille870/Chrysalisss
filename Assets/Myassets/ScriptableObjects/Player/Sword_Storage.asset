@@ -14,4 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordList:
   - {fileID: 11400000, guid: b34732a0e977bfe4b963d21c460cecc6, type: 2}
-  test: 0

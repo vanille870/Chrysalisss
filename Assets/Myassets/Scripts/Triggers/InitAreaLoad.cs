@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SpawnByLocation;
-using UnityEditor;
+
 using Unity.Mathematics;
-using UnityEngine.InputSystem;
+
 
 public class InitAreaLoad : MonoBehaviour
 {
@@ -18,6 +17,7 @@ public class InitAreaLoad : MonoBehaviour
     [SerializeField] bool isInitScene;
 
     private GameObject PlayerGO;
+    bool isLoading;
 
 
     [System.Serializable]
@@ -45,7 +45,15 @@ public class InitAreaLoad : MonoBehaviour
 
     public void Start()
     {
-        ChangeAreaFunction();
+        SceneLoad.SetClock();
+    }
+
+    void Update()
+    {
+        if (SceneLoad.IsFinished == true && isLoading == false)
+        {
+            ChangeAreaFunction();
+        }
     }
 
     public void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
@@ -64,7 +72,7 @@ public class InitAreaLoad : MonoBehaviour
             if (InputSpawnNumber == spawn.ID)
             {
                 PlayerGO = Instantiate(PlayerPrefab, spawn.Location, quaternion.identity);
-                PlayerGO.GetComponent<InitReferencesToMaster>().InitPlayer();
+                PlayerGO.GetComponent<InitStaticReferencesStorageToMaster>().InitPlayer();
                 return;
             }
         }
@@ -76,5 +84,6 @@ public class InitAreaLoad : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
         SceneManager.sceneLoaded += OnSceneLoad;
+        isLoading = true;
     }
 }

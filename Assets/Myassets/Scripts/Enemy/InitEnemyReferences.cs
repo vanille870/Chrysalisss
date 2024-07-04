@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InitEnemyReferences : MonoBehaviour
+public class InitEnemyStaticReferencesStorage : MonoBehaviour
 {
+    public StaticReferencesStorage StaticReferencesStorageSO;
 
     [System.Serializable]
     public struct TimedEvent
@@ -43,14 +44,14 @@ public class InitEnemyReferences : MonoBehaviour
     {
         if (WaitUntilLoading.IsFinished == true)
         {
-            basic_Enemy_AIScript.playerController = GameMaster.gameMasterSingleton.playerController;
-            basic_Enemy_AIScript.PlayerPoint = GameMaster.gameMasterSingleton.playerTrans;
-            GetComponentInChildren<Enemy_Animation>().PlayerPoint = GameMaster.gameMasterSingleton.playerTrans;
+            basic_Enemy_AIScript.playerController = StaticReferencesStorageSO.playerController;
+            basic_Enemy_AIScript.PlayerPoint = StaticReferencesStorageSO.playerPoint;
+            GetComponentInChildren<Enemy_Animation>().PlayerPoint = StaticReferencesStorageSO.playerTrans;
 
-            enemyHitbox.playerConditionStatsScript = GameMaster.gameMasterSingleton.playerConditionStatsScript;
-            enemyHitbox.mainCharAnimationScript = GameMaster.gameMasterSingleton.mainCharAnimationScript;
-            enemyHitbox.movementScript = GameMaster.gameMasterSingleton.PlayerMovementReference;
-            enemyHitbox.playerPoint = GameMaster.gameMasterSingleton.playerTrans;
+            enemyHitbox.playerConditionStatsScript = StaticReferencesStorageSO.playerStatsReference;
+            enemyHitbox.mainCharAnimationScript = StaticReferencesStorageSO.mainCharAnimationScript;
+            enemyHitbox.movementScript = StaticReferencesStorageSO.PlayerMovementReference;
+            enemyHitbox.playerPoint = StaticReferencesStorageSO.playerPoint;
             CustomGameLoop.UpdateLoopFunctionsSubscriber -= UpdateFunction;
         }
     }

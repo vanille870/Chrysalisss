@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +9,7 @@ public class Enemy_Animation : MonoBehaviour
     public GameObject CollisonGO;
     public GameObject EnemyHurtBoxGO;
     public ParticleSystem EnemyDeathParticleSystem;
+    public CapsuleCollider test;
 
     public float currentSpeed;
     [Range(0, 1)]
@@ -38,8 +34,6 @@ public class Enemy_Animation : MonoBehaviour
     public bool isAttacking;
     public float rotationSpeed;
 
-    public Collider[] TriggerCollection;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -51,18 +45,6 @@ public class Enemy_Animation : MonoBehaviour
         agentOriginalSpeed = slimeAgent.speed;
         agentOrginalAcceleration = slimeAgent.acceleration;
         agentOrginalAnglSpeed = slimeAgent.angularSpeed;
-
-
-        for (int i = 0; i < TriggerCollectionGO.transform.childCount; i++)
-        {
-            GameObject currentGO = TriggerCollectionGO.transform.GetChild(i).gameObject;
-
-            if (currentGO.CompareTag("Enemy_trigger"))
-            {
-                TriggerCollection[i] = currentGO.GetComponent<Collider>();
-            }
-        }
-
     }
 
     void OnEnable()
@@ -124,31 +106,23 @@ public class Enemy_Animation : MonoBehaviour
 
     }
 
-    public void CheckIfPlayerIsInRange(int colliderNumber)
+    public void TriggerAttack(int attackNumber)
     {
-        if (TriggerCollection[colliderNumber].bounds.Contains(PlayerPoint.position) == true)
-        {
-            slimeAnimator.SetInteger("_TriggerINT", colliderNumber);
-        }
+        slimeAnimator.SetInteger("_TriggerINT", attackNumber);
     }
 
-    public void SetTriggerBool(int colliderNumber)
-    {
-        slimeAnimator.SetInteger("_TriggerINT", colliderNumber);
-    }
+    /* void RotateTowardsTarget()
+     {
+         // Determine which direction to rotate towards
+         Vector3 targetDirection = PlayerPoint.position - transform.position;
 
-   /* void RotateTowardsTarget()
-    {
-        // Determine which direction to rotate towards
-        Vector3 targetDirection = PlayerPoint.position - transform.position;
+         float singleStep = rotationSpeed * Time.deltaTime;
+         Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
 
-        float singleStep = rotationSpeed * Time.deltaTime;
-        Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-
-        // Draw a ray pointing at our target in
-        Debug.DrawRay(transform.position, newDirection, Color.red);
-        transform.rotation = Quaternion.LookRotation(newDirection);
-    }*/
+         // Draw a ray pointing at our target in
+         Debug.DrawRay(transform.position, newDirection, Color.red);
+         transform.rotation = Quaternion.LookRotation(newDirection);
+     }*/
 
 
 

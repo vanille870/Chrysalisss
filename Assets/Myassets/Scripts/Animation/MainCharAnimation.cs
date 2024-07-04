@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
+
 using UnityEngine;
-using UnityEngine.Animations;
+
 
 public class MainCharAnimation : MonoBehaviour
 {
     public Animator mainCharAnimator;
-    public BlendTree MovementBlend;
     public PlayerMovement movementScript;
 
     [Range(0, 1)]

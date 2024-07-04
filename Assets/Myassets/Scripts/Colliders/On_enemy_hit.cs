@@ -7,6 +7,18 @@ public class On_enemy_hit : MonoBehaviour
 {
     public GeneralAnimationWeapon generalAnimationWeaponScript;
     public CameraShake cameraShakeScript;
+    public PlayerEquiment playerEquimentScript;
+    public PlayerStats playerStats;
+    [SerializeField] DamageNumberManager damageNumberManager;
+
+
+    [Header("DamageNumber setup")]
+    [SerializeField] bool fadesOut;
+    [SerializeField] bool shrinks;
+    [SerializeField] bool bursts;
+    [SerializeField] bool rises;
+    [SerializeField] Transform enemyTransform;
+
 
     public static int AttackNumber = 0;
     [SerializeField] int AttackNumberDEBUG;
@@ -19,17 +31,20 @@ public class On_enemy_hit : MonoBehaviour
 
     public int damage;
     public int staggerDamage;
-    int clampedDamage;
-    int clampedStaggerDamage;
     public int chargeDamagePenaltyMultiplier;
     [SerializeField] int chargeDamageMultiplier;
     [SerializeField] float DeathHitStopMultiplier;
 
     public float TimeScaleToUse;
-    float OriginalHitStop;
 
-    bool HasAlreadyTriggeredShakeSafetyCheck = false;
-    bool timeScaleIsNormal;
+    int swordAttackPower;
+    Sword currentSword;
+    SwordAttackTypes CurrentSwordAttackTypes;
+    NormalAttack currentNormalAttack;
+    ChargedAttack CurrentChargedAttack;
+    FailedAttack CurrentfailedAttack;
+
+
 
     [System.Serializable]
     public struct HitStopEvent
@@ -131,6 +146,7 @@ public class On_enemy_hit : MonoBehaviour
             enemyGameObject = thisCollider.gameObject;
             currentEnemyHealthScript = thisCollider.GetComponent<EnemyHealth>();
 
+
             if (currentEnemyHealthScript.lastAttackHitNumber == AttackNumber)
             {
                 print("surplus hit blocked");
@@ -139,6 +155,7 @@ public class On_enemy_hit : MonoBehaviour
 
             if (currentEnemyHealthScript.EnemyIsDead != true)
             {
+                GetEquipmntInfo();
                 CalculateDamageAndHitstop();
                 InflictDamage();
 
@@ -165,10 +182,12 @@ public class On_enemy_hit : MonoBehaviour
 
     int CalculateDamageAndHitstop()
     {
+        enemyTransform = currentEnemyHealthScript.trans;
+
         if (generalAnimationWeaponScript.isPerformingChargAttack == false)
         {
-            damage = 5 - currentEnemyHealthScript.defence;
-            staggerDamage = damage;
+            damage = currentNormalAttack.damage + playerStats.playerStatSet.strength - currentEnemyHealthScript.defence;
+            staggerDamage = currentNormalAttack.staggerDamage;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.RegularAttack;
             HitStopTimer.Duration = hitStopVariables.durationPerAttack.RegularAttack;
@@ -178,13 +197,15 @@ public class On_enemy_hit : MonoBehaviour
                 cameraShakeScript.StartCamShakeCouretine(shakeParamameters.NormalAttack.ShakeDuration, shakeParamameters.NormalAttack.ShakeAmount);
             }
 
+            print(damage);
+            damageNumberManager.InstantiateDamageNumber(damage, enemyTransform.position, EntityType.enemy, false, fadesOut, shrinks, rises);
             return damage;
         }
 
         else if (generalAnimationWeaponScript.ChargeAttackCharged)
         {
-            damage = 15 - currentEnemyHealthScript.defence;
-            staggerDamage = damage * chargeDamageMultiplier;
+            damage = CurrentChargedAttack.damage + playerStats.playerStatSet.strength - currentEnemyHealthScript.defence;
+            staggerDamage = CurrentChargedAttack.staggerDamage;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.ChargedAttack;
             HitStopTimer.Duration = hitStopVariables.durationPerAttack.ChargedAttack;
@@ -194,17 +215,21 @@ public class On_enemy_hit : MonoBehaviour
                 cameraShakeScript.StartCamShakeCouretine(shakeParamameters.ChargeAttack.ShakeDuration, shakeParamameters.ChargeAttack.ShakeAmount);
             }
 
+            print(damage);
+            damageNumberManager.InstantiateDamageNumber(damage, enemyTransform.position, EntityType.enemy, true, fadesOut, shrinks, rises);
             return damage;
         }
 
         else
         {
-            damage = 4 - currentEnemyHealthScript.defence;
-            staggerDamage = damage / chargeDamagePenaltyMultiplier;
+            damage = CurrentfailedAttack.damage + playerStats.playerStatSet.strength - currentEnemyHealthScript.defence;
+            staggerDamage = CurrentfailedAttack.staggerDamage;
 
             TimeScaleToUse = hitStopVariables.timeScaleAmountsPerAttack.UnchargedAttack;
             HitStopTimer.Duration = hitStopVariables.durationPerAttack.RegularAttack;
 
+            print(damage);
+            damageNumberManager.InstantiateDamageNumber(damage, enemyTransform.position, EntityType.enemy, false, fadesOut, shrinks, false);
             return damage;
         }
     }
@@ -231,5 +256,16 @@ public class On_enemy_hit : MonoBehaviour
             CustomGameLoop.UpdateLoopFunctionsSubscriber += UpdateHitStop;
             HitStopTimer.SetClock();
         }
+    }
+
+    public void GetEquipmntInfo()
+    {
+        currentSword = playerEquimentScript.CurrentSwordOfPlayer;
+        CurrentSwordAttackTypes = currentSword.swordAttackTypes;
+        currentNormalAttack = CurrentSwordAttackTypes.normalAttack;
+        CurrentChargedAttack = CurrentSwordAttackTypes.chargedAttack;
+        CurrentfailedAttack = CurrentSwordAttackTypes.failedAttack;
+
+
     }
 }

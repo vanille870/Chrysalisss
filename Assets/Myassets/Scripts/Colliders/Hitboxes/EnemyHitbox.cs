@@ -6,7 +6,7 @@ public class EnemyHitbox : MonoBehaviour
 {
     public Transform playerPoint;
     public PlayerMovement movementScript;
-    public PlayerConditionStats playerConditionStatsScript;
+    public PlayerStats playerConditionStatsScript;
     public MainCharAnimation mainCharAnimationScript;
     CharacterController characterControllerPlayer;
 

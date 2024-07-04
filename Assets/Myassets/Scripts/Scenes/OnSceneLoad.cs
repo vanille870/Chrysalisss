@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class OnSceneLoad : MonoBehaviour
 {
+
     [SerializeField] SaveObjects saveObjectsScript;
+    public StaticReferencesStorage StaticReferencesStorageSO;
 
     [System.Serializable]
     public struct TimerBeforeControl
@@ -40,9 +42,10 @@ public class OnSceneLoad : MonoBehaviour
     {
         if (timerBeforeControl.IsFinished)
         {
+            StaticReferencesStorageSO.playerStatsReference.LoadStatsFromSO();
             SceneManager.SetActiveScene(gameObject.scene);
             InputManager.EnableControls();
-            GameMaster.gameMasterSingleton.playerController.enabled = true;
+            StaticReferencesStorageSO.playerController.enabled = true;
             Destroy(gameObject);
 
             if (saveObjectsScript != null)
