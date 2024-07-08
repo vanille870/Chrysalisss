@@ -47,4 +47,4 @@ MonoBehaviour:
   saveObjectsScript: {fileID: 0}
   StaticReferencesStorageSO: {fileID: 11400000, guid: bcc08fed1a97a7645947a056b7e94264, type: 2}
   timerBeforeControl:
-    Duration: 0.2
+    Duration: 0.05

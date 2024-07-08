@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 645449001827969323}
   serializedVersion: 2
   m_LocalRotation: {x: 0.01172292, y: -0.00042062244, z: 0.030828599, w: 0.9994558}
-  m_LocalPosition: {x: 0.0002, y: -0.0373, z: 0.0009}
+  m_LocalPosition: {x: -0.0006, y: -0.0356, z: 0.002}
   m_LocalScale: {x: 0.33434388, y: 1.9553936, z: 0.00632383}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -84,7 +84,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.02
-  m_Height: 0.02
+  m_Height: 0.022
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4464123526777244869
@@ -230,17 +230,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f74ce92a82c0db4e870b6a1b83a3424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  staticReferencesStorageSO: {fileID: 0}
   StaggerValue: 1
   defence: 3
   lastAttackHitNumber: 0
-  EnemyCurrentHealth: 15
+  EnemyCurrentHealth: 999999
   EnemyAnimator: {fileID: 7554675601832430311}
   enemyAnimationScript: {fileID: 7482937410125289088}
   slimeSoundScript: {fileID: 15834542719468642}
   AIScript: {fileID: 9120271176045327374}
   enemyHitEffect: {fileID: 8678222856202147450}
   EnemyIsDead: 0
-  trans: {fileID: 0}
 --- !u!1 &1260487330350758058
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,11 +349,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.23
-  m_Speed: 0.7
+  m_Speed: 1
   m_Acceleration: 0.3
   avoidancePriority: 50
-  m_AngularSpeed: 2000
-  m_StoppingDistance: 0.6
+  m_AngularSpeed: 3000
+  m_StoppingDistance: 0.8
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -565,6 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d46ef7bc5c3054c4b9fc294f82418c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StaticReferencesStorageSO: {fileID: 11400000, guid: bcc08fed1a97a7645947a056b7e94264, type: 2}
   WaitUntilLoading:
     Duration: 0.2
   basic_Enemy_AIScript: {fileID: 9120271176045327374}
@@ -5513,7 +5514,7 @@ Transform:
   m_GameObject: {fileID: 2926830301809524059}
   serializedVersion: 2
   m_LocalRotation: {x: 0.11921619, y: 0.14041819, z: 0.7438689, w: 0.64244014}
-  m_LocalPosition: {x: -0.0021, y: -0.012, z: 0.0029}
+  m_LocalPosition: {x: -0.0014, y: -0.012, z: 0.0045}
   m_LocalScale: {x: 0.31199393, y: 2.0511384, z: 0.012830428}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10702,8 +10703,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce8876a3447493e42b44ab3eddd0390f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerArray: []
-  attackCheckNumbers: 
+  triggerArray:
+  - {fileID: 4139048406114132972}
+  - {fileID: 5259018244664687387}
+  attackCheckNumbers: 0000000001000000
   enemy_AnimationS: {fileID: 7143420826174826133}
   enemy_Sound: {fileID: 15834542719468642}
   playerController: {fileID: 3845523790628162605, guid: 30d7de992ec51f942adcbfe30ed0fa1d, type: 3}
@@ -10729,7 +10732,7 @@ MonoBehaviour:
   IdleWayPointTimer:
     Duration: 5
   AttackCheckTimer:
-    Duration: 1
+    Duration: 0.5
   WaitUntilLoading:
     Duration: 2
   currentEnemyState: 0

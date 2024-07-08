@@ -10,7 +10,7 @@ public class PlayerStats : MonoBehaviour
     public PlayerStatSet playerStatSet;
 
     public int playerHealth;
-    public DamageNumberManager damageNumberManager;
+    public HealthNumberManager damageNumberManager;
     public Transform damageNumberPos;
 
     // Start is called before the first frame update
@@ -22,10 +22,17 @@ public class PlayerStats : MonoBehaviour
 
     public void RecieveDamage(int damage)
     {
-        damageNumberManager.InstantiateDamageNumber(damage, damageNumberPos.position, EntityType.player, false, true, true, true);
+        damageNumberManager.InstantiateHealthNumber(damage, damageNumberPos.position, TypeOfHealthNumber.playerDamage);
         playerStatSet.health.Current -= Mathf.Clamp(damage, 1, 9999);
-        HealthBar.UpdateHealthBar(damage);
+        HealthBar.UpdateHealthBar(damage, true);
         //playerHealthSlider.value = playerHealth;
+    }
+
+    public void RestoreHealth(int amount)
+    {
+        playerStatSet.health.AdjustCurrent(amount);
+        damageNumberManager.InstantiateHealthNumber(amount, damageNumberPos.position, TypeOfHealthNumber.heal);
+        HealthBar.UpdateHealthBar(amount, false);
     }
 
     public void SetStatsFromBase()

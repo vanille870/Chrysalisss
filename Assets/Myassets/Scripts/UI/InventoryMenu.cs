@@ -11,6 +11,7 @@ public class InventoryMenu : MonoBehaviour
     [SerializeField] CustomGameLoop customGameLoopScript;
 
     [SerializeField] Button FirstButton;
+    [SerializeField] InputManager inputManager;
 
     EventSystem eventSystem;
 
@@ -28,10 +29,10 @@ public class InventoryMenu : MonoBehaviour
             customGameLoopScript.DisableLoop();
             Time.timeScale = 0;
             InventoryOpen = true;
-
             InventoryUI.SetActive(true);
-
             InventoryUI.GetComponentInChildren<Button>().Select();
+
+            inputManager.ToggleIngameInput();
         }
 
         else
@@ -39,8 +40,8 @@ public class InventoryMenu : MonoBehaviour
             customGameLoopScript.EnableLoop();
             Time.timeScale = 1;
             InventoryOpen = false;
-
             InventoryUI.SetActive(false);
+            inputManager.ToggleIngameInput();
         }
     }
 }

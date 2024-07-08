@@ -48,7 +48,7 @@ public class ChangeArea : MonoBehaviour
     public void OnTriggerEnter(Collider collider)
     {
        
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player") || collider.CompareTag("Player_Dodging"))
         {
             collider.GetComponent<PlayerStats>().SaveStatsToSO();
 

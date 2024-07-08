@@ -113,6 +113,26 @@ public struct TimerScaled
 }
 
 [System.Serializable]
+public struct TimerUnScaled
+{
+    public float Duration;
+    private float Clock;
+
+    public TimerUnScaled(float duration, float time = 0f)
+    {
+        Duration = duration;
+        Clock = time;
+    }
+
+    public void SetClock()
+    {
+        Clock = Time.unscaledTime + Duration;
+    }
+
+    public bool IsFinished => Time.unscaledTime >= Clock;
+}
+
+[System.Serializable]
 public struct LerpEvent
 {
     [SerializeField]
@@ -128,6 +148,32 @@ public struct LerpEvent
     public void Lerp()
     {
         LerpFloat += Time.deltaTime * DurationMultiplier;
+    }
+
+    public void ResetLerp()
+    {
+        LerpFloat = 0;
+    }
+
+    public bool LerpFinished => 1 <= LerpFloat;
+}
+
+[System.Serializable]
+public struct LerpEventUnscaled
+{
+    [SerializeField]
+    public float DurationMultiplier;
+    public float LerpFloat;
+
+    public LerpEventUnscaled(float durationmult, float time = 0f)
+    {
+        DurationMultiplier = durationmult;
+        LerpFloat = time;
+    }
+
+    public void Lerp()
+    {
+        LerpFloat += Time.unscaledDeltaTime * DurationMultiplier;
     }
 
     public void ResetLerp()

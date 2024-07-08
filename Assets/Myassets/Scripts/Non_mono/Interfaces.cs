@@ -20,3 +20,8 @@ public interface IInteractableTextbox
     public bool TakesControlAway { get; set; }
     public bool IsInteractable { get; set; }
 }
+
+public interface HealthNumber
+{
+   public void HealthNumberSpawn(int amount, Vector3 position, TypeOfHealthNumber typeOfHealthNumber);
+}

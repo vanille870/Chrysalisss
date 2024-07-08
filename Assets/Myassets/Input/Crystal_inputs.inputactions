@@ -67,6 +67,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RaiseShield",
+                    "type": "Button",
+                    "id": "cc8e36af-0bf3-4340-b0af-f1de9a6600c0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -172,7 +181,7 @@
                 {
                     "name": "",
                     "id": "18bea54f-61c0-433d-9628-b8815db9376b",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard_mouse",
@@ -210,6 +219,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fe696e5-207d-49d8-8031-31095886f9ad",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RaiseShield",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

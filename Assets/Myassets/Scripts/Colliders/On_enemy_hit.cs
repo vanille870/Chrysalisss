@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class On_enemy_hit : MonoBehaviour
@@ -9,7 +10,7 @@ public class On_enemy_hit : MonoBehaviour
     public CameraShake cameraShakeScript;
     public PlayerEquiment playerEquimentScript;
     public PlayerStats playerStats;
-    [SerializeField] DamageNumberManager damageNumberManager;
+    [SerializeField] HealthNumberManager damageNumberManager;
 
 
     [Header("DamageNumber setup")]
@@ -17,7 +18,7 @@ public class On_enemy_hit : MonoBehaviour
     [SerializeField] bool shrinks;
     [SerializeField] bool bursts;
     [SerializeField] bool rises;
-    [SerializeField] Transform enemyTransform;
+    [SerializeField] Vector3 enemyPosition;
 
 
     public static int AttackNumber = 0;
@@ -120,6 +121,7 @@ public class On_enemy_hit : MonoBehaviour
     [SerializeField] ShakeParametersCollection shakeParamameters = new ShakeParametersCollection();
 
     public bool TestTimer;
+    private Vector3 contactPoint;
 
     void OnEnable()
     {
@@ -145,7 +147,12 @@ public class On_enemy_hit : MonoBehaviour
         {
             enemyGameObject = thisCollider.gameObject;
             currentEnemyHealthScript = thisCollider.GetComponent<EnemyHealth>();
+            enemyPosition = thisCollider.transform.position;
+            contactPoint = thisCollider.ClosestPointOnBounds(this.transform.position);
 
+            /*GameObject GO = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GO.transform.position = contactPoint;
+            GO.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);*/
 
             if (currentEnemyHealthScript.lastAttackHitNumber == AttackNumber)
             {
@@ -182,7 +189,6 @@ public class On_enemy_hit : MonoBehaviour
 
     int CalculateDamageAndHitstop()
     {
-        enemyTransform = currentEnemyHealthScript.trans;
 
         if (generalAnimationWeaponScript.isPerformingChargAttack == false)
         {
@@ -198,7 +204,7 @@ public class On_enemy_hit : MonoBehaviour
             }
 
             print(damage);
-            damageNumberManager.InstantiateDamageNumber(damage, enemyTransform.position, EntityType.enemy, false, fadesOut, shrinks, rises);
+            damageNumberManager.InstantiateHealthNumber(damage, enemyPosition, TypeOfHealthNumber.enemyNormal);
             return damage;
         }
 
@@ -216,7 +222,7 @@ public class On_enemy_hit : MonoBehaviour
             }
 
             print(damage);
-            damageNumberManager.InstantiateDamageNumber(damage, enemyTransform.position, EntityType.enemy, true, fadesOut, shrinks, rises);
+            damageNumberManager.InstantiateHealthNumber(damage, enemyPosition, TypeOfHealthNumber.EnemyCrit);
             return damage;
         }
 
@@ -229,7 +235,7 @@ public class On_enemy_hit : MonoBehaviour
             HitStopTimer.Duration = hitStopVariables.durationPerAttack.RegularAttack;
 
             print(damage);
-            damageNumberManager.InstantiateDamageNumber(damage, enemyTransform.position, EntityType.enemy, false, fadesOut, shrinks, false);
+            damageNumberManager.InstantiateHealthNumber(damage, enemyPosition, TypeOfHealthNumber.enemyFailedAttack);
             return damage;
         }
     }
@@ -238,7 +244,7 @@ public class On_enemy_hit : MonoBehaviour
     {
         int clampedDamage = Mathf.Clamp(damage, 1, 9999999);
         int clampedStaggerDamage = Mathf.Clamp(staggerDamage, 1, 9999999);
-        currentEnemyHealthScript.EnemyRecieveDamage(clampedDamage, staggerDamage);
+        currentEnemyHealthScript.EnemyRecieveDamage(clampedDamage, staggerDamage, contactPoint);
 
         if (currentEnemyHealthScript.EnemyIsDead == true)
         {

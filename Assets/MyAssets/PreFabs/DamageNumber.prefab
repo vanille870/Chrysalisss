@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7227996169248809911
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8567367807523842015}
-  m_LocalRotation: {x: 0.15399644, y: -0, z: -0, w: 0.98807144}
+  m_LocalRotation: {x: 0.15399475, y: 0, z: 0, w: 0.9880717}
   m_LocalPosition: {x: 0, y: 0, z: -2.7696655}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55fed7fc07be40f4faf0e843c91848a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageNumber: {fileID: 4044153268265505623}
+  number: {fileID: 4044153268265505623}
   riseSpeed: 0.0045
   maxFontSize: 3
   maxBurstFontSize: 8

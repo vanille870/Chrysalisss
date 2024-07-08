@@ -10,6 +10,10 @@ public class HealthBar : MonoBehaviour
 
     public static Slider playerHealthBar;
     public static Slider AdjustingHealthBar;
+    [SerializeField] Image AdjustingHealthBarSpriteInspector;
+    [SerializeField] static Image AdjustingHealthBarSprite;
+    [SerializeField] Image HealthBarSpriteInspector;
+    [SerializeField] static Image HealthBarSprite;
     public float adjustSpeedInspector;
     public float durationTimer;
     [SerializeField] static float adjustSpeed;
@@ -19,6 +23,12 @@ public class HealthBar : MonoBehaviour
     static TimerScaled TimeBeforeDarkDeplete = new TimerScaled();
 
     static bool IsDepletingAdjustBar;
+    static bool IsAdjustingBar;
+
+    [SerializeField] StatsStorage statsStorage;
+
+    [SerializeField] Color color;
+
 
     public void Awake()
     {
@@ -27,6 +37,11 @@ public class HealthBar : MonoBehaviour
 
         adjustSpeed = adjustSpeedInspector;
         TimeBeforeDarkDeplete.Duration = durationTimer;
+
+        AdjustingHealthBarSprite = AdjustingHealthBarSpriteInspector;
+        HealthBarSprite = HealthBarSpriteInspector;
+
+        playerHealthBar.onValueChanged.AddListener(delegate {ChangColorOfSlider(); });
     }
 
     public static void SetUpHealthBar(int MaxHP, int currentHP)
@@ -39,32 +54,81 @@ public class HealthBar : MonoBehaviour
         AdjustingHealthBar.value = currentHP;
     }
 
-    public static void UpdateHealthBar(int damage)
+    public static void UpdateHealthBar(int amount, bool IsDamage)
     {
-        playerHealthBar.value -= damage;
-
-        if (IsDepletingAdjustBar == false)
+        if (IsDamage)
         {
-            CustomGameLoop.UpdateLoopFunctionsSubscriber += DepleteDarkBar;
+            AdjustingHealthBarSprite.color = new Color32(20, 0, 0, 255);
+
+            playerHealthBar.value -= amount;
+            CustomGameLoop.UpdateLoopFunctionsSubscriber += HealthBarCatchUp;
             IsDepletingAdjustBar = true;
+            IsAdjustingBar = true;
+
+            if (IsDepletingAdjustBar)
+            {
+                AdjustingHealthBar.value = playerHealthBar.value + amount;
+            }
         }
 
+        else
+        {
+            AdjustingHealthBarSprite.color = Color.green;
+
+            if (IsDepletingAdjustBar)
+            {
+                AdjustingHealthBar.value = playerHealthBar.value + amount;
+            }
+
+            AdjustingHealthBar.value += amount;
+            CustomGameLoop.UpdateLoopFunctionsSubscriber += HealthBarCatchUp;
+            IsDepletingAdjustBar = false;
+            IsAdjustingBar = true;
+
+        }
 
         TimeBeforeDarkDeplete.SetClock();
     }
 
-    static void DepleteDarkBar()
+    static void HealthBarCatchUp()
     {
         if (TimeBeforeDarkDeplete.IsFinished)
         {
-            AdjustingHealthBar.value -= Time.deltaTime * adjustSpeed;
-
-            if (AdjustingHealthBar.value <= playerHealthBar.value)
+            if (IsDepletingAdjustBar)
             {
-                AdjustingHealthBar.value = playerHealthBar.value;
-                CustomGameLoop.UpdateLoopFunctionsSubscriber -= DepleteDarkBar;
-                IsDepletingAdjustBar = false;
+                if (AdjustingHealthBar.value >= playerHealthBar.value)
+                {
+                    AdjustingHealthBar.value -= Time.deltaTime * adjustSpeed;
+
+                    if (AdjustingHealthBar.value <= playerHealthBar.value)
+                    {
+                        CustomGameLoop.UpdateLoopFunctionsSubscriber -= HealthBarCatchUp;
+                        AdjustingHealthBar.value = playerHealthBar.value;
+                        IsDepletingAdjustBar = false;
+                        IsAdjustingBar = false;
+                    }
+                }
+            }
+
+            else
+            {
+                print("ayooooooooo");
+                playerHealthBar.value += Time.deltaTime * adjustSpeed;
+
+                if (playerHealthBar.value >= AdjustingHealthBar.value)
+                {
+                    playerHealthBar.value = AdjustingHealthBar.value;
+                    CustomGameLoop.UpdateLoopFunctionsSubscriber -= HealthBarCatchUp;
+                    IsAdjustingBar = false;
+                }
             }
         }
+    }
+
+    static void ChangColorOfSlider()
+    {
+        float percentage = playerHealthBar.value / playerHealthBar.maxValue;
+
+        HealthBarSprite.color = new Color(percentage, 0, 0 ,255);
     }
 }

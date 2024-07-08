@@ -9,7 +9,8 @@ public class InitStaticReferencesStorageToMaster : MonoBehaviour
     [SerializeField] PlayerMovement playerMovementScript;
     [SerializeField] GeneralAnimationWeapon generalAnimationWeaponScript;
     [SerializeField] Interact interactScript;
-    [SerializeField] DamageNumberManager damageNumberManager;
+    [SerializeField] HealthNumberManager damageNumberManager;
+    [SerializeField] PlayerShield playerShield;
 
 
     [SerializeField] CharacterController characterController;
@@ -38,6 +39,8 @@ public class InitStaticReferencesStorageToMaster : MonoBehaviour
         StaticReferencesStorage.playerVisibilityParent = playerVisibilityParent;
         StaticReferencesStorage.playerPoint = PlayerPoint;
         StaticReferencesStorage.damageNumberManager = damageNumberManager;
+        StaticReferencesStorage.playerShieldReference = playerShield;
+
 
         PlayerInventory.inventoryParentObjectStatic = StaticReferencesStorage.InventoryParent;
         ResetAfterimageShaderParams();

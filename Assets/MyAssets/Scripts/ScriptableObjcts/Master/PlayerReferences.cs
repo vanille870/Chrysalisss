@@ -9,7 +9,7 @@ public class StaticReferencesStorage : ScriptableObject
     public StatsStorage StatsStorageSO;
     public InputManager inputManagerScript;
     public TextBox textBoxScript;
-    public DamageNumberManager damageNumberManager;
+    public HealthNumberManager damageNumberManager;
     public GameObject InventoryParent;
 
     [Header("Pools parent game objects")]
@@ -25,7 +25,7 @@ public class StaticReferencesStorage : ScriptableObject
     public PlayerInventory playerInventory;
     public CinemachineVirtualCamera playerCam;
 
-    private PlayerStats playerStats;
+    PlayerStats playerStats;
     public PlayerStats playerStatsReference
     {
         get => playerStats;
@@ -34,12 +34,12 @@ public class StaticReferencesStorage : ScriptableObject
         {
             playerStats = value;
             StatsStorageSO.playerStatsScript = value;
-            
+
         }
 
     }
-
-    private PlayerMovement playerMovementScript;
+    
+    PlayerMovement playerMovementScript;
     public PlayerMovement PlayerMovementReference
     {
         get => playerMovementScript;
@@ -52,7 +52,7 @@ public class StaticReferencesStorage : ScriptableObject
 
     }
 
-    private GeneralAnimationWeapon generalAnimationWeapon;
+    GeneralAnimationWeapon generalAnimationWeapon;
     public GeneralAnimationWeapon generalAnimationWeaponReference
     {
         get => generalAnimationWeapon;
@@ -64,7 +64,7 @@ public class StaticReferencesStorage : ScriptableObject
         }
     }
 
-    public Interact interactScript;
+    Interact interactScript;
     public Interact interactScriptReference
     {
         get
@@ -76,6 +76,21 @@ public class StaticReferencesStorage : ScriptableObject
         {
             interactScript = value;
             inputManagerScript.interactionScript = value;
+        }
+    }
+
+    PlayerShield playerShield;
+    public PlayerShield playerShieldReference
+    {
+        get
+        {
+            return playerShield;
+        }
+
+        set
+        {
+            playerShield = value;
+            inputManagerScript.playerShieldScript = value;
         }
     }
 }

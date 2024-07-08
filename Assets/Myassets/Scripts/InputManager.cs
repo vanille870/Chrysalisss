@@ -13,8 +13,10 @@ public class InputManager : MonoBehaviour
     public PlayerMovement movementScript;
     public GeneralAnimationWeapon generalAnimationWeapon;
     public Interact interactionScript;
+    public PlayerShield playerShieldScript;
     [SerializeField] Pause_Menu pause_MenuScript;
     [SerializeField] InventoryMenu inventoryMenuScript;
+
 
     public static Action<InputAction.CallbackContext> currentInteractFunction;
     public static Action<InputAction.CallbackContext> currentSkipInteractionFunction;
@@ -23,7 +25,7 @@ public class InputManager : MonoBehaviour
     {
         playerInput = new Crystal_inputs();
 
-        playerInput.InGame.Enable(); 
+        playerInput.InGame.Enable();
         playerInput.Interacting.Disable();
         playerInput.UI.Disable();
     }
@@ -56,6 +58,13 @@ public class InputManager : MonoBehaviour
 
         playerInput.InGame.OpenInventory.started += _ => inventoryMenuScript.ToggleInventory();
         playerInput.InGame.OpenInventory.Enable();
+
+        playerInput.InGame.RaiseShield.started += _ => playerShieldScript.ShieldUp();
+        playerInput.InGame.RaiseShield.canceled += _ => playerShieldScript.ShieldDown();
+        playerInput.InGame.RaiseShield.Enable();
+
+        playerInput.UI.CloseInventory.started += _ => inventoryMenuScript.ToggleInventory();
+        playerInput.UI.CloseInventory.Enable();
 
         playerInput.Disable();
     }
@@ -115,9 +124,28 @@ public class InputManager : MonoBehaviour
         playerInput.InGame.Enable();
     }
 
-     public void DisableControls()
+    public void EnableControlsNonStatic()
+    {
+        InputManager.playerInput.Enable();
+        playerInput.InGame.Enable();
+    }
+
+    public void DisableControls()
     {
         InputManager.playerInput.Disable();
         playerInput.InGame.Disable();
+    }
+
+    public void ToggleIngameInput()
+    {
+        if (playerInput.InGame.enabled)
+        {
+            playerInput.InGame.Disable();
+        }
+
+        else
+        {
+            playerInput.InGame.Enable();
+        }
     }
 }

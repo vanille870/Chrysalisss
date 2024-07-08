@@ -50,7 +50,7 @@ public class InitStaticReferencesStorageInteract : MonoBehaviour
     {
         if (TryGetComponent<Sign>(out Sign sign))
         {
-            sign.interactScript = StaticReferencesStorageSO.interactScript;
+            sign.interactScript = StaticReferencesStorageSO.interactScriptReference;
             sign.playerPos = StaticReferencesStorageSO.playerTrans;
 
             sign.textBoxScript = StaticReferencesStorageSO.textBoxScript;

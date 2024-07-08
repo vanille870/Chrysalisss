@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour, HealthNumber
 {
+    [SerializeField] StaticReferencesStorage staticReferencesStorageSO;
+
     public int StaggerValue;
     public int defence;
     int maxStaggerValue;
@@ -19,21 +21,19 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] ParticleSystem enemyHitEffect;
     public bool EnemyIsDead;
 
-    public Transform trans;
-
-
     // Start is called before the first frame update
     void Start()
     {
         maxStaggerValue = StaggerValue;
     }
 
-    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage)
+    public void EnemyRecieveDamage(int recievedDamage, int staggerDamage, Vector3 contactPoint)
     {
         EnemyCurrentHealth -= recievedDamage;
         StaggerValue -= staggerDamage;
         AIScript.seenPlayer = true;
         AIScript.currentEnemyState = Basic_Enemy_AI.EnemyState.chasing;
+        enemyHitEffect.transform.position = contactPoint;
         enemyHitEffect.Play();
 
         if (EnemyCurrentHealth <= 0)
@@ -62,6 +62,11 @@ public class EnemyHealth : MonoBehaviour
         EnemyAnimator.SetTrigger("_Dead");
         enemyAnimationScript.DeadAnimation();
         EnemyIsDead = true;
+    }
+
+    public void HealthNumberSpawn(int amount, Vector3 position, TypeOfHealthNumber typeOfHealthNumber)
+    {
+        staticReferencesStorageSO.damageNumberManager.InstantiateHealthNumber(amount, position, typeOfHealthNumber);
     }
 }
 
